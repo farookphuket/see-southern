@@ -77,7 +77,7 @@ $(function(){
                 var data = $(this).serialize();
                 $.post(url,data,function(e){
                     var rs = $.parseJSON(e);
-                    //console.log(rs);
+                    console.log(rs);
                     var full_pay = 0;
                     var deposite = 0;
                     var tmp = "";
@@ -92,7 +92,6 @@ $(function(){
                         </span>
                         your booking has been send but there will be not confirm! unless you have to make a payment as deposite at ${deposite} THB. or full pay at ${full_pay} THB. by choosing one of the payment method below. 
                         </p>
-                        <br />
                         `;
                     });
                     

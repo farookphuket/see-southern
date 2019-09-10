@@ -4,7 +4,7 @@
     <hr class="my-4" />
 </div>
 
-<label for="keyurl">The url will show here after you press the save button</label>
+<label for="meta_url">The url will show here after you press the save button</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="meta_key1">
@@ -14,12 +14,12 @@
     ?>
     </span>
   </div>
-  <input type="text" name="keyurl" class="form-control keyurl" id="keyurl"   aria-describedby="meta_key1" disabled>
+  <input type="text" name="meta_url" class="form-control meta_url" id="meta_url" name="meta_url"  aria-describedby="meta_key1" />
   <input type="hidden" name="kw_id" class="kw_id" />
   <input type="hidden" name="tour_id" class="tour_id" />
 </div>
 
-<label for="keyword">The meta key word for the seo search engine</label>
+<label for="meta_keyword">The meta key word for the seo search engine</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="meta_key2">
@@ -29,10 +29,10 @@
     ?>
     </span>
   </div>
-  <input type="text" name="keyword" class="form-control keyword" id="keyword" aria-describedby="meta_key2">
+  <input type="text" name="meta_keyword" class="form-control meta_keyword" id="meta_keyword" aria-describedby="meta_key2">
 </div>
 
-<label for="keydes">The meta key description for the seo search engine</label>
+<label for="meta_description">The meta key description for the seo search engine</label>
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="meta_key3">
@@ -42,7 +42,7 @@
     ?>
     </span>
   </div>
-  <input type="text" name="keydes" class="form-control keydes" id="keydes" aria-describedby="meta_key3">
+  <input type="text" name="meta_description" class="form-control meta_description" id="meta_description" aria-describedby="meta_key3">
 </div>
 <!--end of seo section -->
 <!--write about tour program-->
@@ -51,12 +51,12 @@
 </div>
 <hr class="my-4" />
 
-<label for="t_title">Tour title</label>
+<label for="tour_title">Tour title</label>
 <div class="input-group mb-3">
     <div class="input-group-prepend">
         <span class="input-group-text">Program Title</span>
     </div>
-    <input type="text" name="t_title" id="t_title" class="form-control t_title" aria-label="title of this tour program">
+    <input type="text" name="tour_title" id="tour_title" class="form-control tour_title" aria-label="title of this tour program">
 </div>
 
 <label for="tour_fullprice">Price per person in Thaibath</label>
@@ -88,7 +88,7 @@
 
 <label for="tour_summary">Tour summary</label>
 <div class="col-lg-12">
-  <textarea class="form-control tour_summary" id="tour_summary" name="tour_summary" aria-label="tour_summary" rows="15"></textarea>
+  <textarea class="form-control tour_summary" id="tour_summary" name="tour_summary" aria-label="tour_summary"></textarea>
 </div>
 
 

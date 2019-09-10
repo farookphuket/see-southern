@@ -2,7 +2,7 @@
 <html lang="en">
 
   <head>
-  <meta name="google-signin-client_id" content=" XPjLJGaR_YtKMf6DpWP-Q6Z7q0e8VI3HQuOfTUYrjZc">
+  <meta name="google-signin-client_id" content="250943952533-r0frvqehp0nuav0ng4omape6tptcp0p2.apps.googleusercontent.com">
     <?php 
       $tag_head = "component/_tag_in_head.php";
       $this->load->view($tag_head);
@@ -51,19 +51,21 @@
           ?>
           <a href="<?php echo $check_booking;?>" class="btn btn-primary" target="_blank">Check My Booking</a>
         </div>
-        
       </div>
     </header>
     
-    <!--test--> 
+
+    <!--Add this line on 6-6-19
+        //---This script is "component/_tag_in_head.php"
+    --> 
     <section id="user_agent">
       <div class="container">
         <div id="chk_user_agent"></div>
       </div>
     </section>
-    <!--end of test-->
+    <!--end-->
 
-    
+
     <!-- About Section -->
     <section id="about" class="about-section text-center">
       <div class="container">
@@ -267,6 +269,15 @@
           <a href="#" class="mx-2">
             <i class="fab fa-github"></i>
           </a>
+            <!--test line on 28-5-19-->
+            <div class="line-it-button" data-lang="en" data-type="friend" data-lineid="@farook_ais2016" data-count="true" data-home="true" style="display: none;"></div>
+            <div class="col-md-4">
+                <a href="https://lh3.googleusercontent.com/NnjK3cnCPyT_dt6iWzmSCUVPKCGC38qubchM7Ko8DxUBDey5049dPqZ70Yuf0YDYI5hvvvzZ8gaDoE18ceZ05tq6dIMVS_NSE3s6ggicwtiFs5nCApOIcuyfIMZqOeY1EjKG6uu7Th4=w2400" target="_blank" alt="click to view full size image">
+<img src="https://lh3.googleusercontent.com/NnjK3cnCPyT_dt6iWzmSCUVPKCGC38qubchM7Ko8DxUBDey5049dPqZ70Yuf0YDYI5hvvvzZ8gaDoE18ceZ05tq6dIMVS_NSE3s6ggicwtiFs5nCApOIcuyfIMZqOeY1EjKG6uu7Th4=w2400" class="responsive" />
+</a>
+             </div>
+ <script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+            <!--end of test line-->
         </div>
 
       </div>
@@ -285,6 +296,7 @@
 
     <!-- Plugin JavaScript -->
     <script src="<?php echo $ln; ?>vendor/jquery-easing/jquery.easing.min.js"></script>
+
 
     <!-- Custom scripts for this template -->
     <script src="<?php echo $ln; ?>js/grayscale.min.js"></script>

@@ -95,11 +95,10 @@
                                 ${v.ar_summary}
                                 
                                 </div>
-                                
                                 <div class="card-footer">
                                 <a class="btn btn-primary" href="${read_url}" target="_blank">Read</a>
-                                </div>
-                                
+                                </div>                                
+
                                 </div>
                                 <p>&nbsp;</p>
                                 `;

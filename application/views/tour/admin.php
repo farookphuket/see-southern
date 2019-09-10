@@ -3,20 +3,17 @@
         <div class="col-lg-12 text-center">
             <h2 class="section-heading ">Manage Tour Program</h2>
             <hr class="my-4">
-        </div>
-        <div class="col-lg-12">
-            <a href="<?php echo site_url("tour");?>" class="btn btn-primary">Go to page</a>
-
-            <button class="btn btn-primary lnAddTour float-right">Add new Tour</button>
-        </div>
+          </div>
     </div>
     
     <div class="row">
+        <div class="col-lg-3">
+            <h2 class="text-center text-white bg-primary left_head">Menu</h2>
+        </div>
         
-        
-        <div class="col-lg-12">
+        <div class="col-lg-9">
             <div class="float-right">
-                    
+                    <button class="btn btn-primary lnAddTour">Add new Tour</button>
                     <br style="clear:both"/>
             </div>
             <br style="clear:both"/>

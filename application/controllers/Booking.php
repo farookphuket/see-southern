@@ -34,11 +34,6 @@ class Booking extends MY_Controller{
     }
 
     function index(){
-
-        if($this->user_is_login()):
-            $url = site_url("booking/u/{$this->user_id}");
-            redirect($url);
-        endif;
         $this->data["meta_title"] = "Make your booking";
         $this->data["subview"] = "booking/book_index";
         $this->load->view("_layout_main",$this->data);
@@ -179,7 +174,6 @@ class Booking extends MY_Controller{
             //---user pay data
             $u_pay = $this->uGetUserPayData();
             $u_pay["bk_id"] = $bk_id;
-            $u_pay["user_pay_as"] = "never_pay";
             $u_pay["user_payment_img"] = "NOT_PAY_YET_1.png";
             $this->Mdl_booking->savePaymentInfo($u_pay);
             //var_dump($u_pay);
@@ -627,8 +621,18 @@ class Booking extends MY_Controller{
             //---sent email to user
 
             $title = "your booking with {$our_url} is confirmed";
-            $body = "<h1 style='text-align:center;color:green;'>Your booking is confirmed.</h1>
-            <p>Dear {$bk_name} your booking is confirmed on {$this->today_andTime}</p>
+            $body = "<h1 style='text-align:center;color:green'>Booking for {$tour_name} is confirmed</h1>
+            <p>Dear <strong>{$bk_name}</strong></p>
+            <p>your booking of <strong>{$tour_name}</strong> on date departure {$go_day} is confirmed.</p>
+            <p>please click <a href='$print_url' target='_blank'>HERE</a> or go to visit <strong>{$print_url}</strong> to see this booking detail.</p>
+            <p>any question please contact <strong>info@see-southern.com</strong></p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p style='margin-top:10px;color:green;text-align:right'>best regard.</p>
+            <p style='text-align:right'>{$this->user_name} | {$this->admin_email} 
+            <br />{$this->today_andTime}
+            </p>
             ";
             $this->sendMailTo("booking@see-southern.com",$bk_email,$title,$body);
             //--end of sent mail

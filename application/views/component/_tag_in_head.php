@@ -3,7 +3,7 @@
     $this->load->view($gTools);
 ?>
 
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, shrink-to-fit=no">
 <meta charset="UTF-8">
 <title><?php echo $meta_title;?></title>
 <meta name="robots" content="noodp,noydir"/>
@@ -22,15 +22,47 @@
 
 
 
+  <!-- Last edit 10-9-2019 -->
+     <!-- load CSS -->
 
-<script src="<?php echo site_url("public/js/jquery.js");?>"></script>
-<!---Last add Sat 13 Oct 2018 start-->
-    <!-- Bootstrap core CSS -->
-    <link href="<?php echo site_url("public/vendor/bootstrap/css/bootstrap.min.css");?>" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">
 
-    <!-- Custom fonts for this template -->
-    <link href="<?php echo site_url("public/vendor/fontawesome-free/css/all.min.css");?>" rel="stylesheet" type="text/css">
+    <!-- Google web font "Open Sans" -->
 
+
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<!-- Propper.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+
+<!-- boostrap 4-->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- https://getbootstrap.com/ -->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="<?php echo site_url("public/css/templatemo-style.css");?>">
+  
+<!-- only for the menu -->
+<?php 
+    $menu_ln = site_url("public/");
+    $menu_css = $menu_ln."css/menu.css";
+?>
+
+  
+    <link rel="stylesheet" href="<?php echo $menu_css; ?>">
+    <script>
+    jQuery(document).ready(function() {
+      jQuery('.toggle-nav').click(function(e) {
+            jQuery(this).toggleClass('active');
+                jQuery('.menu ul').toggleClass('active');
+
+    e.preventDefault();
+  
+      });
+
+    });
+  
+    </script>
+<!-- End of menu section -->
     <!--
 
     just comment this out when upload top the server
@@ -89,6 +121,7 @@ readonly : 1,
 });
 </script>
 
+
 <!--Add this line on 6-6-19-->
 <script>
     $(function(){
@@ -106,7 +139,7 @@ readonly : 1,
                 if(cur_browser === fox_browser){
                     msg = `
                     <div class="alert alert-danger">
-                    <p>Dear user your browser is ${fox_browser} and which is still not support for this website!</p>
+                    <p>Dear user your browser is ${fox_browser}! which is still not support for this website!</p>
                     <p>to use this website functionally please change your browser such as Google Chrome or Opera instead!</p>
                     </div>
                     `;
@@ -125,4 +158,5 @@ readonly : 1,
         browser.getEvent();
     });
 </script>
+
 

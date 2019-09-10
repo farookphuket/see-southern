@@ -30,14 +30,14 @@
     <?php 
 
     $ticket = "admin/booking/book_index.php";
-    $this->load->view($ticket);
+   // $this->load->view($ticket);
     ?>
 </section>
 <p>&nbsp;</p>
 <section id="tour">
     <?php 
         $tour = "admin/tour/index.php";
-        $this->load->view($tour);
+       // $this->load->view($tour);
     ?>
 </section>
 <section id="article">
@@ -160,7 +160,7 @@
             }
             return{getEvent:getEvent}
         })();
-        ar.getEvent();
+       ar.getEvent();
     });
 </script>
 
@@ -168,6 +168,6 @@
 <section class="users" id="users">
     <?php 
         $users = "admin/user/user_index.php";
-        $this->load->view($users);
+      //  $this->load->view($users);
     ?>
 </section>

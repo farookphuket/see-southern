@@ -138,16 +138,7 @@ class Article extends MY_Controller{
 
     
     
-/// -- category
-    function category($id=false){
-        echo"This is the cat number {$id}";
-        $msg = "";
-        if(!$id):
-                $msg = "Show every category";
-        else:
-            $msg = "Show only one category {$id}";
-        endif;
-    }
+
 
 
 
@@ -578,25 +569,15 @@ class Article extends MY_Controller{
         $key_id = $this->input->post("key_id");
         $ar_id = $this->input->post("ar_id");
         $ar_title = $this->input->post("ar_title");
-        $kw_title = $this->input->post("og_title");
-        $kw_des = $this->input->post("og_des");
         
-        //---keyword data
-        $kw_default = "";
-        $kd_default = "";
-        $seo_data = array();
         
-        //--article datatitle
-        $ar_data = array();
 
         $s_today = $this->today_andTime;
         if(!$ar_id):
             //---create new key
-            $kw_default = "new article,change this";
-            $kd_default = "new article create by {$this->user_name} just change this meta key description";
             $seo_data = array(
-                "kw_page_keyword" => $kw_default,
-                "kw_page_des" =>  $kd_default
+                "kw_page_keyword" => "article,change this keyword",
+                "kw_page_des" => "article,edit this default description key"
             );
     
             $key_id = $this->Mdl_seo->saveTag($seo_data);
@@ -619,34 +600,10 @@ class Article extends MY_Controller{
                 "og_site_name" => site_url()
             ),array("kw_id" => $key_id));
 
-            //$this->adminEditAr($ar_id);
-            $get_ar = $this->Mdl_article->modGetArticle(array("{$this->_tb_ar}.ar_id " => $ar_id))->result();
-            $this->o_put["get_ar"] = $get_ar;
-            $this->output->set_output(json_encode($this->o_put));
+            $this->adminEditAr($ar_id);
 
         else:
-            /*
-            User has change the title the keyword also need to change too.
-            last update 11-6-19
-            */
-            //--save keyword
-            $seo_data = array(
-                "kw_page_keyword" => $kw_title,
-                "kw_page_des" => $kw_des,
-                "og_title" => $kw_title,
-                "og_description" => $kw_des
-            );
-            $this->Mdl_seo->saveTag($seo_data,array("kw_id" => $key_id));
-
-            //--update title
-            $ar_data = array(
-                "ar_title" => $ar_title
-            );
-            $this->Mdl_article->saveArticle($ar_data,array("ar_id" => $ar_id));
-            //$this->adminEditAr($ar_id);
-            $get_ar = $this->Mdl_article->modGetArticle(array("{$this->_tb_ar}.ar_id" => $ar_id))->result();
-            $this->o_put["get_ar"] = $get_ar;
-            $this->output->set_output(json_encode($this->o_put));
+            $this->adminSaveAr();
         endif;
     }
     //-----
@@ -717,9 +674,12 @@ class Article extends MY_Controller{
     function adminSaveAr(){
 
         $ar_id = $this->input->post("ar_id");
-        $ar_title = $this->input->post("ar_title");
         $rdUrl = site_url("article/read/{$ar_id}");
-        
+
+        //---ar_title just add
+        $ar_title = $this->input->post("ar_title");        
+
+
         $seo = $this->getSeoData();
         $seo["og_url"] = $rdUrl;
         $kw_id = $this->input->post("key_id");

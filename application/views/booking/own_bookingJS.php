@@ -18,7 +18,6 @@ $(function(){
         var cf_email = $el.find(".cf_email");
         var $img_preview = $el.find(".upload_img_preview");
         var $frmResult = $el.find(".frmResult");
-        
         //----modal sent payment
         var $mdPayment = $el.find(".mdSentPayment");
         var $mdPlaceShowDetail = $el.find(".mdPlaceShowDetail");

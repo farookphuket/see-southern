@@ -16,7 +16,9 @@ class Login extends MY_Controller{
     protected $moderate;
     
 
-
+    //---protect string as google user
+    protected $g_name;
+    protected $g_email;
 
     //the table name
     //edit on Thu 8 Jun 2017
@@ -199,6 +201,75 @@ class Login extends MY_Controller{
             return $data;
         }
         //----------------------------
+        //----googleLogin
+        function googleLogin(){
+            //---create on 11/5/19
+            //---send by ajax
+            $g_email = $this->input->post("g_email");
+            $g_name = $this->input->post("g_name");
+
+            //--protected var
+            $this->g_name = $g_name;
+            $this->g_email = $g_email;
+            //---url to redirect
+            $rd_url = "";
+            //---user data
+            $user_data = "";
+            //---check if the user and email is exit
+            $where = array("email" => $g_email,"name" => $g_name);
+            $get = $this->Mdl_users->getUsers($where)->result();
+            $num = count($get);
+            if(!$num):
+                 
+                //--create new user
+                $u = $this->_createUser();
+                $u_email = $u["email"];
+                $u_name = $u["name"];
+                $u_pass = $u["passwd"];
+
+                //---user data info                
+                /*                
+                $user_data = array(
+                   "name" => $u_name,
+                    "email" => $u_email,
+                    "passwd" => $u_pass            
+                );
+                //--save user data
+                $this->Mdl_users->saveUser($user_data);
+                */
+
+                $user_data = $this->getUserType($u_name);
+                $rd_url = $user_data["user_url"];
+                
+                
+                $msg = "Success | create new user ,Welcome {$u_name}";
+            else:
+                //---user login
+                $user_data = $this->getUserType($g_name);
+                $rd_url = $user_data["user_url"];
+                $msg = "Welcome {$g_name} email {$g_email}";
+            endif;
+            
+            $this->session->set_userdata($user_data);
+            $this->o_put["url"] = $rd_url;
+            $this->o_put["msg"] = $msg;
+            $this->output->set_output(json_encode($this->o_put));
+    
+        }
+
+
+    function _createUser(){
+        $user_data = array(
+            "name" => $this->g_name,
+            "email" => $this->g_email,
+            "passwd" => $this->make_hash(1234),
+            "is_activated" => 1,
+            "date_register" => $this->today,
+            "user_type" => 409
+        );
+        $this->Mdl_users->saveUser($user_data);
+        return $user_data;
+    }
         
 
         

@@ -30,9 +30,14 @@
       </div>
   </header>
   <div class="status"></div>
-  <?php 
-    $this->load->view($subview);
-  ?>
+    <!-- fix the below scroll bar 10-9-2019 
+    by just add div.container
+    -->
+    <div class="container">
+    <?php 
+      $this->load->view($subview);
+    ?>
+    </div>
 
   <?php 
     $tag_tail = "component/_tag_in_tail.php";

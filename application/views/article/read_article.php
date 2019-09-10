@@ -14,28 +14,6 @@
 
             </div>
             <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-bordered">
-                  <tr>
-                    <th>Post By</th>
-                    <td>
-                    <strong>Name :</strong>
-                    <?php echo $row->ar_post_by;?>&nbsp;
-                    <strong>IP : </strong>
-                    <?php echo $row->ar_post_ip;?>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Date</th>
-                    <td>
-                    <strong>Create :</strong>
-                    <?php echo $row->date_add;?>&nbsp;
-                    <strong>Update :</strong>
-                    <?php echo $row->date_edit;?>
-                    </td>
-                  </tr>
-                </table>
-              </div>
               <p>
               <?php 
                 echo $row->ar_summary;

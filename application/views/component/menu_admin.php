@@ -8,7 +8,6 @@
   $lnUser = "#users";
   $lnAr = site_url("article/admin");
   $lnHome = site_url("admin/u/{$user_id}");
-  $lnComment = site_url("comment/admin");
 
   if($cur_url != $home_url):
     $lnTour = site_url("admin/u/{$user_id}/{$lnTour}");
@@ -66,8 +65,7 @@
               
                 <div class="dropdown-menu">
                   <a class="dropdown-item nav-link js-scroll-trigger" href="<?php echo $lnSeo;?>">SEO Key Manager</a>
-                  
-                  <a class="dropdown-item nav-link js-scroll-trigger" href="<?php echo $lnComment;?>">Comment</a>
+
                   
 
                   

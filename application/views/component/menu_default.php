@@ -17,52 +17,20 @@
 
 ?>
 
-<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-      <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="<?php echo $lnTop;?>">Ornnicha-J 1.0</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          Menu
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
+<nav class="menu fixed-top">
+  <ul class="active">
+    <li class="current-item"><a href="#">Home</a></li>
+    <li><a href="#">My Work</a></li>
+    <li><a href="#">About Me</a></li>
+    <li><a href="#">Get in Touch</a></li>
+    <li><a href="#">Blog</a></li>
+  </ul>
 
-          <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="<?php echo site_url();?>">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#about">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#projects">Projects</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="<?php echo $lnTour;?>">Tour Program</a>
-            </li>
+    <a class="toggle-nav" href="#">&#9776;</a>
 
-            <li class="nav-item">
-              <!--
-              <a class="nav-link js-scroll-trigger" href="<?php echo $lnMember;?>">Member Login</a>
-              -->
-              <div class="dropdown ">
-                <a href="#" class="nav-link dropdown-toggle " data-toggle="dropdown">Member</a>
-              
-                <div class="dropdown-menu">
-                  <a class="dropdown-item nav-link js-scroll-trigger" href="<?php echo $lnMember;?>">Login</a>
+      <form class="search-form">
+          <input type="text">
+              <button>Search</button>
+                </form>
+                </nav>
 
-                  <a class="dropdown-item nav-link" href="<?php echo $lnRegist;?>">Register</a>
-
-                  
-                </div>
-              </div>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="<?php echo $lnContact;?>">Contact</a>
-              
-
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>

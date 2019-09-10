@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 <!-- Global site tag (gtag.js) - Google Analytics for see-southern.com-->
-<!-- 
-    This line has been comment on the develop purpose on Wed 12 Sep 2018
-    on the real server just uncomment this line 
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120382485-1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -13,26 +11,12 @@
 
   gtag('config', 'UA-120382485-1');
 </script>
-
--->
-
-
-<!-- Global site tag (gtag.js) - Google Analytics for farookphuket.com
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-118269307-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-118269307-1');
-</script>
-comment this out as it is redundant with farookphuket.co
--->
-
+<!--end of google Analye-->
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta charset="UTF-8">
-<meta name="robots" content="noodp,noydir"/>
+<meta name="google-site-verification" content="XPjLJGaR_YtKMf6DpWP-Q6Z7q0e8VI3HQuOfTUYrjZc" />
+
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="<?php echo $og_url;?>"/>
 <meta property="og:locale" content="en_US" />

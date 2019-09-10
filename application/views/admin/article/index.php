@@ -283,25 +283,21 @@
                 }else{
                     data = {ar_id : ar_id.val(),
                             key_id : key_id.val(),
-                            ar_title : ar_title.val(),
-                            og_title : og_title.val(),
-                            og_des : og_des.val()
+                            ar_title : ar_title.val()
                             };
                 }
-                
                 $.post(url,data,function(e){
                     var rs = $.parseJSON(e);
+                    console.log(rs);
                     var edit_id = "";
                     $.each(rs.get_ar,function(i,v){
-                        edit_id = v.ar_id;
                         ar_id.val(v.ar_id);
                         key_id.val(v.kw_id);
+                        edit_id = v.ar_id;
                     });
+                    
                     frmAr("edit",edit_id);
                 });
-                
-
-
             }
             //-------
             //----sumTemplate

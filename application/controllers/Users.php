@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Users extends MY_Controller {
 
-
+    
     public $user_name;
 
     protected $is_login;
@@ -13,7 +13,7 @@ class Users extends MY_Controller {
     protected $is_admin;
     protected $user_pass;
     protected $moderate;
-
+    
 
 
 
@@ -43,7 +43,7 @@ class Users extends MY_Controller {
     $this->load->model("Mdl_contact");
     $this->load->model("Mdl_booking");
     $this->load->model("Mdl_gallery");
-
+    
     //check the user session
     $this->is_login = $this->session->userdata("is_login");
     $this->user_name = $this->session->userdata("user_name");
@@ -54,12 +54,12 @@ class Users extends MY_Controller {
     $this->moderate = $this->session->userdata("moderate");
     $this->user_type = $this->session->userdata("user_type");
 
-
+    
     $this->u_data = $this->get_user_info();
     $this->ip = $this->Mdl_users->getIP();
 
     //----Wed 3 Oct 2018
-    //$this->user_type = $this->user_type();
+    //$this->user_type = $this->user_type(); 
 
     }
 
@@ -85,7 +85,7 @@ class Users extends MY_Controller {
 
     }//end of index
 
-
+    
 
     function ajaxGetUser(){
         $name = $this->input->post("fb_name");
@@ -100,7 +100,7 @@ class Users extends MY_Controller {
 
         if($num_u == 0){
             $pass = $this->make_hash(1234);
-
+            
             $user_data = array(
                 "name" => $name,
                 "email" => $email,
@@ -112,7 +112,7 @@ class Users extends MY_Controller {
             );
             $s = $this->Mdl_users->saveUser($user_data);
             $u_id = $s;
-
+            
         }else{
             foreach($get as $row){
                 $u_id = $row->id;
@@ -125,9 +125,9 @@ class Users extends MY_Controller {
         $this->o_put["msg"] = "logging in welcome {$name}";
         $this->o_put["url"] = $url;
         $this->output->set_output(json_encode($this->o_put));
-
+        
         //redirect(site_url("users/summary"));
-
+        
     }
 
     /*
@@ -309,7 +309,7 @@ class Users extends MY_Controller {
                     endif;
 
                 endif;
-
+                
                 $this->o_put["err"] = $err;
                 $this->o_put["msg"] = $msg;
                 $this->output->set_output(json_encode($this->o_put));
@@ -370,7 +370,7 @@ class Users extends MY_Controller {
     }
 
 
-
+    
 
     //----
     function u($id){
@@ -378,7 +378,7 @@ class Users extends MY_Controller {
         if(!$this->is_login):
             redirect(site_url("users/logout"));
         endif;
-
+        
         $this->data["subview"] = "users/member_summary";
         $this->data["user_id"] = $this->user_id;
         $this->data["meta_title"] = "{$this->user_type}&nbsp;|&nbsp;welcome {$this->user_name}";
@@ -401,7 +401,7 @@ class Users extends MY_Controller {
         endforeach;
 
         //---set output ajax
-
+        
         $this->o_put["user_info"] = $get;
         $this->output->set_output(json_encode($this->o_put));
 
@@ -415,7 +415,7 @@ class Users extends MY_Controller {
         return $data;
     }
     //-----------------------
-
+    
 
 
     //no need to edit
@@ -424,11 +424,11 @@ class Users extends MY_Controller {
         $user_data = array("user_name","user_id","is_login","is_admin");
         $this->session->unset_userdata($user_data);
         $this->session->sess_destroy();
+        //redirect(site_url());
         $this->data["subview"] = "users/logout";
         $this->data["meta_title"] = "loging out...";
         $tmp = "_layout_main";
         $this->load->view($tmp,$this->data);
-
     }
 ////End of mon-12-Sep-2016
 
@@ -440,7 +440,7 @@ function adminListUser($seg=1){
 
     $where = array(
         "user_type !=" => 642,
-        "id !=" => $this->user_id
+        "id !=" => $this->user_id 
     );
     $get = $this->Mdl_users->getUsers($where)->result();
     $num = count($get);
@@ -491,7 +491,7 @@ function adminEditUser($id){
 }
 //---------adminEditUser
 function adminSaveUser(){
-
+    
     $user_name = $this->input->post("user_name");
     $user_id = $this->input->post("user_id");
     $user_email = $this->input->post("user_email");
@@ -531,7 +531,7 @@ function adminSaveUser(){
         "about_user" => $about_user
     );
 
-
+    
    if(!$user_id):
         if($this->getExitUserName($user_name)):
             //---make sure that this user name is not exit then create new user
@@ -542,9 +542,9 @@ function adminSaveUser(){
             $msg = "Success : The user name {$user_name } is created!";
 
         endif;
-
+        
     else:
-        //---update this user
+        //---update this user 
         unset($user_data["date_register"]);
         unset($user_data["about_user"]);
         unset($user_data["passwd"]);
@@ -552,8 +552,8 @@ function adminSaveUser(){
         $save = $this->Mdl_users->saveUser($user_data,array("id" => $user_id));
         $msg = "Success : data of {$user_name} has been updated";
    endif;
-
-
+   
+   
     $this->o_put["msg"] = $msg;
     $this->o_put["user_id"] = $user_id;
     $this->output->set_output(json_encode($this->o_put));
@@ -568,7 +568,7 @@ function adminDelUser($id){
     $email = "";
     $u_id = "";
     foreach($get as $row):
-        //---for the future improve
+        //---for the future improve 
         $name = $row->name;
         $email = $row->email;
         $u_id = $row->id;
@@ -589,7 +589,7 @@ function getExitUserName($name){
     $repeat = 0;
     if($num):
         $repeat = 1;
-
+    
     endif;
     return $repeat;
 }

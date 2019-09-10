@@ -1,4 +1,4 @@
-    <script src="<?php echo site_url("public/vendor/bootstrap/js/bootstrap.bundle.min.js");?>"></script>
+<script src="<?php echo site_url("public/vendor/bootstrap/js/bootstrap.bundle.min.js");?>"></script>
 
     <!-- Plugin JavaScript -->
     <script src="<?php echo site_url("public/vendor/jquery-easing/jquery.easing.min.js");?>"></script>

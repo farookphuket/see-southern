@@ -112,7 +112,6 @@
                 //console.log(obj);
                 var get_ar = obj.get_ar;
                 var num_ar = obj.num_ar;
-                var pagin = obj.pagination;
                 $share_list.html("");
                 $numShare.html(num_ar);
                 $.each(get_ar,function(i,v){
@@ -134,10 +133,6 @@
                     `;
                     $share_list.append(tmp);
                 });
-
-                
-                $share_pagin.html(pagin);
-            
                 
             }
             //-----------
@@ -168,7 +163,7 @@
                         success : function(e){
                             var rs = $.parseJSON(e);
                             $.each(rs.get_ar,function(i,v){
-                                //console.log(v);
+                                console.log(v);
                                 
                                 ar_id.val(v.ar_id);
                                 kw_id.val(v.kw_id);
@@ -222,7 +217,7 @@
                             <p>Your paragraph content all will be goes here</p>
                             <p>if you want to change the picture on the right just find the tag "src=" then change to your photo source</p>
                             <p>your result will show at the buttom of this text box after you click somewhere else </p>
-                            <p>You can change the text in between "&lt;p&gt;" tag.</p>
+                            <p>You can change the teext in between "&lt;p&gt;" tag.</p>
                         </div>
                     
                     </div>
@@ -331,15 +326,6 @@
                     showForm("edit",id);
                     
                 });
-
-                //---pagination
-                $share_pagin.delegate(".pagination a","click",function(e){
-                    e.preventDefault();
-                    var cur_page = $(this).attr("data-ci-pagination-page");
-                    //alert("page is "+cur_page);
-                    getMyPostList(cur_page);
-                });
-
 
                 //---save post
                 btnSave.on("click",function(){

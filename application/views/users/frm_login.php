@@ -2,17 +2,15 @@
 
 
 
-<div class="jumbotron">
-    <h1>Member : Login</h1>
-</div>
+
 
     <div class="row">
         <div class="col-sm-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h1>Please Note::</h1>
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center">Please Note::</h1>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <p>-All the article content on this website is "PUBLIC".</p>
                     <p>-There is no require to be a member just to reading the content.</p>
                     <p>-Only the "Activated" member can be login.</p>
@@ -20,17 +18,17 @@
             </div>
         </div>
         <div class="col-sm-6">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h1>ทำความเข้าใจกันก่อนนะ</h1>
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h1 class="text-center">ทำความเข้าใจกันก่อนนะ</h1>
                 </div>
-                 <div class="panel-body">
+                 <div class="card-body">
 
-<!--panel body content start-->
-    <p>-    ท่านไม่จำเป็นต้อง "Login" เพื่ออ่านบทความ</p>
-    <p>-    บทความที่ทุกๆ อย่างเป็น "สาธารณะ" ไม่จำเป็นต้อง "สมัครสมาชิก" กับทางเว๊ปไซต์</p>
-    <p>-    เว๊ปไซต์นี้ใช้ "Javascript" </p>                
-<!--end of panel body content -->
+                    <!--card body content start-->
+                    <p>-    ท่านไม่จำเป็นต้อง "Login" เพื่ออ่านบทความ</p>
+                    <p>-    บทความที่ทุกๆ อย่างเป็น "สาธารณะ" ไม่จำเป็นต้อง "สมัครสมาชิก" กับทางเว๊ปไซต์</p>
+                    <p>-    เว๊ปไซต์นี้ใช้ "Javascript" </p>                
+                    <!--end of panel body content -->
 
                 </div>
                 </div>
@@ -44,7 +42,7 @@
                 <div class="modal-body">
 
 <!--start the login form-->
-<form class="form-horizontal frmLogin" id="frmLogin" action="<?php echo site_url("users/login");?>">
+<form class="form-horizontal frmLogin" id="frmLogin" action="<?php echo site_url("login/getLogin");?>">
     <div class="form-group">
         <label class="label-control col-sm-4">User Name</label>
         <div class="col-sm-6">
@@ -64,6 +62,7 @@
         
     </div>
 <div class="modal-footer">
+
 	<span class="pull-right">
 		<fb:login-button
 		        id = "btnSocialLogin"
@@ -71,6 +70,8 @@
 		        onlogin="checkLoginState();">
 	   </fb:login-button>
 	</span>
+
+
     <span class="float-right">
         <div class="g-signin2" data-onsuccess="onSignIn"></div>
     </span>
@@ -285,7 +286,60 @@
 
   
 </script>
+<script>
+    function onSignIn(googleUser) {
+            var id_token = googleUser.getAuthResponse().id_token;
+            var gProfile = googleUser.getBasicProfile();
 
+            var gImage =  gProfile.getImageUrl();
+            var gEmail = gProfile.getEmail();
+            var gName = gProfile.getName();
+            
+            //--sever url 
+            var to_url = "<?php echo site_url("login/googleLogin");?>";
+            //---data to send 
+            var data = {
+                g_email : gEmail,
+                g_name : gName,
+                g_image : gImage,
+                user_token : id_token
+                
+            };
+
+            $.ajax({
+                type : "post",
+                url : to_url,
+                data : data,
+                success : function(e){
+                    var rs = $.parseJSON(e);
+                    $(".status").html(rs.msg).show();
+                    var rd = rs.url;
+                    setTimeout(function(){
+                        location.href = rd;                    
+                    },2000);
+                }
+            });
+            
+            //console.log(`user profile ${gProfile} the email is ${gProfile.getEmail()} and the picture is ${gImage} user name is ${gName}`);
+            
+            /*
+            var xhr = new XMLHttpRequest();
+            
+            
+            xhr.open('POST',to_url );
+           xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            //console.log('Signed in as: ' + xhr.responseText);
+        };
+        xhr.send(data);
+        */
+        
+    }
+    //-----------------
+    //----------signout user on page load
+    //---still not working 
+    //--12-5-19 user have to sign out from google account
+</script>
 
 <?php 
 

@@ -3,7 +3,7 @@
 ?>
 
   <body id="page-top">
-    <div class="status"></div>
+
     <?php 
       $menu = "component/menu_user.php";
       $this->load->view($menu);

@@ -34,7 +34,7 @@
               <h3 class="mb-3">Check your booking online</h3>
               
               <p class="text-muted mb-0">
-                We do update your booking online you can do check anywhere.
+                We do update your booking online you can do check anywahere.
               </p>
             </div>
           </div>
@@ -177,6 +177,9 @@
     <!-- Custom scripts for this template -->
     <script src="<?php echo site_url("public/js/creative.min.js");?>"></script>
    
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb67e3058a76a5d"></script>
+
 
   </body>
 

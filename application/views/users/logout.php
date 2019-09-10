@@ -9,20 +9,26 @@
 
 
 </section>
+<!--try on 14/5/19 7:30 a.m.-->
 <script src="https://apis.google.com/js/platform.js?onload=onLoadCallback" async defer></script>
 
-<!--//
-Comment this line on the development
-REMOVE ALL OF THE COMMENT LINE ON REAL SERVER
+
+<!-- for the developing jst comment this out  -->
 <script>
+$(function(){
+  
+  setTimeout(function(){
+    window.location.href = "<?php echo site_url(); ?>";
+  },4000);
 
-
-        document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://www.see-southern.com/";
-
-
-
-
-
+});
 </script>
-REMOVE ALL OF THE COMMENT LINE ON REAL SERVER
-//// -->
+
+<!-- COMENT THIS ABOVE LINE CODE ON LIVE SERVER -->
+
+<!--
+on the live server just comment this out
+<script>
+        document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://www.see-southern.com/";
+</script>
+-->

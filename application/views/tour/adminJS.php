@@ -3,7 +3,6 @@
 
     $(function(){
         var $el = $("#tour");
-        var $page_status = $(".status");
 
         var manTour = (function(){
             var $tour_list = $el.find(".tour_list");
@@ -18,9 +17,9 @@
             //---form tour
             var $frmTour = $el.find("#frmTour");
 
-            var tour_title = $el.find(".t_title");
+            var tour_title = $el.find(".tour_title");
             
-            var t_id = $el.find(".t_id");
+            var tour_id = $el.find(".tour_id");
             var tour_fullprice = $el.find(".tour_fullprice");
             var tour_duration = $el.find(".tour_duration");
             var tour_des = $el.find(".tour_location");
@@ -32,9 +31,9 @@
             var btnSave = $el.find(".btnSave");
 
             var kw_id = $el.find(".kw_id");
-            var meta_keyword = $el.find(".keyword");
-            var meta_url = $el.find(".keyurl");
-            var meta_des = $el.find(".keydes");
+            var meta_keyword = $el.find(".meta_keyword");
+            var meta_url = $el.find(".meta_url");
+            var meta_des = $el.find(".meta_description");
             
             
             
@@ -43,15 +42,11 @@
             //---------------
             function getTourList(page=1){
                 $tour_list.html("");
-
                 var url = "<?php echo site_url("tour/modGetTourList/");?>"+page;
                 $.ajax({
                     url : url,
                     success : function(e){
                         var rs = $.parseJSON(e);
-                        //console.log(rs);
-                        
-                        
                         $.each(rs.get_tour,function(i,v){
                             
                             var onSale = `
@@ -100,8 +95,8 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="btn btn-primary btnViewTour" data-t_id="${v.t_id}">View and Edit</button>
-                                    <button class="btn btn-danger btnDelTour" data-t_id="${v.t_id}">delete</button>
+                                    <button class="btn btn-primary btnViewTour" data-tour_id="${v.t_id}">View and Edit</button>
+                                    <button class="btn btn-danger btnDelTour" data-tour_id="${v.t_id}">delete</button>
                                 </div>
                             </div>
                             
@@ -110,8 +105,6 @@
                             `;
                             $tour_list.append(tmp);
                         });
-                        
-                        $tour_pagin.html(rs.pagination);
                     }
                 });
             }
@@ -119,47 +112,56 @@
             //---------show_form
             function showForm(cmd,id){
                 tinymce.activeEditor.setMode("design");
-                $mdFormTitle.html("");
                 switch(cmd){
                     case"edit":
-                        var url = "<?php echo site_url("tour/modEditTour/");?>"+parseInt(id);
-                        
+                        var url = "<?php echo site_url("tour/modEditTour/");?>"+id;
                         $.ajax({
                             url : url,
                             success : function(e){
                                 var rs = $.parseJSON(e);
+                                console.log(rs.get_tour);
+                                
                                 $.each(rs.get_tour,function(i,v){
-                                    console.log(v);
-                                    
-                                    t_id.val(v.t_id);
-                                    kw_id.val(v.kw_id);
+                                    tour_id.val(v.t_id);
                                     tour_title.val(v.t_name);
-
-                                    //--seo
-                                    meta_keyword.val(v.kw_page_keyword);
                                     
-                                    meta_url.val(v.kw_canonical);
-                                    meta_des.val(v.kw_page_des);
-
-                                    //---detail
-                                    tour_summary.val(v.t_summary);
-                                    tinymce.activeEditor.setContent(v.t_program);
-
-                                    //---price location 
                                     tour_fullprice.val(v.full_price);
                                     tour_duration.val(v.t_duration);
                                     tour_des.val(v.t_destination);
-
-
-                                    $mdFormTitle.html(`Editing...${v.t_name}`);
+                                    
+                                    tour_summary.val(v.t_summary);
+                                    var t_detail = tinymce.activeEditor.setContent(v.t_program);
+                                    tour_detail.val(t_detail);
+                                    meta_keyword.val(v.kw_page_keyword);
+                                    meta_des.val(v.kw_page_des);
+                                    meta_url.val(v.og_url);
+                                    kw_id.val(v.kw_id);
+                                    mark_draft.val(v.mark_draft);
+                                    $mdFormTitle.html(`Editing... ${v.t_name}`);
+                                    $($mdTourForm).modal("show");
                                 });
-                                $($mdTourForm).modal("show");
                             }
                         });
 
                     break;
                     case"add":
-                        
+                        var url = "<?php echo site_url("tour/seoFirstSave");?>";
+                        $.ajax({
+                            url : url,
+                            success : function(e){
+                                //console.log(e);
+                                var rs = $.parseJSON(e);
+                                $tourResult.html(rs.msg);
+                                $.each(rs.get_tour,function(i,v){
+                                    meta_url.val(v.og_url);
+                                    kw_id.val(v.kw_id);
+                                    tour_id.val(v.t_id);
+                                });
+                                setTimeout(function(){
+                                    $tourResult.html("").fadeOut("slow");
+                                },4000);
+                            }
+                        });
                         $mdFormTitle.html("Add New Tour");
                         $($mdTourForm).modal("show");
                     break;
@@ -171,16 +173,11 @@
             //----seoAutoSave
             function seoAutoSave(id){
                 $tourResult.html("");
-               var url = "";
-               if(!id){
-                url = "<?php echo site_url("tour/seoFirstSave/");?>";
-               }else{
-                url = "<?php echo site_url("tour/seoAutoSave/");?>"+id;
-               }
+               var url = "<?php echo site_url("tour/seoAutoSave/");?>"+id;
                var data = {
                     t_title : tour_title.val(),
                     kw_id : kw_id.val(),
-                    t_id : t_id.val(),
+                    t_id : tour_id.val(),
                     keyword : meta_keyword.val(),
                     keydes : meta_des.val(),
                     keyurl : meta_url.val(),
@@ -197,9 +194,7 @@
                         </span>
                         `;
                         $tourResult.html(tmp_msg);
-                        console.log(rs);
-                        
-                        //showForm("edit",rs.t_id);
+                        showForm("edit",rs.t_id);
                     }
                });
             }
@@ -215,7 +210,7 @@
                 var url = "<?php echo site_url("tour/seoAutoSave/");?>"+id;
                 var data = {
                     mark_draft : opt,
-                    t_id : t_id.val(),
+                    t_id : tour_id.val(),
                     set_mark : true
                 };
                 //alert(`tour id is ${id} mark is ${opt}`);
@@ -257,38 +252,6 @@
                 });
 
             }
-            //------------
-            //-----delTour
-            function delTour(cmd,id){
-                
-                switch(cmd){
-                    case"delete":
-                        var url = "<?php echo site_url("tour/modDelTour/");?>"+id;
-                        $.ajax({
-                            url : url,
-                            success : function(e){
-                                var rs = $.parseJSON(e);
-                                $page_status.html(rs.msg).show();
-                                setTimeout(function(){
-                                    $page_status.html("loading...").fadeOut("slow");
-                                    getSummary();
-                                },5000);
-                                
-                            }
-                        });
-                    break;
-                    default:
-                        
-                        var ms = `You are about to delete tour id ${id} this operation cannot be undo\n are you sure to delete?`;
-                        if(confirm(ms) === true){
-                            delTour("delete",id);
-                        }else{
-                            return false;
-                        }
-                    break;
-                }
-            }
-            //-----------
 
             //---------------
             function getSummary(){
@@ -302,7 +265,7 @@
                 //--------------
                 //-------mark as draft
                 mark_draft.on("change",function(){
-                    var id = t_id.val();
+                    var id = tour_id.val();
                     saveAsDraft(id);
                 });
 
@@ -314,29 +277,14 @@
 
                 //---button view and edit click
                 $tour_list.delegate(".btnViewTour","click",function(e){
-                    e.preventDefault();
-                    var id = $(this).attr("data-t_id");
-                    showForm("edit",id);
-                    //alert(`the id is ${id}`);
-                });
-
-                $tour_list.delegate(".btnDelTour","click",function(){
                     var id = $(this).attr("data-tour_id");
-                    delTour(null,id);
-                });
-
-                //---pagination
-                $tour_pagin.delegate(".pagination a","click",function(e){
-                    e.preventDefault();
-                    var cur_page = $(this).attr("data-ci-pagination-page");
-                    
-                    getTourList(cur_page);
+                    showForm("edit",id);
                 });
 
                 
                 //---run firstSave when the user type in tour title box
                 tour_title.on("blur",function(){
-                    var id = t_id.val();
+                    var id = tour_id.val();
                     seoAutoSave(id);
                 });
 

@@ -1,5 +1,5 @@
 
-<div class="container-fluid">
+<div class="container">
 
 <?php 
     $t_id = $this->uri->segment(3);
@@ -7,7 +7,7 @@
 <form id="bookingTour" class="form-horizontal" action="<?php echo site_url("booking/uSaveBooking");?>">
 
     <label for="meta_url">Booking for</label>
-    <div class="input-group mb-4">
+    <div class="input-group mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="input_1">
             <?php echo site_url(); ?>
@@ -32,7 +32,7 @@
     </div>
 
     <label for="bk_name">Name</label>
-    <div class="input-group mb-4">
+    <div class="input-group mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon2">your name</span>
         </div>

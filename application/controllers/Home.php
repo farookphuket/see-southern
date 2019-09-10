@@ -8,21 +8,24 @@ class Home extends MY_Controller {
 New edit with the MY_Model class on Thu-25-Aug-2016
 
 */
-        protected $is_login;
-        protected $is_admin;
+      protected $is_login;
+      protected $is_admin;
+      protected $moderate;
+      
 
-        
+      //--public variable
+      
+      public $ip;
+      public $os;
+      public $browser;
+      public $o_put;
 
-        //--public variable
-        
-        public $ip;
-        public $os;
-        public $browser;
-        public $o_put;
-
+      public $sysName = "";
+      public $sysVersion = "";
+      public $sysDate = "";
     function __construct() {
-    parent::__construct();
-    $this->is_login = $this->session->userdata("is_login");
+        parent::__construct();
+        $this->is_login = $this->session->userdata("is_login");
         $this->load->model("Mdl_home");
         $this->load->model("Mdl_article");
         $this->load->model("Mdl_tour");
@@ -44,11 +47,26 @@ public function index()
     $url = site_url();
     $this->data['subview'] = "home_index";
     $this->data['meta_title'] = "Welcome  to {$url}";
-    
-    
-    
+    $safari = "Safari";
+    $browser_name = "";
+    $ie = "Internet Explorer";
+    $err = 0;
 
-    $this->load->view("_layout_main",$this->data);
+      if($this->agent->browser() == $ie):
+        $browser_name = $ie;
+        $err = 1;
+       elseif($this->agent->browser() == $safari):
+        $browser_name = $safari;
+        $err = 1;
+        else:
+        $err = 0;
+        $browser_name = $this->agent->browser();
+     endif;
+     $this->data["browser_name"] = $browser_name;
+     $this->data["error"] = $err;
+    
+    $tmp = "_MAIN_TMP";
+    $this->load->view($tmp,$this->data);
 
 
 

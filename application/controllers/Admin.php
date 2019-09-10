@@ -16,28 +16,28 @@ class Admin extends MY_Controller{
     protected $_tb_user = "users";
 
     function __construct() {
-        parent::__construct();
-		$this->is_admin = $this->session->userdata("is_admin");
-        $this->user_is_login();
-        $this->user_id = $this->session->userdata("user_id");
-        $this->user_is_admin();
-        $this->user_name = $this->session->userdata("user_name");
+      parent::__construct();
+      $this->is_admin = $this->session->userdata("is_admin");
+      $this->user_is_login();
+      $this->user_id = $this->session->userdata("user_id");
+      $this->user_is_admin();
+      $this->user_name = $this->session->userdata("user_name");
 
-        //Load the library..edit on Mon-31-July-2017
-        $this->load->library("pagination");
-        
-        //Load the models
-        $this->load->model("Mdl_users");
-		$this->load->model("Mdl_article");
-        $this->load->model("Mdl_admin");
-        $this->load->model("Mdl_cat");
-        $this->load->model("Mdl_booking");
-        $this->load->model("Mdl_faq");
-        $this->load->model("Mdl_notice");
-        if(!$this->is_admin):
-            //echo"No Admin..";
-            redirect(site_url("users/logout"));
-        endif;
+      //Load the library..edit on Mon-31-July-2017
+      $this->load->library("pagination");
+
+      //Load the models
+      $this->load->model("Mdl_users");
+      $this->load->model("Mdl_article");
+      $this->load->model("Mdl_admin");
+      $this->load->model("Mdl_cat");
+      $this->load->model("Mdl_booking");
+      $this->load->model("Mdl_faq");
+      $this->load->model("Mdl_notice");
+      if(!$this->is_admin):
+        //echo"No Admin..";
+        redirect(site_url("users/logout"));
+      endif;
     }
     
 
@@ -47,8 +47,6 @@ class Admin extends MY_Controller{
         endif;
         $this->data["meta_title"] = "admin page | {$this->user_name}";
         $this->data["subview"] = "admin/admin_index";
-
-        
         $this->load->view("_layout_admin",$this->data);
     }
     //---
@@ -81,31 +79,6 @@ class Admin extends MY_Controller{
         $this->output->set_output(json_encode($this->o_put));
    }
 
-   //-------------------------
-   //------markSingleAsRead
-   function markSingleAsRead(){
-       $notice_id = $this->input->post("notice_id");
-       $opt = $this->input->post("opt");
-       
-       $notice_data = array(
-           "notice_read" => $opt
-       );
-       $this->Mdl_notice->markAllAsRead($notice_data,array("notice_id" => $notice_id));
-
-       $this->o_put["msg"] = "Success : item has been marked";
-       $this->output->set_output(json_encode($this->o_put));
-
-   }
-   //-----------------------------
-   //--------mark all as read
-   function markAllAsRead(){
-       $note_data = array(
-           "notice_read" => 2
-       );
-       $this->Mdl_notice->markAllAsRead($note_data);
-       $this->o_put["msg"] = "Success : all caught up!";
-       $this->output->set_output(json_encode($this->o_put));
-   }
     //-----------------------------------
 
     function profile(){
@@ -184,9 +157,6 @@ class Admin extends MY_Controller{
     function u($id){
         $this->data["subview"] = "admin/admin_index";
         $this->data["meta_title"] = "{$this->user_type} | welcome {$this->user_name}";
-        $this->data["is_admin"] = $this->user_is_admin();
-
-        
 
         $this->load->view("_ADMIN_TMP",$this->data);
     }
