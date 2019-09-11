@@ -417,10 +417,10 @@ p {
 }
 
 
-@media screen and(max-width:500px){
+@media screen and(max-width:800px){
   .tm-site-header{
     margin-top:20%;
-    padding-top:85px;
+    padding-top:120px;
   }
 
 }
