@@ -6,8 +6,8 @@ class MY_Model extends CI_Model{
     protected $_order_by = '';
 
 
-//last edit on Tue 13 June 2017
-// Add $_tb_name
+    //last edit on Tue 13 June 2017
+    // Add $_tb_name
     protected $_tb_name;
     
 
@@ -15,22 +15,34 @@ class MY_Model extends CI_Model{
     public $ip;
     public $os;
     public $browser;
+
+
+
+
     public $user_name;
-    protected $user_id;
+    public $user_id;
+
     //-----
     function __construct(){
         parent::__construct();
 
-        $this->user_name = $this->session->userdata("user_name");
-        $this->user_id = $this->session->userdata("user_id");
-        
+        $this->user_name = $this->getUserName();
+        $this->user_id = $this->getUserId();
     }//end of construct
 
-/*edit this part on the Tue-13-June-2017
-        Add getTB saveTB delTB method
+    function getUserName(){
+      return $this->session->userdata("user_name");
+    }
 
-*/
-//---this method has create on Fri 20 Apr.2018
+    function getUserId(){
+      return $this->session->userdata("user_id");
+    }
+    
+    function getEl($el,$option=false){
+      return $this->input->post($el,$option);
+    } 
+    
+    //---this method has create on Fri 20 Apr.2018
     //--getIP
     function getIP(){
         $this->ip = $this->input->ip_address();
@@ -52,26 +64,50 @@ class MY_Model extends CI_Model{
         return $this->browser;
     }
 
-    function getUserName(){
-        $user_name = "Anonymous";
-        if($this->session->userdata("user_name")):
-            $user_name = $this->user_name;
+
+    //----randomChar
+    function randomChar($length=false){
+        if(!$length):
+            $length = 10;
         endif;
-        //$this->user_name = $user_name;
-        return $user_name;
+        $permitted_chars = '123456789ABJREESMMRSDSFFSFTYUGGFCDE25KKYMBMBUOPPREDFGHJMNPQRSTUVWXYZ';
+        // Output: 54esmdr0qf
+        $random = substr(str_shuffle($permitted_chars), 0, $length);
+        return $random;
     }
 
-    function getUserId(){
-        $user_id = 0;
-        if($this->user_id):
-            $user_id = $this->user_id;
-        endif;
-        //$this->user_name = $user_name;
-        return $user_id;
+   
+    /* GLOBAL Method 14-Sep-2019 */
+    function SAVE($data,$tb,$where=false){
+      $save = 0;
+      $id = 0;
+      if($where):
+          $id = $where;
+          $save = $this->db
+                        ->where($where)
+                        ->set($data)
+                        ->update($tb);
+      else:
+        $save = $this->db
+                      ->set($data)
+                      ->insert($tb);
+        $id = $this->db->insert_id();
+      endif;
+      return $id;
     }
-
-
     
+
+    function GET($tb,$where=false){
+      $get = 0;
+      if($where):
+        $get = $this->db
+                    ->where($where)
+                    ->get($tb);
+      else:
+        $get = $this->db->get($tb);
+      endif;
+      return $get;
+    }
 
 //---------------------------------
 //---End of get user info fri 20 apr 2018

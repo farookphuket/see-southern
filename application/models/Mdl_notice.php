@@ -4,7 +4,7 @@
 
 class Mdl_notice extends MY_Model{
 
-    protected $user_id;
+    public $user_id;
     public $user_name;
     protected $is_login;
     protected $is_admin;

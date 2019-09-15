@@ -28,13 +28,17 @@ class Mdl_article extends MY_Model{
 
     function __construct() {
         parent::__construct();
-        $this->today = date("Y-m-d",time());
+        //$this->today = date("Y-m-d",time());
 
-        $this->user_name = $this->getUserName();
-        $this->user_id = $this->getUserId();
         $this->ip = $this->getIP();
         $this->os = $this->getOS();
         $this->browser = $this->getBrowser();
+
+
+        $this->user_name = $this->getUserName();
+        $this->user_id = $this->getUserId();
+
+
     }
 
 
@@ -108,7 +112,7 @@ class Mdl_article extends MY_Model{
         return $cat_id;
 
     }
-//------------
+    //------------
     function delCat($where){
 
         //--find the article in this category then delete them
@@ -186,6 +190,11 @@ class Mdl_article extends MY_Model{
             ->delete($this->_tb_ar);
         return true;
     }
+    
+    
+    
+    
+    
     //---
     function num_ar_view($where){
         //this method will update the count
@@ -277,37 +286,161 @@ class Mdl_article extends MY_Model{
 
 
 
-    //-------------------------------
-    //-----------send admin notice 
-    function sendAdminNotice($no_title,$no_body){
-        $u_id = $this->user_id;
-        $u_name = $this->user_name;
-        $label = "";
-        $today = date("Y-m-d h:i:s a.",time());
-        $note_title = $no_title;
-        $note_body = "<div class='row'>
-        <div class='col-sm-6'>
-        <p>
-            {$no_body}
-        </p>
-        <br style='clear:both' />
-        <p>&nbsp;</p>
-        <p>IP : {$this->ip}&nbsp;  {$this->browser}&nbsp;  OS : {$this->os}&nbsp; </p>
-        <p>Date : {$today}</p>
-        </div>
-        </div>";
-        
-        $note_array = array(
-            "notice_title" => $note_title,
-            "notice_body" => $note_body,
-            "notice_ip" => $this->ip,
-            "by_user_name" => $this->user_name,
-            "notice_date" => $today,
-        );
-        //var_dump($note_array);
-        $this->saveTB($this->_tb_notice,$note_array);
 
+    /* NO LOGIN SECTION START */
+    /* Section create on 15 Sep 2019 */
+    /* No login can read the public article */
+    function readArticle($where){
+      
+      $j1 = "{$this->_tb_user}.id={$this->_tb_ar}.ar_user_id";
+      $j2 = "{$this->_tb_seo}.kw_id={$this->_tb_ar}.kw_id";
+      $get = $this->db
+                  ->where($where)
+                  ->join($this->_tb_user,$j1)
+                  ->join($this->_tb_seo,$j2)
+                  ->get($this->_tb_ar);
+
+      return $get;
     }
+
+
+
+    /*   End of np login section */
+    //---------------------------------------------//
+
+
+
+
+
+
+
+
+    /* Admin Start 
+     * Sun 15 Sep 2019 while change the new theme
+     *
+     * */
+    
+    
+    function adminGet($where=false,$limit=false,$offset=false){
+        $get = 0;
+        $j1 = "{$this->_tb_user}.id={$this->_tb_ar}.ar_user_id";
+        $j2 = "{$this->_tb_seo}.kw_id = {$this->_tb_ar}.kw_id";
+      
+        if($where):
+          $get = $this->db
+                      ->where($where)
+                      ->join($this->_tb_user,$j1)
+                      ->join($this->_tb_seo,$j2)
+                      ->order_by("{$this->_tb_ar}.date_add","DESC")
+                      ->get($this->_tb_ar,$limit,$offset);
+        else:
+          $get = $this->db
+                      ->join($this->_tb_user,$j1)
+                      ->join($this->_tb_seo,$j2)
+                      ->order_by("{$this->_tb_ar}.date_add","DESC")
+                      ->get($this->_tb_ar,$limit,$offset);
+
+        endif;
+        return $get;
+    }
+
+
+    //--- adminSave
+    function adminSave(){
+        $ar_id = $this->getEl("ar_id");
+        $kw_id = $this->getEl("key_id");
+        $ar_user_id = $this->getEl("ar_user_id");
+
+        $uniq_id = $this->getEl("uniq_id");
+
+        if(!$uniq_id):
+          $uniq_id = $this->randomChar(255);
+        endif;
+
+        /* form article section */
+        $ar_title = $this->getEl("ar_title");
+        $ar_body = $this->getEl("ar_body");
+        $ar_sum = $this->getEl("ar_sum");
+
+        $approve = ($this->getEl("ar_approve"))?$approve=1:$approve=0;
+        $a_index = ($this->getEl("show_index"))?$a_index=1:$a_index=0;
+        $pub = ($this->getEl("ar_pub"))?$pub=1:$pub=0;
+        /* End of Article filed */
+        /* form seo section */
+        $keyword = $this->getEl("og_title");
+        $keydes = $this->getEl("og_des");
+        $se_data = array(
+          "kw_page_keyword" => $keyword,
+          "kw_page_des"  => $keydes,
+          "article_publisher" => $this->user_name,
+          "og_site_name " => site_url() 
+        );
+        if(!$kw_id):
+          $save = $this->SAVE($se_data,$this->_tb_seo);
+          $kw_id = $save;
+        else:
+          $kw_id = $kw_id;
+          $save = $this->SAVE($se_data,$this->_tb_seo,array("{$this->_tb_seo}.kw_id" => $kw_id));
+            
+        endif;
+       $kw_id = $kw_id; 
+
+      /* Ar data to save   */
+        $ar_data = array(
+          "kw_id" => $kw_id,
+          "uniq_id" => $uniq_id,
+          "ar_title" => $ar_title,
+          "ar_summary" => $ar_sum,
+          "ar_body" => $ar_body,
+          "ar_show_index" => $a_index,
+          "ar_show_public" => $pub,
+          "ar_is_approve" => $approve,
+          "ar_user_id" => $this->user_id,
+          "ar_post_by" => $this->user_name,
+          "date_add" => $this->today_andTime,
+          "date_edit" => $this->today_andTime,
+        );
+      
+        if($this->user_id != $ar_user_id):
+          unset($ar_data["ar_post_by"]);
+          unset($ar_data["ar_user_id"]);
+        endif;
+        if(!$ar_id):
+           $save  = $this->SAVE($ar_data,$this->_tb_ar);
+           $ar_id = $save;
+        else:
+          unset($ar_data["date_add"]);
+          $ar_id = $ar_id;
+          $save = $this->Save($ar_data,$this->_tb_ar,array("{$this->_tb_ar}.ar_id" => $ar_id));
+        endif;
+      /*  End of ar_data */
+         
+      /* Update the seo table add the url */
+      $url = site_url("article/read/{$uniq_id}");
+      $up_se = array(
+                      "kw_page_keyword" => $keyword,
+                      "kw_page_des" => $keydes,
+                      "kw_canonical " => $url,
+                      "og_url" => $url,
+                      "og_title" => $keyword,
+                      "og_description" => $keydes
+                    );
+        $this->SAVE($up_se,$this->_tb_seo,array("{$this->_tb_seo}.kw_id" => $kw_id));
+
+      /* return the id back to controller */
+      $data = array(
+        "ar_id" => $ar_id,
+        "kw_id" => $kw_id,
+        "uniq_id" => $uniq_id
+      );
+      return $data;
+    }
+    //------- End of adminSave ---
+
+
+    /* End of Admin */
+
+
 
 }//end of Mdl_article
 

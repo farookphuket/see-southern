@@ -19,17 +19,17 @@
 
 <nav class="menu fixed-top">
   <ul class="active">
-    <li class="current-item"><a href="#">Home</a></li>
+  <li class="current-item"><a href="<?php echo $home_url;?>">Home</a></li>
     <li><a href="#">My Work</a></li>
     <li><a href="#">About Me</a></li>
-    <li><a href="#">Get in Touch</a></li>
-    <li><a href="#">Blog</a></li>
+    <li><a href="<?php echo $lnTour;?>">Tour</a></li>
+    <li><a href="<?php echo $lnMember;?>">Login</a></li>
   </ul>
 
     <a class="toggle-nav" href="#">&#9776;</a>
 
       <form class="search-form">
-          <input type="text">
+          <input type="text" class="search" placeholder="Still in the test mode">
               <button>Search</button>
                 </form>
                 </nav>

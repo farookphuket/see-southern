@@ -184,11 +184,11 @@ class Login extends MY_Controller{
                 $url = site_url("users/u/{$u_id}");
             endforeach;
             if($mod == 1):
-                $url = site_url("users/mod/{$u_id}");
+                $url = site_url("users/mod");
                 $data["moderate"] = $mod;
             endif;
             if($admin == 1):
-                $url = site_url("admin/u/{$u_id}");
+                $url = site_url("admin/u");
                 $data["is_admin"] = 1;
             endif;
             $data["user_id"] = $u_id;

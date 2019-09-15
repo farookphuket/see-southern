@@ -254,7 +254,7 @@ padding: 1.5em;
 }
 
 .status{
-    position:fixed;
+    position:fixed !important;
     padding:25px;
     top:50%;
     right:50%;
@@ -263,6 +263,24 @@ padding: 1.5em;
     color:green;
     display:none;
 
+}
+
+
+.modal-content{
+  color:black;
+
+}
+
+.modal-body input[type='text'],textarea.form-control{
+  background-color:black;
+  color:white;
+}
+
+.card-title > h1,h2{
+  color:black;
+}
+.card-body > p{
+  color:black;
 }
 .error{
     position:fixed;

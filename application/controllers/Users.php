@@ -45,13 +45,13 @@ class Users extends MY_Controller {
     $this->load->model("Mdl_gallery");
     
     //check the user session
-    $this->is_login = $this->session->userdata("is_login");
-    $this->user_name = $this->session->userdata("user_name");
-    $this->user_id = $this->session->userdata("user_id");
-    $this->is_admin = $this->session->userdata("is_admin");
+    $this->is_login = $this->user_is_login();
+    $this->user_name = $this->getUserName();
+    $this->user_id = $this->getUserId();
+    $this->is_admin = $this->user_is_admin();
     $this->user_pass = $this->session->userdata("user_pass");
     $this->user_email = $this->session->userdata("user_email");
-    $this->moderate = $this->session->userdata("moderate");
+    $this->moderate = $this->user_is_mod();
     $this->user_type = $this->session->userdata("user_type");
 
     
@@ -75,6 +75,9 @@ class Users extends MY_Controller {
             $url = site_url("users/u/{$this->user_id}");
             if($this->is_admin):
                 $url = site_url("admin");
+            endif;
+            if($this->moderate):
+              $url = site_url("users/mod");
             endif;
             redirect($url);
         endif;
@@ -463,6 +466,15 @@ function adminListUser($seg=1){
 
     $this->output->set_output(json_encode($this->o_put));
 }
+
+
+  /* Moderate Section create on 15-Sep-2019 */
+  function mod(){
+    echo"welcome {$this->user_name}";
+  }
+
+
+  /* End of Moderate section */
 //---------------------------------
 //--------modViewUser
 function modViewUser($id){

@@ -27,6 +27,8 @@
     <label for="ar_title">Title</label>
     <input type="text" name="ar_title" id="ar_title" class="form-control ar_title" />
     <input type="hidden" name="ar_id" class="ar_id" />
+    <input type="hidden" name="uniq_id" class="uniq_id" />
+    <input type="hidden" name="ar_user_id" class="ar_user_id" value="<?php echo $user_id ?>"/>
     <input type="hidden" name="key_id" class="key_id" />
 </div>
 <p>&nbsp;</p>

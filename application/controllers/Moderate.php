@@ -4,7 +4,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-class Admin extends MY_Controller{
+class Moderate extends MY_Controller{
     protected $user_id;
     protected $user_name;
     protected $is_login;
@@ -19,9 +19,8 @@ class Admin extends MY_Controller{
       parent::__construct();
       $this->is_admin = $this->user_is_admin();
       $this->is_login = $this->user_is_login();
-      $this->user_id = $this->session->userdata("user_id");
-      //$this->user_is_admin();
-      $this->user_name = $this->session->userdata("user_name");
+      $this->user_id = $this->getUserId();
+      $this->user_name = $this->getUserName();
 
       //Load the library..edit on Mon-31-July-2017
       $this->load->library("pagination");
@@ -34,14 +33,26 @@ class Admin extends MY_Controller{
       $this->load->model("Mdl_booking");
       $this->load->model("Mdl_faq");
       $this->load->model("Mdl_notice");
-      if(!$this->is_admin):
-        //echo"No Admin..";
-        redirect(site_url("users/logout"));
-      endif;
+      
+      if($this->is_login):
+          $url = site_url("users/u");
+          if($this->is_admin):
+            $url = site_url("users/admin");
+          endif;
+          if($this->moderate):
+            $url = site_url("moderate/u");
+          endif;
+        redirect($url);
+      else:
+          redirect(site_url("users/logout"));
+          exit(); 
+      endif; 
+
     }
     
 
     function index(){
+
         if($this->is_admin):
             redirect(site_url("admin/u"));
         endif;
@@ -157,7 +168,7 @@ class Admin extends MY_Controller{
     function u(){
         
         
-        $this->data["subview"] = "admin/admin_index";
+        $this->data["subview"] = "mod/mod_index";
         $this->data["meta_title"] = "{$this->user_type} | welcome {$this->user_name}";
 
         $this->load->view("_ADMIN_TMP",$this->data);

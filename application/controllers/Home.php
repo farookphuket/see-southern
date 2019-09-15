@@ -65,6 +65,20 @@ public function index()
      $this->data["browser_name"] = $browser_name;
      $this->data["error"] = $err;
     
+
+    /* check login session 15-Sep-2019 */
+    if($this->is_login):
+      $url = site_url("users/u/{$this->user_id}");
+      if($this->moderate):
+        $url = site_url("users/mod");
+      endif;
+        if($this->is_admin):
+          $url = site_url("admin");
+        endif;
+        redirect($url);
+    endif;
+    /* End of check login  */
+
     $tmp = "_MAIN_TMP";
     $this->load->view($tmp,$this->data);
 

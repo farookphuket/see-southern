@@ -21,7 +21,7 @@
 
    <?php 
    $page_about = "component/about_main.php";
-   //$this->load->view($page_about); 
+   $this->load->view($page_about); 
    ?>
 
       <section id="article">

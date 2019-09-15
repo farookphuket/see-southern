@@ -8,11 +8,13 @@ http://www.templatemo.com/tm-517-timeless
 
 body {
     background-color: #333333;
-    color: #FFFFFF;
+    color: green; 
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
     font-weight: 300;
     overflow-x: hidden;
 }
+
+
 
 h1,
 h2,
@@ -27,7 +29,9 @@ h3 {
     font-size: 1.3rem;
 }
 
-
+table{
+  color:white;
+}
 /*
  *Copy this code from custom_theme.css
  */
@@ -43,6 +47,15 @@ image responsive
     height: auto;
     border: 2px solid #B98CC3;
 }
+
+
+  /* Set the section */
+.container > section{
+  padding-top:100px;
+  margin-top:85px;
+}
+
+
 
 /*
     add this  line Sat 2 Jun 2018 to make an embeded youtube video responsive
@@ -303,17 +316,19 @@ iframe {
 }
 
 .form-control:focus {
-    background-color: transparent;
+    /*background-color: transparent;*/
     border-color: #CCCCCC;
-	color: #FFF;
+	color: red;
     box-shadow: 0 0 0 0.2rem #cccccc14;
 }
 
+/*
 input,
 textarea,
 [contenteditable] {
     caret-color: #FFFFFF;
 }
+*/
 
 p {
     line-height: 1.9;

@@ -54,6 +54,8 @@
 
     <link href="<?php echo site_url("public/css/custom_theme.css");?>" rel="stylesheet">
 
+
+    <link rel="stylesheet" href="<?php echo site_url("public/css/templatemo-style.css");?>">
 <!--
    <script src="<?php echo site_url("public/vendor/jquery/jquery.min.js");?>"></script>
 -->

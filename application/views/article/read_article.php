@@ -1,49 +1,65 @@
+
 <?php 
-    foreach($get_ar as $row):
+
+
+      $ar_post_by = "";
+      $ar_post_date = "";
+      $ar_body = "";
+      $ar_sum = "";
+      $ar_title = "";
+      foreach($get_ar as $row):
+      
+        $ar_post_by = $row->name;
+        $ar_title = $row->ar_title;
+        $ar_sum = $row->ar_summary;
+        $ar_body = $row->ar_body;
+      endforeach;
 ?>
-<div class="container-fluid">
-      <div class="row">
-        
 
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="text-center">
-                <?php echo $row->ar_title;?>
-              </h2>
 
-            </div>
-            <div class="card-body">
-              <p>
-              <?php 
-                echo $row->ar_summary;
-              ?>
-              </p>
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <p>
-                <?php 
-                  echo $row->ar_body;
-                ?>
-              </p>
-              <div class="float-right">
-                <button class="btn btn-danger lnClose">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p>&nbsp;</p>
-        <div class="col-lg-12">
-          <?php 
-            $comment = "comment/comment_index.php";
-            $this->load->view($comment);
-          ?>
-        </div>
+
+<p>&nbsp;</p>
+
+<section id="read">
+  <div class="container">
+    <p>
+    <?php //var_dump($get_ar); ?>
+    </p>
+    <p>&nbsp;</p>
+    <div class="card">
+      <div class="card-header">
+        <h1><?php echo $ar_title; ?></h1>
       </div>
+      <div class="card-body"> 
+      <div class="table-responsive">
+          <table class="table table-bordered">
+            <tr>
+              <th>Post By</th>
+              <td><?php echo $ar_post_by; ?></td>
+            </tr>
+          </table>
+      </div>
+      <p>
+        <?php echo $ar_sum; ?>
+      </p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>
+        <?php echo $ar_body; ?>
+      </p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+    </div>
+    </div>
 
-</div>
+  </div>
 
-<?php endforeach;?>
+
+
+
+
+</section>
+
 <script>
   $(function(){
     $(".lnClose").on("click",function(){
