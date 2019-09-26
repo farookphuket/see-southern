@@ -42,10 +42,11 @@ class Users extends MY_Controller {
     $this->load->model("Mdl_article");
     $this->load->model("Mdl_contact");
     $this->load->model("Mdl_booking");
-    $this->load->model("Mdl_gallery");
+    $this->load->model("Mdl_ustd"); //--18-Sep-2019
     
     //check the user session
     $this->is_login = $this->user_is_login();
+    $this->data["is_login"] = $this->is_login;
     $this->user_name = $this->getUserName();
     $this->user_id = $this->getUserId();
     $this->is_admin = $this->user_is_admin();
@@ -418,9 +419,33 @@ class Users extends MY_Controller {
         return $data;
     }
     //-----------------------
-    
+   /* User 
+    * member that has login to his landing page
+    *  create Wed 18 Sep 2019 
+    *
+    */
+     
+
+    function userListStatus($page=1){
+      $where = array("{$this->_tb_user}.id" => $this->user_id);
+      $get = $this->Mdl_ustd->userGetStatus($where)->result();
+      $this->o_put["get"] = $get;
+      $this->output->set_output(json_encode($this->o_put));
+    }
+
+    function userStatusSave(){
+      $save = $this->Mdl_ustd->userStatusSave();
+      $user_id = $save["user_id"];
+      $this->o_put["msg"] = "Success  @{$user_id}";
+      $this->output->set_output(json_encode($this->o_put));
+    }
 
 
+
+
+
+
+    /*  End of user section */
     //no need to edit
     function logout(){
 

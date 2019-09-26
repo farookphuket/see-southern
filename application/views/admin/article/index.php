@@ -1,527 +1,399 @@
-<section id="article">
-    <div class="page-top" id="top"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-10">
-                <span class="">
-                    <a href="<?php echo site_url("admin");?>" class="btn btn-primary">Home page</a>
-                </span>
-                <div class="float-right">
-                    <button class="btn btn-primary lnCreate">
-                    Create
-                    </button>
-		
-                </div>
-                <h1 class="text-center">Article Admin</h1>
-                <h2 class="text-center">
-                All post 
-                <span class="badge badge-info num_ar">0</span> item(s).
-                </h2>
-            </div>
-
-            <div class="col-lg-12">
-                <div class="ar_list">
-                    <div class="no_data">
-                        <h1 class="bg-danger">There is no data.</h1>
-                    </div>
-                </div>
-                <div class="ar_pagin"></div>
-            </div>
-        </div>
-
-
-
-
-        <div class="modal fade" id="mdAr">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content ">
-                    <div class="modal-header">
-                        
-                        <h1 class="modal-title fTitle">Text change</h1>
-                        <button class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        
-                        <?php 
-                            $f = "admin/article/_frm_ar.php";
-                            $this->load->view($f);
-                        ?>
-
-                        <div class="modal_status"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary btnSave" type="submit" form="frmAr">Save</button>
-                    </div>
-                </div>
-            </div>
-        
-        </div>
-
-
+<section id="article_admin">
+<div class="container tm-container-2">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="text-center">Article Admin Page</h1>
+    </div>
+    <div class="col-lg-12">
+      <div class="float-left">
+      <a class="btn btn-primary lnHome" href="<?php echo site_url("admin"); ?>" style="color:red;font-weight:bold;">Home</a>
+      </div>
+      <div class="float-right">
+        <a class="btn btn-primary lnCreate" style="color:white;font-weight:bold;">Create</a>
+      </div>
     </div>
 
+      <div class="row">
+        <div class="col-lg-12">
+          <h2  style="color:white;" class="tm-welcome-text">Article List</h2>
+        </div>
+      </div>
+      <!-- show list of the article -->
+      <div class="row tm-section-mb">
+        <div class="col-lg-12">
+          <div class="ar_list"></div>
+          <div class="ar_pagin"></div>
+
+        </div>
+      </div>
+      <!-- End of show list -->
+
+
+
+  </div> <!-- End of div.row -->
+</div> <!-- End of div.container -->
+
+
+<!-- modal area -->
+  <div class="modal fade md">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title">This is the title</h1>
+          <button class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+<?php
+  $frm = "admin/article/_frm_ar";
+  $this->load->view($frm);
+?>
+          <div class="modal_status"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary btnSave" type="submit" form="frmAr">Save</button>
+          <button class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- end of modal area -->
 </section>
 <script>
-    $(function(){
-        var $el = $(".container");
-        var $modal_status = $(".modal_status");
-        var ar = (function(){
-            
-            //---create button 
-            var lnCreate = $el.find(".lnCreate");
-            var $ar_list = $el.find(".ar_list");
-            var $ar_pagin = $el.find(".ar_pagin");
-            var num_ar = $el.find(".num_ar");
-            
-            //---modal dialog-box
-            var $md = $el.find("#mdAr");
-            var need_tmp = $el.find(".need_tmp");
-            var body_tmp = $el.find(".body_tmp");
-            var $fTitle = $el.find(".fTitle");
 
-            //---form add or edit
-            var $f = $el.find("#frmAr");
-            var $fResult = $el.find(".fResult");
+$(function(){
 
-            //---form element
-            var ar_id = $el.find(".ar_id");
-            var uniq_id = $el.find(".uniq_id");
-            var ar_user_id = $el.find(".ar_user_id");
-            var key_id = $el.find(".key_id");
-            var og_url = $el.find(".og_url");
-            var og_title = $el.find(".og_title");
-            var og_des = $el.find(".og_des");
+  var $el = $("#article_admin");
+  var ar = (function(){
 
-            var ar_title = $el.find(".ar_title");
+    //---the create link
+    var lnCreate = getEl(".lnCreate");
+    
+    //---the list
+    var $ar_list = getEl(".ar_list");
+    var $ar_pagin = getEl(".ar_pagin");
 
-            var ar_sum = $el.find(".ar_sum");
-            var sumResult = $el.find(".sum_result");
-
-            var ar_body = $el.find(".ar_body");
-
-            var approve = $el.find(".ar_approve");
-            var pub = $el.find(".ar_pub");
-            var show_index = $el.find(".show_index");
-
-            var btnSave = $el.find(".btnSave");
+    //--- the modal 
+    var $md = getEl(".md");
+    var $mdTitle = getEl(".modal-title");
+    var $modal_status = getEl(".modal_status");
 
 
-            function getAllAr(page=1){
-                $ar_list.html("");
-                var url = "<?php echo site_url("article/adminGetAllPost/");?>"+page;
-                $.ajax({
-                    url : url,
-                    success : function(e){
-                        var rs = $.parseJSON(e);
-                        //console.log(rs);
-                        num_ar.html(rs.num_ar);
-                        if(rs.pagination){
-                          $ar_pagin.html(rs.pagination);
-                        }
-                        $.each(rs.get_ar,function(i,v){
+    //--- the form
+    var $frm = getEl("#frmAr");
+    var btnSave = getEl(".btnSave");
 
-                            //---approve
-                            var approve = `
-                            <span class="badge badge-success">Yes</span>
-                            `;
-                            if(parseInt(v.ar_is_approve) === 0){
-                                approve = `
-                            <span class="badge badge-danger">No</span>
-                            `;
-                            }
+    //-- the input hidden
+    var ar_id = getEl(".ar_id");
+    var kw_id = getEl(".key_id");
+    var ar_user_id = getEl(".ar_user_id");
+    var uniq_id = getEl(".uniq_id");
+    
+    //--- seo filed 
+    var og_url = getEl(".og_url");
+    var og_title = getEl(".og_title");
+    var og_des = getEl(".og_des");
 
-                            //---index
-                            var index = `
-                            <span class="badge badge-success">Yes</span>
-                            `;
-                            if(parseInt(v.ar_show_index) === 0){
-                                index = `
-                            <span class="badge badge-danger">No</span>
-                            `;
-                            }
+    //-- checkbox for tmp
+    var chSumTmp = getEl(".need_tmp");
+    var $sumResult = getEl(".sum_result");
+    var chBodyTmp = getEl(".body_tmp");
 
-                            //---public
-                            var public = `
-                            <span class="badge badge-success">Yes</span>
-                            `;
-                            if(parseInt(v.ar_show_public) === 0){
-                                public = `
-                            <span class="badge badge-danger">No</span>
-                            `;
-                            }
+    //-- article from field 
+    var ar_title = getEl('.ar_title');
+    var ar_sum = getEl('.ar_sum');
+    var ar_body = getEl(".ar_body");
+    var chPub = getEl(".ar_pub");
+    var chApprove = getEl(".ar_approve");
+    var chIndex = getEl(".show_index");
+    var $fResult = getEl(".fResult");
 
-                            var read_url = "<?php echo site_url("article/read/"); ?>"+v.uniq_id;
-                            var lnEdit = `<button class="btn btn-info btn-sm btnEdit" data-ar_id="${v.ar_id}">Edit</button>`;
-                            var lnDel = `<button class="btn btn-danger btn-sm btnDel" data-ar_id="${v.ar_id}">Delete</button>`;
-                            var lnPubRead = `<a href="${read_url}" class="btn btn-warning btn-sm" target="_blank" style="color:red;font-weight:bold;">View</a>`;
-                            var tmp = `
-                            <div class="card">
-                                <div class="card-header">
-                                  <h2>${v.ar_title}</h2>
-                                  </div>
+    //------ getArList
+    function getArList(page=1){
 
-                                <div class="card-body">
-                                <p>${v.ar_summary}</p>
-                                <p>&nbsp;</p>
-                                
-                                <div class="table-resposive">
-                                <table class="table table-bordered">
-                                <tr>
-                                <th>Date</th>
-                                <td>
-                                <strong>
-                                Create :
-                                </strong> ${v.date_add}
+      var url = "<?php echo site_url("article/adminGetAllPost/"); ?>"+page;
+      $.ajax({
+        url : url,
+          success : function(e){
+            var rs = $.parseJSON(e);
+            //console.log(rs);
+            $ar_list.html("");
+            //--- pagination page
+            if(rs.pagination){
+              $ar_pagin.html(rs.pagination);
 
-                                <strong>
-                                Update :
-                                </strong> ${v.date_edit}
-                                
-                                </td>
-                                </tr>
-
-                                <tr>
-                                <th>Owner info</th>
-                                <td>
-                                <strong>User Name</strong>
-                                ${v.name}
-                                
-                                <strong>User IP</strong>
-                                ${v.ar_post_ip}
-                                </td>
-                                </tr>
-
-                                <tr>
-                                <th>Status info</th>
-                                <td>
-                                <strong>Approve :</strong>
-                                ${approve}
-                                
-                                <strong>Index :</strong>
-                                ${index}
-                                
-
-                                <strong>Public :</strong>
-                                ${public}
-                                </td>
-
-                                </tr>
-
-                                </table>
-                                </div>
-                                </div>
-                                <div class="card-footer">
-                                  ${lnPubRead} ${lnEdit} or ${lnDel}
-                                </div>
-                            </div>
-                            <p>&nbsp;</p>
-                            `;
-
-                           $ar_list.append(tmp); 
-                        });
-                    }
-                });
-            }
-            //---
-
-            
-            
-            //----frmAr
-            function frmAr(cmd,id){
-                tinymce.activeEditor.setMode("design");
-                $f.trigger("reset");
-                switch(cmd){
-                    case"edit":
-                        var url = "<?php echo site_url("article/adminEditAr/");?>"+id;
-                        //alert(url);
-                        $.ajax({
-                            url : url,
-                            success : function(e){
-                                //console.log(e);
-                                var rs = $.parseJSON(e);
-                                console.log(rs);
-                                $.each(rs.get_ar,function(i,v){
-                                  console.log(rs.get_ar);
-                                    og_url.val(v.og_url);
-                                    ar_id.val(v.ar_id);
-                                    ar_user_id.val(v.ar_user_id);
-                                    uniq_id.val(v.uniq_id);
-                                    key_id.val(v.kw_id);
-                                    ar_title.val(v.ar_title);
-                                    ar_sum.val(v.ar_summary);
-                                    tinymce.activeEditor.setContent(v.ar_body);
-                                    
-                                    //---checkbox show index
-                                    var ind = 0;
-                                    if(parseInt(v.ar_show_index) !== 0){
-                                        ind = 1;
-                                        show_index.prop("checked",true);
-                                    } 
-
-                                    //--checkbox approve
-                                    var app = 0;
-                                    if(parseInt(v.ar_is_approve) !== 0){
-                                        app = 1;
-                                        approve.prop("checked",true);
-                                    }
-
-                                    //---checkbox pub
-                                    var is_pub = 0;
-                                    if(parseInt(v.ar_show_public) !== 0){
-                                        is_pub = 1;
-                                        pub.prop("checked",true);
-                                    }
-
-                                    //---seo box
-                                    og_url.val(v.og_url);
-                                    og_title.val(v.kw_page_keyword);
-                                    og_des.val(v.kw_page_des);
-
-
-                                    $fTitle.html(`Editing ${v.ar_title}...edit ${v.ar_id}`);
-                                    $($md).modal("show");
-
-                                });
-                            }
-                        });
-                        
-                        
-                    break;
-                    default:
-                        $fTitle.html("Create new Post");
-                        $($md).modal("show");
-                        $f.trigger("reset");
-                    break;
-                }
             }
 
-            //----firstSave
-            function firstSave(){
-                var url = "<?php echo site_url("article/firstSave");?>";
-                var data = "";
-                if(!parseInt(ar_id.val())){
-                    data = {ar_title : ar_title.val()};
-                }else{
-                    data = {ar_id : ar_id.val(),
-                            key_id : key_id.val(),
-                            ar_title : ar_title.val()
-                            };
-                }
-                $.post(url,data,function(e){
-                    var rs = $.parseJSON(e);
-                    console.log(rs);
-                    var edit_id = "";
-                    $.each(rs.get_ar,function(i,v){
-                        ar_id.val(v.ar_id);
-                        key_id.val(v.kw_id);
-                        edit_id = v.ar_id;
-                    });
-                    
-                    frmAr("edit",edit_id);
-                });
-            }
-            //-------
-            //----sumTemplate
-            function sumTemplate(){
-                var imgUrl = "https://lh3.googleusercontent.com/gkFIhr-OM6alofugspyklBlydNNzTil957XSSI6al_1d9oRUaBv86b4Zbdjpr5wb2-P__EHy-Kyt2tulYTpzvYoWF7fe1KFBdL_Emf5d-4cOFXj_uEENvlsmQTKxEvSXZN5ZX3ta3g=w2400";
-                
-                var tmp = ``;
-                var need = 0;
-                if(need_tmp.is(":checked",true)){
-                    need = 1;
-                    tmp = ` 
-                <div class=" tm-timeline-item">
-                    <div class="tm-timeline-item-inner">
-                      <img src="${imgUrl}" alt="Image" class="rounded-circle tm-img-timeline">
-                      <div class="tm-timeline-connector">
-                      <p class="mb-0">&nbsp;</p>
-                      </div>
-                      <div class="tm-timeline-description-wrap">
-                          <div class="tm-bg-dark tm-timeline-description">
-                                <h3 class="tm-text-green tm-font-400">
-                                Nulla venenatis purus nec quam
-                                </h3>
-                                <p>
-                                You may tell your co-workers about TemplateMo free stuffs to download and use for any website project. Thank you for supporting us.
+            $.each(rs.get_ar,function(i,v){
 
-				<button class="btn btn-primary btnSave">Save</button>
-                                </p>
-                                <p class="tm-text-green float-right mb-0">
-                                New Event . 12 July 2018
-                                </p>
-                          </div>
+              var lnEdit = `<a  style="color:white;font-weight:bold;" class="btn btn-primary lnEdit" data-ar_id="${v.ar_id}">Edit</a>`;
+              var lnDel = `<a  style="color:white;font-weight:bold;" class="btn btn-danger lnDel" data-ar_id="${v.ar_id}">Delete</a>`;
+              var tmp = `<div class="card">
+                  <div class="catd-header">
+                    <h1 class="bg-primary" style="color:white;">${v.ar_title}</h1>
+                  </div>
+                  <div class="card-body">
+                    ${v.ar_summary}
+                    <p>&nbsp;</p>
+                    <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <tr>
+                          <th>Post By</th>
+                          <td>${v.ar_post_by}</td> 
+                        </tr>
+
+                        <tr>
+                          <th>Post User IP</th>
+                          <td>${v.ar_post_ip}</td> 
+                        </tr>
+                        <tr>
+                          <th>Date</th>
+                          <td>
+                            <p>
+                              <strong>Create : </strong>&nbsp;  
+                              ${v.date_add}&nbsp;
+                              <strong>Update :</strong>&nbsp;  
+                              ${v.date_edit}&nbsp;
+
+                            </p>
+
+                          </td> 
+                        </tr>
+
+
+
+                      </table>
                     </div>
                   </div>
-                  <div class="tm-timeline-connector-vertical"></div>
-                </div>
-
-
-
-
-                        `;
-
-                }else{
-                    tmp = `Please edit this text`;
-                }
-                ar_sum.val(tmp);
-            }
-            //------------
-            //-----showSumResult
-            function showSumResult(){
-                sumResult.html("");
-                var sum = ar_sum.val();
-                sumResult.append(sum);
-            }
-            //------------
-            //-----body template
-            function bodyTemplate(){
-                var b = 0;
-                var tmp = ``;
-                var imgUrl = "https://lh3.googleusercontent.com/1dq8UU1YLkYcYzjEHHUSfjJW7bmESlfBBke4VEy-z2s78GEaZbF-vyv-pSP6UFEfLKR8eB0adbDlKvTGlyX2FBUOZaNXGqjYzz-lgO6yQY1kyhogD3C0QkguVqwdoe7RkX2ORTok6g=w2400";
-                if(body_tmp.is(":checked",true)){
-                    tmp = `<!--container div.container start-->
-                    <div class="container">
-                        <div class="row"><!--div.row start-->
-                            
-                            <div class="col-lg-12"><!--1 div.col-lg-12 start-->
-                                <h1 class="text-center">Edit this title</h1>
-                            </div><!--1 div.col-lg-12 end-->
-
-                            <div class="col-lg-12">
-                                <div class="col-md-8">
-                                    <img src="${imgUrl}" class="responsive"/>
-                                </div>
-                            </div>
-                        </div><!--end div.row-->
+                  <div class="card-footer">
+                    <div class="float-right">
+                      ${lnEdit} ${lnDel}
                     </div>
-                    <!--div.container end-->
-                    `;
-                }else{
-                    tmp = `Will edit this part without html template code.`;
+                  </div>
+              </div><p>&nbsp;</p>`;
+
+              $ar_list.append(tmp);
+            });
+
+
+          }
+      });
+
+    }
+    //-------------------------
+    function showForm(cmd,id){
+      formSetZero();
+      tinymce.activeEditor.setMode("design");
+
+      switch(cmd){
+      case"edit":
+        var url = "<?php echo site_url("article/adminEditAr/"); ?>"+id;
+        $.ajax({
+          url : url,
+            success : function(e){
+              var rs = $.parseJSON(e);
+              $.each(rs.get_ar,function(i,v){
+                ar_id.val(v.ar_id);
+                kw_id.val(v.kw_id);
+                ar_user_id.val(v.ar_user_id);
+                uniq_id.val(v.uniq_id);
+                og_url.val(v.og_url);
+                og_title.val(v.og_title);
+                og_des.val(v.og_description);
+                ar_title.val(v.ar_title);
+                ar_sum.val(v.ar_summary);
+                tinymce.activeEditor.setContent(v.ar_body);
+                $mdTitle.html(`Editing ${v.ar_title} ....`);
+
+
+                //---the checkbox
+                if(parseInt(v.ar_is_approve) !== 0){
+                  chApprove.prop("checked",true);
                 }
-                tinymce.activeEditor.setContent(tmp);
-            }
-            //----saveAr
-            function saveAr(){
-              btnSave.unbind();
-              var edit_id = ar_id.val();
-              //alert(`the edit id is ${edit_id}`);
-                
-                $f.submit(function(o){
-                    o.preventDefault();
-                    var url = $(this).attr("action");
-                    var data = $(this).serialize()+"&ar_id="+edit_id;
-                    $.post(url,data,function(e){
-                        var rs = $.parseJSON(e);
-                        edit_id = rs.ar_id;
-                        ar_id.val(edit_id);
-                        key_id.val(rs.kw_id);
-                        //console.log(`The edit id is ${edit_id}`);
-                        
-                        $fResult.html(rs.msg).show();
-                        //$modal_status.html(rs.msg).show();
-                        setTimeout(function(){
-                          //  $modal_status.html("").hide();
-                            $fResult.html("loading...").fadeOut("slow");
-                            frmAr("edit",edit_id);
-                            getSummary();
-                        },3000);
-                    });
-                });
-                
-            }
-            //----------
-            //---delAr
-            function delAr(cmd,id){
-                var title = "";
-                var msg = "";
-                switch(cmd){
-                    case"delete":
-                        var url = "<?php echo site_url("article/modDelAr/");?>"+id;
-                        $.ajax({
-                            url : url,
-                            success : function(e){
-                                alert(e);
-                            }
-                        });
-                    break;
-                    default:
-                        msg = `you are about to delete ${id} this operation cannot be undo\n are your sure to delete ${id}?`;
-                        
-                        if(confirm(msg) === true){
-                            delAr("delete",id);
-                        }else{
-                            return false;
-                        }
-                    break;
+
+                if(parseInt(v.ar_show_public) !== 0){
+                  chPub.prop("checked",true);
                 }
-                
-                
-                
-            }//----end of delAr
 
-            //--------------
-            function getSummary(){
-                //--call getAllAr
-                getAllAr();
+               if(parseInt(v.ar_show_index) !== 0){
+                  chIndex.prop("checked",true);
+                }
+
+                var showMsg = `<p class="alert alert-warning">
+                  you are editing "${ v.ar_title }" now.
+                  </p><p class="alert alert-danger">Please note : you have to click "Save" button to save your change.</p>`;
+                $modal_status.html(showMsg);
+
+              });
             }
-            function getEvent(){
-                getSummary();
+        }); 
 
-                //---need_tmp
-                need_tmp.on("change",function(){
-                    sumTemplate();
-                });
 
-                //---body_tmp
-                body_tmp.on("change",function(){
-                    bodyTemplate();
-                });
+        break;
+      default:
+        $mdTitle.html("Create New Post");  
+      break;
+      }
+      $($md).modal("show");
+    }
+    //-------------------
+    //------- getDefaultTmp
+    function getDefaultTmp(){ 
+      if(parseInt(ar_id.val()) === 0){
+        //--- only if the none id paste
+        og_title.val(`edit the keyword for [${ ar_title.val() }]`);
+        og_des.val(`edit the description for [${ ar_title.val() }] `);
+        var today = new Date().toLocaleString();
+        var imgUrl = "";
+        var sum_tmp = `<div class="tm-timeline-item">
+			        <div class="tm-timeline-item-inner">
+			          <img src="${imgUrl}" alt="Image" class="rounded-circle tm-img-timeline responsive">
+			          <div class="tm-timeline-connector">
+				          <p class="mb-0">&nbsp;</p>
+			          </div>
 
-                //---show form
-                lnCreate.on("click",function(){
-                    frmAr();
-                });
+			    <div class="tm-timeline-description-wrap">
+				<div class="tm-bg-dark-light tm-timeline-description">
+            <h3 class="tm-text-cyan tm-font-400">
+                Change this tag
+            </h3>
+				    <p>Change this tag</p>
 
-                //---title on blur
-                ar_title.on("blur",function(){
-                    //firstSave();
-                });
+            <p class="tm-text-cyan float-left mb-0">Another Story . 
+              create on ${ today }
+            </p>
+            <div class="float-right">
+              <a href="COPY-OG_URL-THEN-PASTE-HERE!" target="_blank" class="btn btn-primary" style="color:white;font-weight:bold;">Read More</a>
+            </div>
 
-                //---summary on blur
-                ar_sum.on("blur",function(){
-                    showSumResult();
-                });
+				</div>
+			    </div>
+			</div>
+			<div class="tm-timeline-connector-vertical"></div>
+		    </div>
 
-                //---edit button
-                $ar_list.delegate(".btnEdit","click",function(){
-                    var id = $(this).attr("data-ar_id");
-                    frmAr("edit",id);
-                    
-                });
+        `;
+        ar_sum.val(sum_tmp);//-- append to the textarea
 
-                //---delete button
-                $ar_list.delegate(".btnDel","click",function(){
-                    var id = $(this).attr("data-ar_id");
-                    delAr(null,id);
-                });
-                
-                //---pagination
-                $ar_pagin.delegate(".pagination a","click",function(e){
-                  e.preventDefault();
-                  var page = $(this).attr("data-ci-pagination-page");
-                  getAllAr(page);
-                });
+        var body_tmp = `<div class="container tm-container-2">
+            <div class="row">
+              <div class="col-lg-12">
+                <h1 class="tm-welcome-text">edit the title for "${ ar_title.val() }".</h1>
+              </div>
+            </div>
+            <div class="row tm-section-mb"> 
+              <div class="col-lg-12">
+              <p style="color:black;font-weight:bold;">
+                All this text is generate by the default template on ${ today } you can simply just DELETE all of this text then paste or type you text here in the &lt;p style="color:color-name;"&gt;IN BETWEEN THIS p tag &lt;p&gt;. Enjoin.
+              
+              </p>
+              </div>
+            </div>
+        </div>
+        `;
+        tinymce.activeEditor.setContent(body_tmp);
 
-                //---btnSave
-                btnSave.on("click",function(){
-                    saveAr();
-                });
-            }
-            return{
-                getEvent:getEvent
-            }
-        })();
-        ar.getEvent();
-    });
+      }
+
+    }
+
+    //--- showSumResult
+    function showSumResult(){
+      $sumResult.html(""); 
+      var sum = ar_sum.val();
+      var tmp = `<div class="container">
+            ${sum}
+          </div>
+          `;
+        $sumResult.html(tmp);
+    }
+
+    //-------- formSetZero
+    function formSetZero(){
+      $frm.trigger("reset");
+      ar_title.attr("placeholder","New Post");
+      og_url.attr("placeholder","This field will be shown after you click save button!");
+      og_title.attr("placeholder","Enter new meta keyword");
+      og_des.attr("placeholder","Enter new meta key description");
+      ar_sum.attr("placeholder","You can tik on 'I want HTML' to create default template fo you");
+
+      ar_id.val(0);
+      kw_id.val(0);
+      uniq_id.val(0);
+      $sumResult.html("");
+      $modal_status.html("");
+    }
+    //----------------
+    //----------------------
+    //------saveArticle 
+    function saveArticle(){
+      btnSave.unbind();
+      $frm.submit(function(o){ 
+        o.preventDefault();
+        var url = $(this).attr("action");
+        var data = $(this).serialize();
+        $.post(url,data,function(e){ 
+          var rs = $.parseJSON(e);
+
+          var showMsg = `<p class="alert alert-success">${ rs.msg }</p>`;
+          $modal_status.html(showMsg).show();
+          setTimeout(function(){ 
+            $modal_status.html("");
+            showForm("edit",rs.ar_id);
+            getSummary();
+          },3000);
+        });
+
+      });
+    }
+    //----------------
+    //------ getSummary 
+    function getSummary(){
+      getArList();
+
+    }
+    //------- getEl ----//
+    function getEl(el){
+      return $el.find(el);
+    }
+    //----- getEvent -->
+    function getEvent(){
+     //$($md).modal("show"); 
+      getSummary();
+      //--- click create new button
+      lnCreate.on("click",function(){
+        showForm();
+      });
+      og_url.on("click",function(){
+        $(this).select();
+      });
+
+      //--- edit button click
+      $ar_list.delegate(".lnEdit","click",function(){
+        var id = $(this).attr("data-ar_id");
+        showForm("edit",id);
+      });
+
+      //---- will trigger if title is blur
+      ar_title.on("blur",function(){ 
+        getDefaultTmp();
+      });
+      //---- ar_sum on blur will show the result
+      ar_sum.on("blur",function(){
+        showSumResult();
+      });
+
+      //--- save button click
+      btnSave.on("click",function(){ 
+        saveArticle();
+      });
+
+    }
+    return{getEvent:getEvent};
+  })();
+  ar.getEvent();
+});
+
 </script>
+
+

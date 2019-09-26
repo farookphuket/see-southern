@@ -22,12 +22,14 @@ class MY_Model extends CI_Model{
     public $user_name;
     public $user_id;
 
+    public $today;
     //-----
     function __construct(){
         parent::__construct();
 
         $this->user_name = $this->getUserName();
         $this->user_id = $this->getUserId();
+        $this->today = date("Y-m-d",time());
     }//end of construct
 
     function getUserName(){

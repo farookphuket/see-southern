@@ -36,7 +36,7 @@
     <div class="float-right">
         <input type="checkbox" class="need_tmp" id="need_tmp"> I want html
     </div>
-    <label for="ar_body">Summary</label>
+    <label for="ar_sum">Summary</label>
     <textarea class="form-control ar_sum" name="ar_sum" id="ar_sum" rows=15 cols=8></textarea>
 </div>
 <p>&nbsp;</p>

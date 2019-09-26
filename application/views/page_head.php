@@ -36,8 +36,9 @@
     <link href="<?php echo site_url("public/vendor/bootstrap/css/bootstrap.min.css");?>" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
-    <link href="<?php echo site_url("public/vendor/fontawesome-free/css/all.min.css");?>" rel="stylesheet" type="text/css">
-
+    <!-- not being use 16-Sep-2019
+    <link href="<?php //echo site_url("public/vendor/fontawesome-free/css/all.min.css");?>" rel="stylesheet" type="text/css">
+      -->
     <!--
 
     just comment this out when upload top the server

@@ -384,6 +384,28 @@ The Gallery style just edit on the Mon-17-Oct-2016
     
 }
 
+/* copy from temo-style.css 19-Sep-2019 */
+.tm-timeline-item {
+    margin-left: 70px;
+}
+
+.tm-timeline-item-inner {
+    display: flex;
+    align-items: center;
+}
+
+
+
+
+
+.tm-img-timeline {
+    width: 160px;
+    height: 160px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
 .img_thumb span{
 /*
 Show the name of thumbnail block

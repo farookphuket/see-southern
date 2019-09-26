@@ -115,19 +115,23 @@ class Article extends MY_Controller{
         $page_url = "";
         $page_keyword = "";
         $page_des = "";
+        $pub_name = "";
         foreach($get_ar as $row):
             $ar_title = $row->ar_title;
             $ar_id = $row->ar_id;
             $page_url = $row->og_url;
             $page_keyword = $row->kw_page_keyword;
             $page_des = $row->kw_page_des;
+            $pub_name = $row->article_publisher; 
+            
         endforeach;
         //---seo key
         $this->data["page_description"] = $page_des;
         $this->data["page_keyword"] = $page_keyword;
         $this->data["og_url"] = $page_url;
 
-
+          
+        $this->data["publisher"] = $pub_name;
         $this->data["get_ar"] = $get_ar;
         $this->data["meta_title"] = "{$ar_title}";
         $this->data["subview"] = "article/read_article";
@@ -378,7 +382,7 @@ class Article extends MY_Controller{
         endif;
 
         //---pagination
-        $per_page = 4;
+        $per_page = 15;
         $page = $seg;
         $url = "adminGetAllPost";
         $conf = $this->getConfPagin($per_page,$num,$url);

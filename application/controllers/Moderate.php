@@ -9,6 +9,7 @@ class Moderate extends MY_Controller{
     protected $user_name;
     protected $is_login;
     protected $is_admin;
+    protected $moderate;
 
     public $o_put;
 
@@ -19,6 +20,7 @@ class Moderate extends MY_Controller{
       parent::__construct();
       $this->is_admin = $this->user_is_admin();
       $this->is_login = $this->user_is_login();
+      $this->moderate = $this->user_is_mod();
       $this->user_id = $this->getUserId();
       $this->user_name = $this->getUserName();
 
@@ -33,32 +35,16 @@ class Moderate extends MY_Controller{
       $this->load->model("Mdl_booking");
       $this->load->model("Mdl_faq");
       $this->load->model("Mdl_notice");
-      
-      if($this->is_login):
-          $url = site_url("users/u");
-          if($this->is_admin):
-            $url = site_url("users/admin");
-          endif;
-          if($this->moderate):
-            $url = site_url("moderate/u");
-          endif;
-        redirect($url);
-      else:
-          redirect(site_url("users/logout"));
-          exit(); 
-      endif; 
+
+
 
     }
     
 
     function index(){
+        echo"welcome {$this->user_name}";
 
-        if($this->is_admin):
-            redirect(site_url("admin/u"));
-        endif;
-        $this->data["meta_title"] = "admin page | {$this->user_name}";
-        $this->data["subview"] = "admin/admin_index";
-        $this->load->view("_layout_admin",$this->data);
+
     }
     //---
     

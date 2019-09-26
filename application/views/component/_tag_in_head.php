@@ -10,7 +10,6 @@
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="<?php echo $og_url;?>"/>
 <meta property="og:locale" content="en_US" />
-<meta property="og:type" content="article" />
 <meta property="og:title" content="<?php echo $meta_title;?>" />
 <meta property="og:description" content="<?php echo $page_description;?>" />
 <meta name="description" content="<?php echo $page_description;?>"/>
@@ -39,8 +38,17 @@
     <!-- https://getbootstrap.com/ -->
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="<?php echo site_url("public/css/templatemo-style.css");?>">
-  
+
+
+
+<!-- this template style has use on 11-Sep-2019 -->
+<link rel="stylesheet" href="<?php echo site_url("public/css/templatemo-style.css");?>">
+
+
+
+
+
+
 <!-- only for the menu -->
 <?php 
     $menu_ln = site_url("public/");

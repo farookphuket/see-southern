@@ -77,7 +77,7 @@ http://www.templatemo.com/tm-517-timeless
             
         <!-- Tag person_credit END -->
 
-            <hr>
+        <hr>
           
         <!-- Location Map and Contact form move to "_tag_contactus.php" -->
 
@@ -108,14 +108,9 @@ http://www.templatemo.com/tm-517-timeless
 
     <!-- .container -->
 
-
-<!--
-    <script src="<?php echo site_url("public/js/templatemo-script.js");?> "></script>
--->
-  
-    <!-- Custom scripts for this template -->
-
-<!-- Call from home_index.php -->
+ 
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cb67e3058a76a5d"></script>
 </body>
 
 </html>

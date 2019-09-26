@@ -294,16 +294,51 @@ class Mdl_article extends MY_Model{
       
       $j1 = "{$this->_tb_user}.id={$this->_tb_ar}.ar_user_id";
       $j2 = "{$this->_tb_seo}.kw_id={$this->_tb_ar}.kw_id";
+
+      //-- for call numHasRead
+      $ar_id = 0;
       $get = $this->db
                   ->where($where)
                   ->join($this->_tb_user,$j1)
                   ->join($this->_tb_seo,$j2)
                   ->get($this->_tb_ar);
+      foreach($get->result() as $row):
+        $ar_id = $row->ar_id;
+      endforeach;
 
+      $this->numHasRead($ar_id);
       return $get;
     }
 
 
+    //--- numHasRead
+    function numHasRead($ar_id){
+      $where = array("{$this->_tb_ar}.ar_id" => $ar_id);
+      $last_count = 0;
+      $last_view_date = "";
+      $view_today = $this->today;
+      $last_view_ip = "";
+      $ip_today = $this->ip;
+
+      $get = $this->GET($this->_tb_ar,$where)->result();
+      
+      foreach($get as $row):
+        $last_count = $row->ar_read_count;
+        $last_view_ip = $row->last_view_ip;
+       $last_view_date = $row->last_view_date; 
+      endforeach;
+      if($last_view_ip != $ip_today && $last_view_date != $view_today):
+        //-- only update if not the same ip and day
+        $last_count = $last_count+1;
+        $up_data = array(
+          "ar_read_count" => $last_count,
+          "last_view_ip" => $ip_today,
+          "last_view_date" => $view_today
+        );
+      $this->SAVE($up_data,$this->_tb_ar,$where);
+      endif;
+
+    }
 
     /*   End of np login section */
     //---------------------------------------------//
@@ -347,8 +382,11 @@ class Mdl_article extends MY_Model{
 
     //--- adminSave
     function adminSave(){
-        $ar_id = $this->getEl("ar_id");
-        $kw_id = $this->getEl("key_id");
+                
+       $ar_id = $this->getEl("ar_id"); 
+       $kw_id = $this->getEl("key_id"); 
+
+
         $ar_user_id = $this->getEl("ar_user_id");
 
         $uniq_id = $this->getEl("uniq_id");
@@ -397,6 +435,7 @@ class Mdl_article extends MY_Model{
           "ar_is_approve" => $approve,
           "ar_user_id" => $this->user_id,
           "ar_post_by" => $this->user_name,
+          "ar_post_ip" => $this->ip,
           "date_add" => $this->today_andTime,
           "date_edit" => $this->today_andTime,
         );

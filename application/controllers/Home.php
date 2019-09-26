@@ -29,6 +29,9 @@ New edit with the MY_Model class on Thu-25-Aug-2016
         $this->load->model("Mdl_home");
         $this->load->model("Mdl_article");
         $this->load->model("Mdl_tour");
+        $this->load->model("Mdl_tour");
+        $this->load->model("Mdl_ustd");
+
 
         $this->load->library("pagination");
 
@@ -68,7 +71,7 @@ public function index()
 
     /* check login session 15-Sep-2019 */
     if($this->is_login):
-      $url = site_url("users/u/{$this->user_id}");
+      $url = site_url("users/u");
       if($this->moderate):
         $url = site_url("users/mod");
       endif;
@@ -86,17 +89,60 @@ public function index()
 
 }//end of index function
 //----------------------------
+
+/* user status on page 19-Sep-2019 */
+function userStatusList($page=1){
+  $where = array(
+    "show_public !=" => 0,
+    "friend_only !=" => 1,
+    "private_only !=" => 1
+  );
+
+  $get = $this->Mdl_ustd->userGetStatus($where)->result();
+  $num = count($get);
+
+  //--- pagination
+  $per_page = 5;
+  $url = "userStatusList";
+  $conf = $this->getConfPagin($per_page,$num,$url);
+  $this->pagination->initialize($conf);
+  $start = ($page-1)*$per_page;
+  $get_st = $this->Mdl_ustd->userGetStatus($where,$per_page,$start)->result();
+
+  if($num >= $per_page):
+    $this->o_put["pagination"] = $this->pagination->create_links();
+  endif;
+  $this->o_put["get_status"] = $get_st;
+  $this->output->set_output(json_encode($this->o_put)); 
+}
+
+
+
+
+/* End of user status */
 //-------get Recent post
-function getRecentPost(){
+function getRecentPost($page=1){
     $where = array(
         "ar_show_public !=" => 0,
         "ar_show_index !=" => 0,
         "ar_is_approve !=" => 0
     );
-    $get = $this->Mdl_article->getArticle($where,10)->result();
+    $get = $this->Mdl_article->getArticle($where)->result();
     $num = count($get);
+
+    //--- pagination 
+    $url = "getRecentPost";
+    $per_page = 8;
+    $conf = $this->getConfPagin($per_page,$num,$url);
+    $this->pagination->initialize($conf);
+    $start = ($page-1)*$per_page;
+    $get_ar = $this->Mdl_article->getArticle($where,$per_page,$start)->result();
+    if($num >= $per_page):
+      $this->o_put["pagination"] = $this->pagination->create_links();
+    endif;
+
     $this->o_put["num_ar"] = $num;
-    $this->o_put["get_ar"] = $get;
+    $this->o_put["get_ar"] = $get_ar;
     $this->output->set_output(json_encode($this->o_put));
 }
 

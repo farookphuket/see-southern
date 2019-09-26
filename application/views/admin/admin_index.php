@@ -1,45 +1,8 @@
-<section class="notice_admin" id="notice">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10">
-                <div class="row">
-                    <div class="col-md-9">
-                        <h2 class="text-center">
-                            All notification 
-                            <span class="badge badge-warning notice_num">0</span> item(s).
-                        </h2>
-                    </div>
-                    <div class="col-md-3 set_all content-wrap">
-                        <input type="checkbox" class="mark_all" name="mark_all"> mark all as read
-                    </div>
-                </div>
-                <ul class="notice_list">
-                
-                </ul>
-                <div class="notice_pagin"></div>
-            </div>
-            <?php 
-                $aJS = "admin/adminJS.php";
-                $this->load->view($aJS);
-            ?>
-        </div>
-    </div>
-</section>
 
-<section class="ticket" id="ticket">
-    <?php 
 
-    $ticket = "admin/booking/book_index.php";
-   // $this->load->view($ticket);
-    ?>
-</section>
-<p>&nbsp;</p>
-<section id="tour">
-    <?php 
-        $tour = "admin/tour/index.php";
-       // $this->load->view($tour);
-    ?>
-</section>
+
+
+
 <section id="article">
     <div class="row">
         <div class="col-lg-12">
@@ -164,10 +127,3 @@
     });
 </script>
 
-<p>&nbsp;</p>
-<section class="users" id="users">
-    <?php 
-        $users = "admin/user/user_index.php";
-      //  $this->load->view($users);
-    ?>
-</section>

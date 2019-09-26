@@ -9,6 +9,8 @@
   $lnAr = site_url("article/admin");
   $lnHome = site_url("admin/u/{$user_id}");
 
+  $lnUstd = site_url("ustd");
+
   if($cur_url != $home_url):
     $lnTour = site_url("admin/u/{$user_id}/{$lnTour}");
     $lnTicket = site_url("admin/u/{$user_id}/{$lnTicket}");
@@ -36,7 +38,7 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="<?php echo $lnTicket;?>">Ticket</a>
+              <a class="nav-link js-scroll-trigger" href="<?php echo $lnUstd;?>">USTD</a>
             </li>
 
             <li class="nav-item">
