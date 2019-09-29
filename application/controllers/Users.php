@@ -45,14 +45,14 @@ class Users extends MY_Controller {
     $this->load->model("Mdl_ustd"); //--18-Sep-2019
     
     //check the user session
-    $this->is_login = $this->user_is_login();
+    $this->is_login = $this->Mdl_users->user_is_login();
     $this->data["is_login"] = $this->is_login;
-    $this->user_name = $this->getUserName();
-    $this->user_id = $this->getUserId();
-    $this->is_admin = $this->user_is_admin();
+    $this->user_name = $this->Mdl_users->getUserName();
+    $this->user_id = $this->Mdl_users->getUserId();
+    $this->is_admin = $this->Mdl_users->user_is_admin();
     $this->user_pass = $this->session->userdata("user_pass");
     $this->user_email = $this->session->userdata("user_email");
-    $this->moderate = $this->user_is_mod();
+    $this->moderate = $this->Mdl_users->user_is_mod();
     $this->user_type = $this->session->userdata("user_type");
 
     

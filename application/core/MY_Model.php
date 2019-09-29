@@ -57,6 +57,21 @@ class MY_Model extends CI_Model{
         return $this->os;
     }
 
+    function user_is_login(){
+        return $this->session->userdata("is_login");
+    }
+
+   function user_is_admin(){
+        return $this->session->userdata("is_admin");
+    }
+
+    function user_is_mod(){
+        return $this->session->userdata("moderate");
+    }
+
+    
+    
+
     //--getBrowser
     function getBrowser(){
         $browser = $this->agent->browser();

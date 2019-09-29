@@ -104,6 +104,10 @@ class Mdl_ustd extends MY_Model{
       $friend_only = $this->getEl("friend_only");
       $private_only = $this->getEl("private_only");
 
+    if(!$show_pub):
+        $show_pub = 0;
+      endif;
+
       if(!$friend_only):
         $friend_only = 0;
       endif;

@@ -44,8 +44,8 @@ class Ustd extends MY_Controller {
     //check the user session
     $this->is_login = $this->user_is_login();
     $this->data["is_login"] = $this->is_login;
-    $this->user_name = $this->getUserName();
-    $this->user_id = $this->getUserId();
+    $this->user_name = $this->Mdl_ustd->getUserName();
+    $this->user_id = $this->Mdl_ustd->getUserId();
     $this->is_admin = $this->user_is_admin();
     $this->user_pass = $this->session->userdata("user_pass");
     $this->user_email = $this->session->userdata("user_email");

@@ -374,7 +374,7 @@ $config['sess_expiration'] = 7200;
 //$config['sess_save_path'] = "/home/farookph/tmp";
 
 //comment this line on server
-$config['sess_save_path'] = "/tmp";
+$config['sess_save_path'] = "/var/www/html/tmp";
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
