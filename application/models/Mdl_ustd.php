@@ -75,6 +75,68 @@ class Mdl_ustd extends MY_Model{
       return $data;
     }//---End of userStatusSave
 
+
+
+    /* MOD section Start 30-sep-2019 */
+
+    function modSave(){
+
+        $msg = "";
+        $uniq_id = $this->getEl("uniq_id");
+        $st_user_id = $this->getEl("st_user_id");
+        $st_id = $this->getEl("st_id");
+        $st_title = $this->getEl("st_title");
+        $st_body = $this->getEl("st_body");
+
+        if(!$st_user_id):
+            $st_user_id = $this->user_id;
+            endif;
+        
+        $st_data = array(
+            "date_create" => $this->today_andTime,
+            "date_update" => $this->today_andTime,
+            "st_title" => $st_title,
+            "st_body" => $st_body,
+            "st_user_id" => $st_user_id
+        );
+
+        if(!$st_id):
+            //-- new item
+            $st_data["uniq_id"] = $this->randomChar(66);
+            $st_id = $this->SAVE($st_data,$this->_tb_status);
+
+            $msg = "Success : data has been created @{$st_id}";
+        else:
+            //--- update data
+            unset($st_data["date_create"]);
+            unset($st_data["st_user_id"]);
+                
+            $this->SAVE($st_data,$this->_tb_status,array("{$this->_tb_status}.st_id" => $st_id));
+
+            $msg = "Success : data has been updated on @{$st_id}";
+        endif;
+
+        $r_data = array(
+            "msg" => $msg,
+            "st_id" => $st_id
+        ); 
+        return $r_data;
+    }
+
+
+    function modDel($id){
+        $where = array("{$this->_tb_status}.st_id" => $id);
+        $last_count = 0;
+        $this->DEL($where,$this->_tb_status);
+
+        $msg = "Success : data has been deleted";
+                    
+        $r_data = array("msg" => $msg);
+        return $r_data;
+    }
+
+    /* MOD section End */
+
     /* -- Admin section */
     function adminGet($where=false,$limit=false,$offset=false){
       $get = "";

@@ -85,6 +85,63 @@ class Ustd extends MY_Controller {
     }//end of index
 
 
+
+    /* mod section Start*/
+
+    function modGet($page=1){
+        $get = $this->Mdl_ustd->adminGet()->result();
+        $num = count($get);
+
+        $url = "modGet";
+        $per_page = 4;
+        $config = $this->getConfPagin($per_page,$num,$url);
+        $this->pagination->initialize($config);
+        
+        $start = ($page-1)*$per_page;
+        $get_st = $this->Mdl_ustd->adminGet(null,$per_page,$start)->result();
+        if($num > $per_page):
+        $this->o_put["pagination"] = $this->pagination->create_links();
+           endif; 
+
+
+        $this->o_put["get_st"] = $get_st;
+        $this->output->set_output(json_encode($this->o_put));
+
+    }
+
+    function modEdit($id){
+        $where = array("{$this->_tb_status}.st_id" =>  $id);
+        $get = $this->Mdl_ustd->adminGet($where)->result();
+        $this->o_put["get"] = $get;
+      $this->output->set_output(json_encode($this->o_put));
+
+    }
+
+    function modSave(){
+
+        $save = $this->Mdl_ustd->modSave();
+
+        
+        $this->o_put["st_id"] = $save["st_id"];
+        $this->o_put["msg"] = $save["msg"];
+        $this->output->set_output(json_encode($this->o_put));
+    }
+
+
+    function modDel($id){
+
+        $get = $this->Mdl_ustd->modDel($id);
+        $this->o_put["msg"] = $get["msg"];
+      $this->output->set_output(json_encode($this->o_put));
+
+    }
+
+
+
+
+    /* mod section END */
+
+
     /* -- Admin section 19-Sep-2019 -- */
 
     function admin(){
@@ -118,9 +175,6 @@ class Ustd extends MY_Controller {
       $save = $this->Mdl_ustd->adminSave();
       $st_id = $save["st_id"];
       //$uniq_id = $save["uniq_id"];
-
-
-  
       $this->o_put["st_id"] = $st_id;
       $this->o_put["msg"] = "success : data has been save";
       $this->output->set_output(json_encode($this->o_put));

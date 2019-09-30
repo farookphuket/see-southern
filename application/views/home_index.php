@@ -13,156 +13,6 @@
         <div class="st_list"></div>
         <div class="st_pagin"></div>
 
-                <!--           
-                  <div class=" tm-timeline-item">
-                    <div class="tm-timeline-item-inner">
-                      <img src="img/img-01.jpg" alt="Image" class="rounded-circle tm-img-timeline">
-                      <div class="tm-timeline-connector">
-                      <p class="mb-0">&nbsp;</p>
-                      </div>
-                      <div class="tm-timeline-description-wrap">
-                          <div class="tm-bg-dark tm-timeline-description">
-                                <h3 class="tm-text-green tm-font-400">
-                                Nulla venenatis purus nec quam
-                                </h3>
-                                <p>
-                                You may tell your co-workers about TemplateMo free stuffs to download and use for any website project. Thank you for supporting us.
-
-				<button class="btn btn-primary btnSave">Save</button>
-                                </p>
-                                <p class="tm-text-green float-right mb-0">
-                                New Event . 12 July 2018
-                                </p>
-                          </div>
-                    </div>
-                  </div>
-                  <div class="tm-timeline-connector-vertical"></div>
-                </div>
-                      -->
-
-              <!--
-                <div class="tm-timeline-item">
-                  <div class="tm-timeline-item-inner">
-                      <img src="https://music.mthai.com/app/uploads/2019/04/3-2.jpg" alt="Image" class="rounded-circle tm-img-timeline responsive">
-                      <div class="tm-timeline-connector">
-                        <p class="mb-0">&nbsp;</p>
-                      </div>
-                      <div class="tm-timeline-description-wrap">
-                        <div class="tm-bg-dark-light tm-timeline-description">
-                            <h3 class="tm-text-cyan tm-font-400">
-                              ฟังเพลง เจ็บจนพอ - Wanyai
-                            </h3>
-                            
-                            <p>There can put some song in here</p>
-
-                            <p class="tm-text-cyan float-right mb-0">
-                                Another Story . 9 July 2018
-                            </p>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="tm-timeline-connector-vertical"></div>
-                </div> -->
-
-                    <!--
-                     <div class="tm-timeline-item">
-
-                        <div class="tm-timeline-item-inner">
-
-                            <img src="https://s.isanook.com/jo/0/rp/r/w670/ya0xa0m1w0/aHR0cHM6Ly9zLmlzYW5vb2suY29tL2pvLzAvdWQvNDgxLzI0MDk4NDUvYXEuanBn.jpg" alt="Image" class="rounded-circle tm-img-timeline responsive">
-
-                            <div class="tm-timeline-connector">
-
-                                <p class="mb-0">&nbsp;</p>
-
-                            </div>
-
-                            <div class="tm-timeline-description-wrap">
-
-                                <div class="tm-bg-dark-light tm-timeline-description">
-
-                                    <h3 class="tm-text-cyan tm-font-400">ฟังเพลง ชอบแบบนี้ - หนามเตย</h3>
-                                    <p>
-                                      <iframe src="https://archive.org/embed/20190908_20190908_1258" width="500" height="30" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
-                                      <br />
-                                      ฟังเพลงหวานซึ้ง ซึ่งไม่รู้ว่าจะเสร็จเมื่อไหร่ แต่เอาจริงๆ นะอันนี้เรามาทดสอบกันด้วยการเพิ่ม Tag p เข้าไปแล้วเขียนข้อความยาวๆ ดูว่ามันจะมีปัญหากับ Layout หรือไม่
-                                    </p>
-
-                                    <p class="tm-text-cyan float-right mb-0">Another Story . 9 July 2018</p>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="tm-timeline-connector-vertical"></div>
-
-                    </div>
-                    -->
-
-
-
-<!-- End -->
-
-		<!-- item number 4 start -->
-      <!--
-		    <div class="tm-timeline-item">
-			<div class="tm-timeline-item-inner">
-			    <img src="img/img-02.jpg" alt="Image" class="rounded-circle tm-img-timeline">
-			    <div class="tm-timeline-connector">
-				<p class="mb-0">&nbsp;</p>
-			    </div>
-
-			    <div class="tm-timeline-description-wrap">
-				<div class="tm-bg-dark-light tm-timeline-description">
-				    <h3 class="tm-text-cyan tm-font-400">Vestibulum ante ipsum primis</h3>
-				    <p>In imperdiet nisl quis sapien pellentesque, non rhoncus elit sollicitudin. Donec pharetra egestas magna at eleifend. Sed non magna vitae enim tempus faucibus.</p>
-
-				    <p class="tm-text-cyan float-right mb-0">Another Story . 9 July 2018</p>
-
-				</div>
-			    </div>
-			</div>
-			<div class="tm-timeline-connector-vertical"></div>
-		    </div> -->
-			<!-- End of tm-timeline-item -->
-
-
-              <!--
-                    <div class="tm-timeline-item">
-
-                        <div class="tm-timeline-item-inner">
-
-                            <img src="img/img-04.jpg" alt="Image" class="rounded-circle tm-img-timeline">
-
-                            <div class="tm-timeline-connector">
-
-                                <p class="mb-0">&nbsp;</p>
-
-                            </div>
-
-                            <div class="tm-timeline-description-wrap">
-
-                                <div class="tm-bg-dark-light tm-timeline-description">
-
-                                    <h3 class="tm-text-orange tm-font-400">Lorem ipsum dolor sit amet</h3>
-
-                                    <p>Phasellus at quam facilisis sem congue lacinia. Fusce risus velit, bibendum in magna eu, sollicitudin pellentesque dolor. Nulla facilisi. Fusce libero mauris, maximus et liqula at.เพิ่มตัวอักษรสีส้มด้วย tag tm-text-orange</p>
-
-                                    <p class="tm-text-orange float-right mb-0">New Project . 22 June 2018</p>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-
-                    </div>
-                    -->
-
 
     </div>
 	</div>	
@@ -187,7 +37,10 @@ $(function(){
             tmp = `<div class="alert alert-danger"><h2 class="text-center">There is no data</h2></div>`; 
           }else{ 
             $.each(rs.get_status,function(i,v){ 
-              var tmp = v.st_body;
+                
+                var tmp = `<div class="container">
+                    ${v.st_body}
+                    </div>`;
               $st_list.append(tmp);
           });
 

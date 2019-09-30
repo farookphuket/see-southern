@@ -184,80 +184,17 @@ function delTB($tb,$id=false,$del_table=false)
 ////////////////    end of method getTB saveTB delTB
 ////////////////////////
 
-/*
 
-    //--comment out as no longer require
-    public function get($id=null,$single=false,$limit=null,$offset=null){
+function getTable(){
+    return $this->_table_name;
+}
 
-        if($id != null):
-            $method = 'row';
-        elseif($single == true):
-            $method = 'row';
-        else:
-            $method = 'result';
-        endif;
-        if(!count($this->db->order_by($this->_order_by))):
-            $this->db->order_by($this->_order_by);
-        endif;
-     return $this->db->get($this->_table_name,$limit,$offset)->$method();
-    }//end of get function
-    
-    public function get_by($where,$single=false ){
+function DEL($where,$tb){
+    $this->db
+            ->where($where)
+            ->delete($tb);
+}
 
-         $this->db->where($where);
-         return $this->get(null,$single);
-    }//end of get_by function
-    
-
-    */
-
-    /*
-    comment out as no use on Sun 6 May 2018
-    //add this line on the Mon-29-May-2017
-    function getMe($tb,$id=false,$limit=false,$offset=false){
-        $get = false;
-        if(!$id):
-            $get = $this->db
-                        ->get($tb,$limit,$offset);
-        else:
-            $get = $this->db
-                        ->where($id)
-                        ->get($tb,$limit,$offset);
-        endif;        
-
-        return $get;
-    }//end of getMe
-
-    //--not use
-    public function save($data,$id=null){
-        if($id != null):
-        //the id has pass in get to edit
-        $this->db
-                ->where($id)
-                ->set($data)
-                ->update($this->_table_name);
-        $id = $id;
-        else:
-        //no id set will be insert
-        $this->db
-            ->set($data)
-            ->insert($this->_table_name);
-        $id = $this->db->insert_id();
-        endif;
-    return $id;
-   }//end of save function
-    public function del($id){
-        if(!$id):
-            return false;
-        endif;
-        $this->db
-                ->where($id)
-                ->limit(1)
-                ->delete($this->_table_name);    
-       return true;
-   }//end of del function
-
-   */
 
 
 }//end of MY_Model class

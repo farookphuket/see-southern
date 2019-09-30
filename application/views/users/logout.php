@@ -18,7 +18,7 @@
 $(function(){
   
   setTimeout(function(){
-    //window.location.href = "<?php echo site_url(); ?>";
+    window.location.href = "<?php echo site_url(); ?>";
   },4000);
 
 });

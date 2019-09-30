@@ -495,7 +495,15 @@ function adminListUser($seg=1){
 
   /* Moderate Section create on 15-Sep-2019 */
   function mod(){
-    echo"welcome {$this->user_name}";
+
+        if(!$this->moderate):
+            echo"You are not moderator!";
+            exit();
+        endif;    
+      $this->data["subview"] = "mod/mod_index";
+      $tmp = "_MOD_TMP";
+      $this->load->view($tmp,$this->data);
+
   }
 
 
