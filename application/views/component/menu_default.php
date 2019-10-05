@@ -7,6 +7,7 @@
   $lnMember = "#member";
   $lnContact = "#contact";
   $lnTop = "#page-top";
+  $ln_aboutMe = site_url("page");
   $lnRegist = site_url("register");
   if($cur_url != $home_url):
     $lnTour = site_url("#tour");
@@ -20,9 +21,7 @@
 <nav class="menu fixed-top">
   <ul class="active">
   <li class="current-item"><a href="<?php echo $home_url;?>">Home</a></li>
-    <li><a href="#">My Work</a></li>
-    <li><a href="#">About Me</a></li>
-    <li><a href="<?php echo $lnTour;?>">Tour</a></li>
+  <li><a href="<?php echo $ln_aboutMe; ?>">About Us</a></li>
     <li><a href="<?php echo $lnMember;?>">Login</a></li>
   </ul>
 

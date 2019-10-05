@@ -12,6 +12,8 @@ class Template extends MY_Controller{
     protected $user_name;
     protected $is_login;
     protected $is_admin;
+    protected $moderate;
+    protected $_tb_tmp;
 
     public $o_put;
 
@@ -21,26 +23,27 @@ class Template extends MY_Controller{
     function __construct() {
       parent::__construct();
       $this->is_admin = $this->user_is_admin();
+      $this->moderate = $this->user_is_mod();
       $this->is_login = $this->user_is_login();
       $this->user_id = $this->session->userdata("user_id");
       //$this->user_is_admin();
-      $this->user_name = $this->Mdl_template->getUserName();
 
       //Load the library..edit on Mon-31-July-2017
       $this->load->library("pagination");
 
       //Load the models
       $this->load->model("Mdl_users");
+      $this->load->model("Mdl_template");
+      $this->_tb_tmp = $this->Mdl_template->getTable();
+
+      $this->user_name = $this->Mdl_template->getUserName();
       $this->load->model("Mdl_article");
       $this->load->model("Mdl_admin");
       $this->load->model("Mdl_cat");
       $this->load->model("Mdl_booking");
       $this->load->model("Mdl_faq");
       $this->load->model("Mdl_notice");
-      if(!$this->is_admin):
-        //echo"No Admin..";
-        redirect(site_url("users/logout"));
-      endif;
+
     }
     
 
@@ -48,126 +51,65 @@ class Template extends MY_Controller{
         if($this->is_admin):
             redirect(site_url("admin/u"));
         endif;
-        $this->data["meta_title"] = "admin page | {$this->user_name}";
-        $this->data["subview"] = "admin/template/list_tmp";
-        $this->load->view("_layout_admin",$this->data);
+        if($this->moderate):
+            redirect(site_url("template/mod"));
+        endif;
+        
+        echo"template";
     }
     //---
     
-    
-    //---------------adminGetNotice
-   //----Fri 21 sep 2017
-   function adminGetNotice($seg=1){
-        $where = array(
-            "notice_read " => 0
-        );
-        $get = $this->Mdl_notice->getNotice($where)->result();
-        $num_notice = count($get);
+    function tmpList($page=1){
 
-        //---pagination
-        $per_page = 10;
-        $url = "admin/adminGetNotice";
-        $conf = $this->getConfPagin($per_page,$num_notice,$url);
-        $this->pagination->initialize($conf);
-        $page = $seg;
-        $start = ($page-1)*$conf["per_page"];
-        $get_all = $this->Mdl_notice->getNotice($where,$conf["per_page"],$start)->result();
-        if($num_notice >= $per_page):
-            $this->o_put["pagination"] = $this->pagination->create_links();
-        endif;
-
-        $this->o_put["num_notice"] = $num_notice;
-        $this->o_put["get_notice"] = $get_all;
-
-        $this->output->set_output(json_encode($this->o_put));
-   }
-
-    //-----------------------------------
-
-    function profile(){
-
-        $command = $this->input->post("command");
-        $admin_id = $this->input->post("admin_id");
-        $name = $this->input->post("name");
-        $email = $this->input->post("email");
-        $tel = $this->input->post("tel");
-        $passwd = $this->make_hash($this->input->post("passwd"));
-
-        $a_data = array(
-            "name" => $name,
-            "email" => $email,
-            "tel" => $tel,
-            "last_update" => time(),
-        );
-
-        $error = 0;
-        $msg = array();
-        switch($command):
-            case"check_admin":
-
-                $where = array("passwd" => $passwd);
-                $get = $this->Mdl_admin->getTB($this->_tb_user,$where);
-                $num = count($get->result());
-
-                if($num == 0):
-                    $error = 1;
-                    $msg["msg"] = "Error : Wrong password!";
-                endif;
-                $msg["error"] = $error;
-                echo json_encode($msg);
-
-            break;
-            case"update":
-                $where = array("id" => $this->user_id);
-                $save = $this->Mdl_admin
-                        ->saveTB($this->_tb_user,$a_data,$where);
-                if(!$save):
-                    echo"Error : code=1";
-                else:
-                    echo"Success : Data has been save!";
-                endif;
-            break;
-            default:
-
-                $where = array("user_type" => 642,"id" => $this->user_id);
-                $get = $this->Mdl_users->getTB($this->_tb_user,$where);
-                foreach($get->result() as $row):
-                    $name = $row->name;
-                    $email = $row->email;
-                    $tel = $row->tel;
-                    $about = $row->about_user;
-                    $u_id = $row->id;
-                endforeach;
-
-                    $this->data["subview"] = "admin/user/admin_profile";
-                    $this->data["meta_title"] = "{$this->user_name}'s profile";
-                    $this->data["admin_id"] = $this->user_id;
-                    $this->data["name"] = $name;
-                    $this->data["email"] = $email;
-                    $this->data["tel"] = $tel;
-                    $this->data["about"] = $about;
-                    $this->load->view("_layout_admin",$this->data);
-
-
-            break;
-        endswitch;
-
-
-    }//end of profile
-
-    //--------------------
-    //-------- u
-    function u(){
-        
-        
-        $this->data["subview"] = "admin/admin_index";
-        $this->data["meta_title"] = "{$this->user_type} | welcome {$this->user_name}";
-
-        $this->load->view("_ADMIN_TMP",$this->data);
     }
 
-    
-   
+    function tmpGet($id){
+        $where = array("tmp_id" => $id);
+        $get = $this->Mdl_template->tmpList($where)->result();
+        $this->o_put["get"] = $get;
+        $this->output->set_output(json_encode($this->o_put));
+    }
+  
+
+    /* Moderate section Start */
+
+    function modList($page=1){
+        $get = $this->Mdl_template->tmpList()->result();
+        $this->o_put["get"] = $get;
+
+        $this->output->set_output(json_encode($this->o_put));
+    }
+    function mod(){
+        $this->data["subview"] = "mod/template/tmp_list";
+        $tmp = "_SEP2019_TMP";
+        $this->load->view($tmp,$this->data);
+    }
+
+    function modEdit($id){
+        $where = array("tmp_id" => $id);
+        $get = $this->Mdl_template->tmpList($where)->result();
+        $this->o_put["get"] = $get;
+        $this->output->set_output(json_encode($this->o_put));
+
+    }
+
+    function modSave(){
+        $s = $this->Mdl_template->modSave();
+        $this->o_put["msg"] = $s["msg"];
+        $this->o_put["tmp_id"] = $s["tmp_id"];
+        $this->output->set_output(json_encode($this->o_put));
+    }
+
+    function modDel($id){
+        $where = array("tmp_id" => $id);
+        $del = $this->Mdl_template->modDel($where);
+        $this->o_put["msg"] = $del["msg"];
+        $this->output->set_output(json_encode($this->o_put));
+                
+    }
+
+    /* Moderate section End */
+
 
 
 

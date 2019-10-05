@@ -4,10 +4,12 @@
 <?php
 
     $home = "";
+    $page = site_url("page");
 
     if($is_login):
         if($moderate != 0):
             $home = site_url("moderate");
+            $page = site_url("page/mod");
         elseif($is_admin != 0):
             
             $home = site_url("admin");
@@ -38,15 +40,18 @@
                             <a class="nav-link" href="<?php echo $home; ?>">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Page</a>
+                            <a class="nav-link" href="<?php echo $page; ?>">Page</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Page</a>
+                                <a class="nav-link" href="#">Future Link</a>
                             </li>
                             <li class="nav-item">
 <?php 
     if(!$is_login):
-        echo"Login";
+?>
+        <a class="nav-link" href="<?php echo site_url("home/#member"); ?>">Login</a>
+
+<?php
     else:
 ?>
     <a class="nav-link" href="<?php echo site_url("users/logout"); ?>">Logout</a>

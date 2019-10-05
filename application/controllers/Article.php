@@ -16,6 +16,7 @@ class Article extends MY_Controller{
     protected $_tb_cat = "tbl_cat";
     protected $tb_his;
     protected $_tb_user = "users";
+    protected $_tb_tmp = "";
 
     
 
@@ -25,6 +26,8 @@ class Article extends MY_Controller{
         $this->load->model("Mdl_users");
         $this->load->model("Mdl_article");
         $this->load->model("Mdl_seo");
+        $this->load->model("Mdl_template");
+        $this->_tb_tmp = $this->Mdl_template->getTable();
 
         $this->load->library("pagination");
 
@@ -309,15 +312,67 @@ class Article extends MY_Controller{
 
     //--------------------------------------//
     //---------Moderate section-------------------//
-    /* Delete old moderate operation on 15-Sep-2019 */
+    /* Delete old moderate operation on 15-Sep-2019 
+     * create new mod section 30 Sep 2019
+     * */
     function mod(){
       if(!$this->moderate):
-          echo"you are not Moderate!!";
+          //echo"you are not Moderate!!";
+          redirect(site_url());
           exit();
       endif;
-      echo"Welcome {$this->user_name} your id is {$this->user_id}";
+        $get_tmp = $this->Mdl_template->tmpList()->result();
+        $this->data["get_tmp"] = $get_tmp;
+
+        $this->data["meta_title"] = "Manage article {$this->user_type}";
+        $this->data["subview"] = "mod/article/ls_article";
+        $tmp = "_SEP2019_TMP";
+        $this->load->view($tmp,$this->data);
+
     }
 
+    function modList($page=1){
+        $get = $this->Mdl_article->modList()->result();
+
+        $num = count($get);
+
+        //---pagination
+        $url = "modList";
+        $per_page = 10;
+        $conf = $this->getConfPagin($per_page,$num,$url);
+        $this->pagination->initialize($conf);
+        $start = ($page-1)*$per_page;
+        $get_ar = $this->Mdl_article->modList(null,$per_page,$start)->result();
+
+        if($num > $per_page):
+            $this->o_put["pagination"] = $this->pagination->create_links();
+            endif;
+
+        $this->o_put["get"] = $get_ar;
+        $this->output->set_output(json_encode($this->o_put));
+    }
+
+
+    function modEdit($id){
+        $get = $this->Mdl_article->modGet($id)->result();
+        $this->o_put["get"] = $get;
+        $this->output->set_output(json_encode($this->o_put));
+    }
+
+    function modSave(){
+        $save = $this->Mdl_article->modSave();
+        $this->o_put["msg"] = $save["msg"];
+        $this->o_put["ar_id"] = $save["ar_id"];
+        $this->output->set_output(json_encode($this->o_put));
+    }
+
+
+    function modDel($id){
+        $where = array("ar_id" => $id);
+        $del = $this->Mdl_article->modDel($where);
+        $this->o_put["msg"] = $del["msg"];
+        $this->output->set_output(json_encode($this->o_put));
+    }
     //---------------------------------------------/////
     //-----------End of moderate section-----------/////
     //---------------------------------------------////

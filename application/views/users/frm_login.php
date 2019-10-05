@@ -24,11 +24,14 @@
 				</label>
 				<input class="form-control user_pass" type="password" name="user_pass">
 			</div>
-			<button type="submit" class="btnLogin tm-btn-send">Login</button>
-			<button class="tm-btn-send btnForgot">Forgot Pass</button>
-			<a href="" class="tm-btn-send btnRegister" style="color:white;font-weight:bold">Register</a>
+                        <div class="row">
+                           <button type="submit" class="btnLogin tm-btn-send btn-sm">Login</button>
+			<button class="tm-btn-send btnForgot btn-sm">Forgot Pass</button>
+			<a href="" class="tm-btn-send btnRegister btn-sm" style="color:white;font-weight:bold">Register</a>
 
-			</form>
+ 
+                        </div>
+						</form>
 		</div>
 	</div>
 <script>

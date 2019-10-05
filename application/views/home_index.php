@@ -116,37 +116,7 @@ $(function(){
 
 
             /*
-            var tmp = `<div class="tm-timeline-item">
-                <div class="tm-timeline-item-inner">
-                  <img src="https://car-images.bauersecure.com/pagefiles/89936/1752x1168/bmw_concept4_045.jpg?mode=max&quality=90&scale=down" class="rounded-circle tm-img-timeline ">
-                    <div class="tm-timeline-connector">
-				              <p class="mb-0">&nbsp;</p>
-			              </div>
-                      
-			              <div class="tm-timeline-description-wrap">
-
-                          
-				              <div class="tm-bg-dark tm-timeline-description">
-                            
-                        <h3 class="tm-text-yellow tm-font-400">
-                            From javascript
-                        </h3>
-                          <p style="color:white;font-weight:bold;">
-                            to make this as my guide line. the background can be preform by add tm-bg-dark or tm-bg-dark-light
-                          </p>
-
-                        <p class="tm-text-cyan float-right mb-0">
-                          Another Story . 9 July 2018
-                        </p>
-
-
-                      </div>
-                    </div><!-- end of description-wrap -->
-
-
-                </div>
-              </div>
-`;
+          comment this 
              */
 
             var url = "<?php echo site_url("home/getRecentPost/") ?>"+page;

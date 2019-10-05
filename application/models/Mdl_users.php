@@ -15,6 +15,29 @@ class Mdl_users extends MY_Model{
  
 
    }
+
+
+
+    /* moderate section 3 Oct 2019 START */
+
+    function modList($where=false,$limit=false,$offset=false){
+
+        $get = "";
+        if($where):
+            $get = $this->db
+                    ->where($where)
+                    ->order_by("date_register","DESC")
+                    ->get($this->_tb_user,$limit,$offset);
+            else:
+                $get = $this->db
+                    ->order_by("date_register","DESC")
+                    ->get($this->_tb_user,$limit,$offset);
+
+            endif;
+        return $get;
+    }
+
+    /* moderate section 3 Oct 2019 END */
     
     //-----------Update <Sun-17-Dec-2017></Sun-17-Dec-2017>
     //--getUser will return all user if no id 

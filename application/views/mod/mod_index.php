@@ -1,9 +1,9 @@
-<section id="newNotificate">
+<section id="newNotification">
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
                 <div class="alert alert-warning">
-                    <h1 class="text-center">0</h1>
+                    <h1 class="text-center newPost">0</h1>
                 </div>
                 <p class="text-center">new post</p>
             </div>
@@ -11,8 +11,15 @@
                 <div class="alert alert-warning">
                     <h1 class="text-center">1</h1>
                 </div>
-                <p class="text-center">new article</p>
+                <p class="text-center newArticle">new article</p>
             </div>
+            <div class="col-lg-4">
+                <div class="alert alert-warning">
+                    <h1 class="text-center newUser">0</h1>
+                </div>
+                <p class="text-center">All users</p>
+            </div>
+
 
             <div class="line">
                 
@@ -21,6 +28,44 @@
         </div>
     </div>
 </section>
+<script charset="utf-8">
+$(function(){
+    const $NOTE = $("#newNotification");
+
+    const note = (function(){
+
+        let $post = getEl(".newPost");
+        let $user = getEl(".newUser");
+        let newPost,newArticle,newUser = 0;
+
+
+        function getUser(){
+            let url = "<?php echo site_url("users/modList/"); ?>";
+            $.ajax({
+                url : url,
+                    success : (e)=>{
+                    //console.log(e);
+                    let rs = $.parseJSON(e);
+                    $newUser = rs.num;
+                    $user.html($newUser);
+            }
+            });
+        }
+
+        function getSummary(){
+           getUser(); 
+        }
+        function getEl(el){
+            return $NOTE.find(el);
+        }
+        function getEvent(){
+            getSummary();
+        }
+        return{getEvent:getEvent}
+    })();
+    note.getEvent();
+}); 
+</script>
 
 
 <!-- Share status Start -->
@@ -106,6 +151,10 @@ $(function(){
 
         var uniq_id = getEl(".uniq_id");
         var u_name = "<?php echo $user_name; ?>";
+        //-- checkbox
+        let show = getEl(".pub");
+        let friend_only = getEl(".friend_only");
+        let private_only = getEl(".private_only");
 
         function getList(page=1){
             st_list.html("");
@@ -113,7 +162,7 @@ $(function(){
             $.ajax({
             url : url,
                 success : function(e){
-                    console.log(e);
+                   // console.log(e);
                     var rs = $.parseJSON(e);
                     if(rs.get_st.length){
                         if(rs.pagination){
@@ -158,6 +207,17 @@ $(function(){
                         var rs = $.parseJSON(e);
                         console.log(rs);
                         $.each(rs.get,function(i,v){
+                       
+                            if(parseInt(v.show_public) !== 0){
+                                show.prop("checked",true);
+                            }
+                            if(parseInt(v.private_only) !== 0){
+                                private_only.prop("checked",true);
+                            }
+                             if(parseInt(v.friend_only) !== 0){
+                                friend_only.prop("checked",true);
+                            }
+
                             st_title.val(v.st_title);
                            tinymce.activeEditor.setContent(v.st_body); 
                            st_id.val(v.st_id);
@@ -291,6 +351,7 @@ $(function(){
 </script>
 
 <!-- End of status content  -->
+
 
 
             <h2>หน้าหลัก Moderate</h2>

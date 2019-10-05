@@ -88,6 +88,10 @@ class Mdl_ustd extends MY_Model{
         $st_title = $this->getEl("st_title");
         $st_body = $this->getEl("st_body");
 
+        $show = !($this->getEl("pub"))?$show = 0:$show=2;
+        $friend_only = !($this->getEl("friend_only"))?$friend_only = 0:$friend_only=2;
+        $private_only = !($this->getEl("private_only"))?$private_only = 0:$private_only=2;
+
         if(!$st_user_id):
             $st_user_id = $this->user_id;
             endif;
@@ -95,6 +99,9 @@ class Mdl_ustd extends MY_Model{
         $st_data = array(
             "date_create" => $this->today_andTime,
             "date_update" => $this->today_andTime,
+            "show_public" => $show,
+            "friend_only" => $friend_only,
+            "private_only" => $private_only,
             "st_title" => $st_title,
             "st_body" => $st_body,
             "st_user_id" => $st_user_id

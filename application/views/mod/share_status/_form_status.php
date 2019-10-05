@@ -13,5 +13,21 @@
         <label for="st_body">what new</label>
         <textarea  name="st_body" class="form-control st_body tinymce" id="st_body"></textarea>
     </div>
+    <div class="form-group">
+        <div class="form-check form-check-inline">
+            <input class="pub" name="pub" id="pub" type="checkbox">
+            <label class="form-check-label">Show Public</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+            <input class="friend_only" name="friend_only" id="friend_only" type="checkbox">
+            <label class="form-check-label">Friend Only</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="private_only" name="private_only" id="private_only" type="checkbox">
+            <label class="form-check-label">Private Only</label>
+        </div>
+
+    </div>
 
 </form>

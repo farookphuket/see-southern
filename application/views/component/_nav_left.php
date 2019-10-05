@@ -1,5 +1,18 @@
 <!-- Last edit 30 sep 2019 -->
 
+<?php 
+
+    $lnHome = site_url();
+    $lnArticle = site_url("article");
+    $lnTmp = site_url("template");
+
+    if($is_login):
+        if($moderate):
+            $lnArticle = site_url("article/mod");
+            endif;
+    endif;
+?>
+
 
  <nav id="sidebar">
             <div class="sidebar-header">
@@ -47,7 +60,7 @@
                     <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
                     <ul class="collapse list-unstyled" id="pageSubmenu">
                         <li>
-                            <a href="#">Page 1</a>
+                        <a href="<?php echo $lnTmp; ?>">Template</a>
                         </li>
                         <li>
                             <a href="#">Page 2</a>
@@ -72,7 +85,7 @@
 
 
                 <li>
-                    <a href="" class="article">article</a>
+                <a href="<?php echo $lnArticle; ?>" class="article">article</a>
                 </li>
             </ul>
         </nav>

@@ -343,12 +343,154 @@ class Mdl_article extends MY_Model{
     /*   End of np login section */
     //---------------------------------------------//
 
+    /* Start MODERATE SECTION */
+
+
+    function modList($where=false,$limit=false,$offset=false){
+
+    $get = "";       
+        if($where):
+            $get = $this->db
+                        ->where($where)
+                        ->order_by("date_add","DESC")
+                        ->get($this->_tb_ar,$limit,$offset);
+        else:
+            $get = $this->db
+                        ->order_by("date_add","DESC")
+                        ->get($this->_tb_ar,$limit,$offset);
+     
+        
+        endif;
+
+
+        return $get;
+
+    }
+
+
+    function modGet($id){
+        $where = array("{$this->_tb_ar}.ar_id" => $id);
+        $get = $this->adminGet($where);
+        
+        return $get;
+    }
+
+
+    function modSave(){
+        $save = "";
+        $ar_id = $this->getEl("ar_id");
+        $ar_user_id = $this->getEl("ar_user_id");
+        $kw_id = $this->getEl("kw_id");
+        $og_url = $this->getEl("og_url");
+        $keyword = $this->getEl("keyword");
+        $keydes = $this->getEl("keydes");
 
 
 
+        $ar_title = $this->getEl("ar_title");
+        $ar_sum = $this->getEl("ar_sum");
+        $ar_body = $this->getEl("ar_body");
+
+        $show_pub = !($this->getEl("pub"))?$show_pub = 0:$show_pub=2;
+
+        $approve = !($this->getEl("approve"))?$approve=0:$approve=2;
+        $show_index = !($this->getEl("show_index"))?$show_index=0:$show_index=2;
+
+        $ar_data = array(
+            "ar_title" => $ar_title,
+            "ar_summary" => $ar_sum,
+            "ar_body" => $ar_body,
+            "ar_show_public" => $show_pub,
+            "ar_show_index" => $show_index,
+            "ar_is_approve" => $approve,
+            "date_add" => $this->today_andTime,
+            "date_edit" => $this->today_andTime
+
+        );
+
+        $se_data = array(
+            "kw_page_keyword" => $keyword,
+            "kw_page_des" => $keydes,
+            "kw_canonical" => $og_url,
+            "og_title" => $keyword,
+            "og_site_name" => site_url(),
+            "og_description" => $keydes,
+            "article_publisher" => $this->user_name,
+            "kw_date_add" => $this->today_andTime,
+            "og_url" => $og_url
+        );
+
+        if(!$ar_id):
+            $uniq_id = $this->randomChar(200);
+            $ar_data["uniq_id"] = $uniq_id;
+            $ar_data["ar_post_by"] = $this->user_name;
+            $ar_data["ar_post_ip"] = $this->ip;
+            $ar_data["ar_user_id"] = $this->user_id;
+
+        $save = $this->SAVE($ar_data,$this->_tb_ar);
+        $ar_id = $save;
+        $og_url = site_url("article/read/{$uniq_id}");
+
+        //-- create new seo if success
+        $se_data["og_url"] = $og_url;
+        $kw_id = $this->SAVE($se_data,$this->_tb_seo);
+
+        //--- update the ar table
+        $update = array(
+            "kw_id" => $kw_id
+        );
+        $this->SAVE($update,$this->_tb_ar,array("{$this->_tb_ar}.ar_id" => $ar_id));
+
+            
+            $msg = "Success data has been create @{$ar_id} the key id is @{$kw_id}";
+        else:
+            //--- update data
+            unset($ar_data["date_add"]);
+            unset($se_data["kw_date_add"]);
+           $save = $this->SAVE($ar_data,$this->_tb_ar,array("{$this->_tb_ar}.ar_id" => $ar_id)); 
+            $this->SAVE($se_data,$this->_tb_seo,array("{$this->_tb_seo}.kw_id" => $kw_id));
+            $msg = "Success data has been updated @{$ar_id} key id @{$kw_id}";
+
+            
+
+        endif;
 
 
+        $r_data = array(
+            "ar_id" => $ar_id,
+            "msg" => $msg
+        );
+        return $r_data;
 
+    }
+
+
+    function modDel($where){
+        $get = $this->adminGet($where)->result();
+        $ar_id = 0;
+        $kw_id = 0;
+        $ar_title = "";
+        $post_name = "";
+        foreach($get as $row):
+            $post_name = $row->name;
+            $ar_id = $row->ar_id;
+            $kw_id = $row->kw_id;
+           endforeach; 
+            $this->db
+                 ->where(array("kw_id" => $kw_id))
+                ->delete($this->_tb_seo);
+            $this->db
+                 ->where(array("ar_id" => $ar_id))
+                ->delete($this->_tb_ar);
+        $msg = "Success : item has been deleted!";
+            $r_data = array(
+                "msg" => $msg
+            );
+        return $r_data;
+        
+    }
+
+    /* Start MODERATE SECTION 1-Oct-2019 */
 
     /* Admin Start 
      * Sun 15 Sep 2019 while change the new theme

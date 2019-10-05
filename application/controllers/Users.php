@@ -19,7 +19,7 @@ class Users extends MY_Controller {
 
     //the table name
     //edit on Thu 8 Jun 2017
-    protected $_tb_user = "users";
+    protected $_tb_user;
     protected $_tb_notice = "tbl_notification";
 
     public $o_put;
@@ -27,6 +27,10 @@ class Users extends MY_Controller {
     public $today;
     public $user_type;
     public $ip;
+
+    public $sysName = "Users";
+    public $sysVersion = "1.14";
+    public $sysDate = "25-sep-2019";
 
   function __construct() {
     parent::__construct();
@@ -39,6 +43,7 @@ class Users extends MY_Controller {
     $this->load->library("pagination");
 
     $this->load->model("Mdl_users");
+    $this->_tb_user = $this->Mdl_users->getTable();
     $this->load->model("Mdl_article");
     $this->load->model("Mdl_contact");
     $this->load->model("Mdl_booking");
@@ -59,8 +64,7 @@ class Users extends MY_Controller {
     $this->u_data = $this->get_user_info();
     $this->ip = $this->Mdl_users->getIP();
 
-    //----Wed 3 Oct 2018
-    //$this->user_type = $this->user_type(); 
+    
 
     }
 
@@ -497,15 +501,41 @@ function adminListUser($seg=1){
   function mod(){
 
         if(!$this->moderate):
-            echo"You are not moderator!";
+            //echo"You are not moderator!";
+            redirect(site_url());
             exit();
         endif;    
+        $this->data["meta_title"] = "{$this->sysName} version{$this->sysVersion} | {$this->user_name}";
       $this->data["subview"] = "mod/mod_index";
-      $tmp = "_MOD_TMP";
+      $tmp = "_SEP2019_TMP";
       $this->load->view($tmp,$this->data);
 
   }
 
+    function modList($page=1){
+        $where = array(
+            "user_type !=" => 642,
+            "id !=" => $this->user_id
+        );
+        $get = $this->Mdl_users->modList($where)->result();
+        $num = count($get);
+
+        $per_page = 4;
+        $url = "modList";
+        $conf = $this->getConfPagin($per_page,$num,$url);
+        $this->pagination->initialize($conf);
+        $start = ($page-1)*$per_page;
+        $get_u = $this->Mdl_users->ModList($where,$per_page,$start)->result();
+
+        if($num > $per_page):
+            $this->o_put["pagination"] = $this->pagination->create_links();
+        endif;
+        $this->o_put["get"] = $get;
+        $this->o_put["num"] = $num;
+        $this->o_put["get_u"] = $get_u;
+
+        $this->output->set_output(json_encode($this->o_put));
+    }
 
   /* End of Moderate section */
 //---------------------------------
