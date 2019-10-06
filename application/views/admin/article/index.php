@@ -64,6 +64,7 @@
 $(function(){
 
   var $el = $("#article_admin");
+  const $page_status = $(".status");
   var ar = (function(){
 
     //---the create link
@@ -83,6 +84,7 @@ $(function(){
     var $frm = getEl("#frmAr");
     var btnSave = getEl(".btnSave");
 
+    let $get_tmp = getEl(".get_tmp");
     //-- the input hidden
     var ar_id = getEl(".ar_id");
     var kw_id = getEl(".key_id");
@@ -108,6 +110,8 @@ $(function(){
     var chIndex = getEl(".show_index");
     var $fResult = getEl(".fResult");
 
+    const u_name = "<?php echo $user_name; ?>"
+
     //------ getArList
     function getArList(page=1){
 
@@ -129,8 +133,8 @@ $(function(){
               var lnEdit = `<a  style="color:white;font-weight:bold;" class="btn btn-primary lnEdit" data-ar_id="${v.ar_id}">Edit</a>`;
               var lnDel = `<a  style="color:white;font-weight:bold;" class="btn btn-danger lnDel" data-ar_id="${v.ar_id}">Delete</a>`;
               var tmp = `<div class="card">
-                  <div class="catd-header">
-                    <h1 class="bg-primary" style="color:white;">${v.ar_title}</h1>
+                  <div class="card-header bg-primary">
+                    <h1 style="color:white;">${v.ar_title}</h1>
                   </div>
                   <div class="card-body">
                     ${v.ar_summary}
@@ -160,8 +164,6 @@ $(function(){
                           </td> 
                         </tr>
 
-
-
                       </table>
                     </div>
                   </div>
@@ -183,7 +185,6 @@ $(function(){
     //-------------------------
     function showForm(cmd,id){
       formSetZero();
-      tinymce.activeEditor.setMode("design");
 
       switch(cmd){
       case"edit":
@@ -228,73 +229,48 @@ $(function(){
             }
         }); 
 
-
+        $get_tmp.prop("disabled",true);
         break;
       default:
         $mdTitle.html("Create New Post");  
+        $get_tmp.prop("disabled",false);
       break;
       }
       $($md).modal("show");
     }
     //-------------------
     //------- getDefaultTmp
-    function getDefaultTmp(){ 
+    function getAppend(){ 
       if(parseInt(ar_id.val()) === 0){
         //--- only if the none id paste
         og_title.val(`edit the keyword for [${ ar_title.val() }]`);
         og_des.val(`edit the description for [${ ar_title.val() }] `);
         var today = new Date().toLocaleString();
-        var imgUrl = "";
-        var sum_tmp = `<div class="tm-timeline-item">
-			        <div class="tm-timeline-item-inner">
-			          <img src="${imgUrl}" alt="Image" class="rounded-circle tm-img-timeline responsive">
-			          <div class="tm-timeline-connector">
-				          <p class="mb-0">&nbsp;</p>
-			          </div>
+        let abody = `${ar_sum.val()}<p class="float-right">post by ${u_name} create on ${today}</p>`;
 
-			    <div class="tm-timeline-description-wrap">
-				<div class="tm-bg-dark-light tm-timeline-description">
-            <h3 class="tm-text-cyan tm-font-400">
-                Change this tag
-            </h3>
-				    <p>Change this tag</p>
+        ar_sum.val(abody);
+        }
 
-            <p class="tm-text-cyan float-left mb-0">Another Story . 
-              create on ${ today }
-            </p>
-            <div class="float-right">
-              <a href="COPY-OG_URL-THEN-PASTE-HERE!" target="_blank" class="btn btn-primary" style="color:white;font-weight:bold;">Read More</a>
-            </div>
+    }
 
-				</div>
-			    </div>
-			</div>
-			<div class="tm-timeline-connector-vertical"></div>
-		    </div>
+    function getTemplate(id){
+        let url = "<?php echo site_url("template/tmpGet/"); ?>"+id;
 
-        `;
-        ar_sum.val(sum_tmp);//-- append to the textarea
+        $.ajax({
+        url : url,
+            success : function(e){
+            let rs = $.parseJSON(e);
+            $.each(rs.get,(i,v)=>{
+                
+                ar_sum.val(v.section_title);
 
-        var body_tmp = `<div class="container tm-container-2">
-            <div class="row">
-              <div class="col-lg-12">
-                <h1 class="tm-welcome-text">edit the title for "${ ar_title.val() }".</h1>
-              </div>
-            </div>
-            <div class="row tm-section-mb"> 
-              <div class="col-lg-12">
-              <p style="color:black;font-weight:bold;">
-                All this text is generate by the default template on ${ today } you can simply just DELETE all of this text then paste or type you text here in the &lt;p style="color:color-name;"&gt;IN BETWEEN THIS p tag &lt;p&gt;. Enjoin.
-              
-              </p>
-              </div>
-            </div>
-        </div>
-        `;
-        tinymce.activeEditor.setContent(body_tmp);
 
-      }
+                tinymce.get("ar_body").setContent(v.section_body);
+            });
 
+        }
+        });
+        
     }
 
     //--- showSumResult
@@ -347,6 +323,21 @@ $(function(){
       });
     }
     //----------------
+    function arDel(id){
+        let url = "<?php echo site_url("article/adminDel/"); ?>"+id;
+        $.ajax({
+        url : url,
+            success :(e)=>{
+            let rs = $.parseJSON(e);
+            $page_status.html(rs.msg).show();
+            setTimeout(()=>{
+
+                $page_status.html("loading...").fadeOut("slow");
+                getSummary();
+            },2000);
+        }
+        });
+    }
     //------ getSummary 
     function getSummary(){
       getArList();
@@ -374,9 +365,16 @@ $(function(){
         showForm("edit",id);
       });
 
+       //--- delete button click
+      $ar_list.delegate(".lnDel","click",function(){
+        var id = $(this).attr("data-ar_id");
+        arDel(id);
+      });
+
+
       //---- will trigger if title is blur
       ar_title.on("blur",function(){ 
-        getDefaultTmp();
+        getAppend();
       });
       //---- ar_sum on blur will show the result
       ar_sum.on("blur",function(){
@@ -386,6 +384,13 @@ $(function(){
       //--- save button click
       btnSave.on("click",function(){ 
         saveArticle();
+      });
+
+      //--- get_template
+      $get_tmp.on("change",function(){
+        let opt = $(this).find("option:selected");
+        let id = opt.val();
+        getTemplate(id); 
       });
 
     }

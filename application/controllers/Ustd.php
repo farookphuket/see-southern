@@ -151,7 +151,7 @@ class Ustd extends MY_Controller {
       endif;
       $this->data["subview"] = "admin/ustd/index";
       $this->data["meta_title"] = "Managing user status|{$this->user_name}|{$this->user_type}";
-      $tmp = "_ADMIN_TMP";
+      $tmp = "_SEP2019_TMP";
       $this->load->view($tmp,$this->data);
       
 
@@ -178,6 +178,13 @@ class Ustd extends MY_Controller {
       $this->o_put["st_id"] = $st_id;
       $this->o_put["msg"] = "success : data has been save";
       $this->output->set_output(json_encode($this->o_put));
+    }
+
+    function adminDel($id){
+        $get = $this->Mdl_ustd->modDel($id);
+        $this->o_put["msg"] = $get["msg"];
+        $this->output->set_output(json_encode($this->o_put));
+
     }
 
     /* -- End of Admin Section -- */

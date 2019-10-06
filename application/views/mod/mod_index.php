@@ -245,7 +245,7 @@ $(function(){
                 var title = `${u_name}'s event on ${today}`;
 
                 var tiny = `<div class="tm-timeline-item">
-                    <div class="tm-timeline-item-inner"><img class="tm-img-timeline rounded-circle responsive" src="https://undubzapp.com/wp-content/uploads/2016/11/cover-800x445.jpg" />
+                    <div class="tm-timeline-item-inner"><img class="tm-img-timeline rounded-circle responsive" src="" />
                     <div class="tm-timeline-connector">
                     <p class="mb-0">&nbsp;</p>
                     </div>
@@ -253,16 +253,15 @@ $(function(){
                     <div class="tm-bg-dark tm-timeline-description">
                     <h3 class="tm-text-green tm-font-400">Love super car</h3>
                     <p>the content in here should be not too long in length<br />I love super car</p>
-                    <p class="tm-text-green float-left mb-0">new event ${u_name} on ${today}</p>
+                    <p class="tm-text-green float-left mb-0">new event tee2018 on 10/3/2019, 9:30:11 AM</p>
                     <div class="float-right"><a class="btn btn-primary" style="font-weight;color: white;" href="#" target="_blank" rel="noopener">Read More</a></div>
                     </div>
                     </div>
                     </div>
                     <div class="tm-timeline-connector-vertical">&nbsp;</div>
                     </div>
-                    <p>&nbsp;</p>
-                   <p>&nbsp;</p> 
-                    `;
+
+`;
 
                 st_title.val(title);
                 tinymce.get('st_body').setContent(tiny); 

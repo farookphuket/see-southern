@@ -97,6 +97,7 @@
 $(function(){ 
 
   var $ST = $("#ustd");
+  const $page_status = $(".status");
   var st = (function(){ 
 
 
@@ -161,46 +162,27 @@ $(function(){
       var img = img_url.val();
       var today = new Date().toLocaleString();
       var tmp = `<div class="tm-timeline-item">
-          <div class="tm-timeline-item-inner">
+          <div class="tm-timeline-item-inner"><img class="tm-img-timeline rounded-circle responsive" src="${img}"/>
+          <div class="tm-timeline-connector">
+          <p class="mb-0">&nbsp;</p>
+          </div>
+          <div class="tm-timeline-description-wrap">
+          <div class="tm-bg-dark tm-timeline-description">
+          <h3 class="tm-text-green tm-font-400">Love super car</h3>
+          <p>the content in here should be not too long in length<br />I love super car</p>
+          <p class="tm-text-green float-left mb-0">new event create by ${usr_name} on ${today}</p>
 
-            <img src="${img}" alt="Image" class="rounded-circle tm-img-timeline">
-
-                            <div class="tm-timeline-connector">
-
-                                <p class="mb-0">&nbsp;</p>
-
-                            </div>
-
-                            <div class="tm-timeline-description-wrap">
-
-              <div class="tm-bg-dark tm-timeline-description">
-
-                  <h3 class="tm-text-orange tm-font-400">Test h3</h3>
-
-                  <p>Place here content</p>
-
-                  <p class="tm-text-orange float-left mb-0">
-                  ${ usr_name } on ${ today }
-                  </p>
-                  <div class="float-right">
-                  <a style="color:white;font-weight:bold;" class="btn btn-primary" href="" target="_blank">Read More</a>
-                  </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-<p>&nbsp;</p>
-
-
+          <div class="float-right"><a class="btn btn-primary" style="font-weight;color: white;" href="#" target="_blank" rel="noopener">Read More</a></div>
+          </div>
+          </div>
+          </div>
+          <div class="tm-timeline-connector-vertical">&nbsp;</div>
+          </div>
+          
 `;
 
         st_body.val(tmp);
-      }else{
-        //alert(`The edit id ${st_id.val()}`);
-        //do nothing
       }
-
 
     }
 
@@ -271,10 +253,26 @@ $(function(){
           setTimeout(function(){ 
             $modal_status.html("");
             showForm("edit",rs.st_id);
+            getSummary();
           },4000);
         });
 
       });
+    }
+
+    function stDel(id){
+        let url = "<?php echo site_url("ustd/adminDel/"); ?>"+id;
+        $.ajax({
+        url : url,
+            success : (e)=>{
+            let rs = $.parseJSON(e);
+            $page_status.html(rs.msg).show();
+            setTimeout(()=>{
+            $page_status.html("loading...").fadeOut("slow");
+            getSummary();
+            },2000);
+        }
+        });
     }
 
     function getSummary(){
@@ -291,7 +289,15 @@ $(function(){
       //--- admin edit the status
       $st_list.delegate(".lnEdit","click",function(){ 
         var id = $(this).attr("data-st_id");
+
         showForm("edit",id);
+      });
+
+    $st_list.delegate(".lnDel","click",function(){ 
+        var id = $(this).attr("data-st_id");
+        
+        stDel(id);
+
       });
 
       //--- img_url

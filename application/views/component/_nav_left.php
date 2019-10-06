@@ -5,10 +5,15 @@
     $lnHome = site_url();
     $lnArticle = site_url("article");
     $lnTmp = site_url("template");
+    $lnUstd = site_url("ustd");
 
     if($is_login):
         if($moderate):
             $lnArticle = site_url("article/mod");
+            endif;
+
+        if($is_admin):
+            $lnTmp = site_url("template/admin");
             endif;
     endif;
 ?>
@@ -43,7 +48,7 @@
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
-                            <a href="#">Home 1</a>
+                        <a href="<?php echo $lnUstd; ?>">Share Status</a>
                         </li>
                         <li>
                             <a href="#">Home 2</a>

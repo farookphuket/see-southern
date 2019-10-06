@@ -16,6 +16,11 @@ class Template extends MY_Controller{
     protected $_tb_tmp;
 
     public $o_put;
+    public $tmp;
+
+    public $sysName = "Template Gen";
+    public $sysVersion = "1.0";
+    public $sysDate = "29 sep 2019";
 
     
     protected $_tb_user;
@@ -43,6 +48,12 @@ class Template extends MY_Controller{
       $this->load->model("Mdl_booking");
       $this->load->model("Mdl_faq");
       $this->load->model("Mdl_notice");
+
+      $this->data["sysName"] = $this->sysName;
+      $this->data["sysVersion"] = $this->sysVersion;
+      $this->data["sysDate"] = $this->sysDate;
+
+      $this->tmp = "_SEP2019_TMP";
 
     }
     
@@ -110,7 +121,44 @@ class Template extends MY_Controller{
 
     /* Moderate section End */
 
+    /* admin section create on 5 Oct 2019 */
+    function admin(){
+        $this->data["meta_title"] = "{$this->sysName} | {$this->user_type}";
+        $this->data["subview"] = "admin/template/list_tmp";
 
+
+        $this->load->view($this->tmp,$this->data);
+    }
+
+    function adminList($page=1){
+        $get = $this->Mdl_template->tmpList()->result();
+
+        $this->o_put["get"] = $get;
+        $this->output->set_output(json_encode($this->o_put));
+    }
+
+    function adminEdit($id){
+        $where = array("tmp_id" => $id);
+        $get = $this->Mdl_template->tmpList($where)->result();
+        $this->o_put["get"] = $get;
+        $this->output->set_output(json_encode($this->o_put));
+    }
+
+    function adminSave(){
+        $s = $this->Mdl_template->modSave();
+        $this->o_put["msg"] = $s["msg"];
+        $this->o_put["tmp_id"] = $s["tmp_id"];
+        $this->output->set_output(json_encode($this->o_put));
+    }
+
+    function adminDel($id){
+        $where = array("tmp_id" => $id);
+        $d = $this->Mdl_template->modDel($where);
+        $this->o_put["msg"] = $d["msg"];
+        $this->output->set_output(json_encode($this->o_put));
+    }
+
+    /* End of admin section */
 
 
 }//end of file

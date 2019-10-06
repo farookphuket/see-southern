@@ -592,7 +592,7 @@ class Mdl_article extends MY_Model{
         else:
           unset($ar_data["date_add"]);
           $ar_id = $ar_id;
-          $save = $this->Save($ar_data,$this->_tb_ar,array("{$this->_tb_ar}.ar_id" => $ar_id));
+          $save = $this->SAVE($ar_data,$this->_tb_ar,array("{$this->_tb_ar}.ar_id" => $ar_id));
         endif;
       /*  End of ar_data */
          

@@ -11,6 +11,7 @@ class Admin extends MY_Controller{
     protected $is_admin;
 
     public $o_put;
+    public $tmp;
 
     
     protected $_tb_user = "users";
@@ -38,6 +39,7 @@ class Admin extends MY_Controller{
         //echo"No Admin..";
         redirect(site_url("users/logout"));
       endif;
+      $this->tmp = "_SEP2019_TMP";
     }
     
 
@@ -47,7 +49,7 @@ class Admin extends MY_Controller{
         endif;
         $this->data["meta_title"] = "admin page | {$this->user_name}";
         $this->data["subview"] = "admin/admin_index";
-        $this->load->view("_layout_admin",$this->data);
+        $this->load->view($this->tmp,$this->data);
     }
     //---
     
@@ -160,7 +162,7 @@ class Admin extends MY_Controller{
         $this->data["subview"] = "admin/admin_index";
         $this->data["meta_title"] = "{$this->user_type} | welcome {$this->user_name}";
 
-        $this->load->view("_ADMIN_TMP",$this->data);
+        $this->load->view($this->tmp,$this->data);
     }
 
     

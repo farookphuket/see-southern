@@ -23,6 +23,20 @@
     <h2 class="text-center">Article</h2>
     <hr class="my-4" />
 </div>
+    <div class="form-group">
+       <label for="get_tmp">Get the template</label>
+        <select name="get_tmp" class="get_tmp form-control" id="get_tmp">
+            <option value=0>--Select Template--</option>
+<?php
+    foreach($get_tmp as $row):
+    ?>
+    <option value="<?php echo $row->tmp_id; ?>"><?php echo $row->tmp_name; ?></option>
+<?php  
+        endforeach;
+?>
+        </select> 
+    <?php //var_dump($get_tmp); ?>
+    </div>
 <div class="form-group">
     <label for="ar_title">Title</label>
     <input type="text" name="ar_title" id="ar_title" class="form-control ar_title" />

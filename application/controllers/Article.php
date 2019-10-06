@@ -395,10 +395,12 @@ class Article extends MY_Controller{
             redirect(site_url("users/logout"));
             exit();
         endif;
+        $get_tmp = $this->Mdl_template->tmpList()->result();
+        $this->data["get_tmp"] = $get_tmp;
         $this->data["meta_title"] = "article Admin| {$this->user_name} | {$this->user_id}";
         $this->data["subview"] = "admin/article/index";
 
-        $tmp = "tmp/article_tmp";
+        $tmp = "_SEP2019_TMP";
         $this->load->view($tmp,$this->data);
     }
 
@@ -451,6 +453,13 @@ class Article extends MY_Controller{
 
         $this->o_put["get_ar"] = $get_ar;
         $this->o_put["num_ar"] = $num;
+        $this->output->set_output(json_encode($this->o_put));
+    }
+
+    function adminDel($id){
+        $where = array("ar_id" => $id);
+        $del = $this->Mdl_article->modDel($where);
+        $this->o_put["msg"] = $del["msg"];
         $this->output->set_output(json_encode($this->o_put));
     }
     //--------------end of admin
