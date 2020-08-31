@@ -1,0 +1,262 @@
+/*
+
+image responsive
+
+*/
+
+/* The float in the middle box in dark color 
+ * 25-Sep-2019
+ * */
+.status{
+    position:fixed !important;
+    padding:25px;
+    top:50%;
+    right:50%;
+    background:#000000;
+    z-index:900;
+    color:green;
+    display:none;
+
+}
+
+
+.responsive{
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #B98CC3;
+}
+
+/*
+    add this  line Sun 7 Sep 2019 to make an embeded youtube video responsive
+    from  https://avexdesigns.com/responsive-youtube-embed/
+*/
+
+video {
+    /* override other styles to make responsive */
+    width: 100%    !important;
+    height: auto   !important;
+        
+}
+
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px; height: 0; overflow: hidden;
+}
+
+.video-container iframe,
+.video-container object,
+.video-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+}
+
+
+
+/*
+End of video section
+
+*/
+
+/*
+  Modal dialog Sun 7 Sep 2019
+*/
+.modal-dialog{
+  width : 80%;
+	position : center;
+}
+
+.modal-lg {
+    max-width: 80% !important;
+}
+
+
+.pagination{
+  text-align:center;
+  text-decoration:none;
+  color:green;
+  margin-top:5%;
+  width:100%;
+            
+}
+.pagination>ul{
+  text-align:center;
+  text-decoration:none;
+  color:green;
+  margin-bottom:0;
+
+  width: 70%;
+  margin: auto;
+
+  
+            
+}
+ul.pagination{
+  margin:auto;
+  width:70%;
+      
+}
+.pagination div {
+  text-align:center;
+  text-decoration:none;
+  color:green;
+  margin-bottom:0;
+  width:100%;
+
+
+}
+
+.iframe-container {
+  overflow: hidden;
+  /* Calculated from the aspect ration of the content (in case of 16:9 it is 9/16= 0.5625) */
+  padding-top: 56.25%;
+  position: relative;
+
+}
+ 
+.iframe-container iframe {
+  border: 0;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+}
+
+
+
+/*
+ *  FORM
+ */
+
+div.frm{
+    padding:25px;
+    background-color:white;
+}
+
+form.frm{
+    margin-top:20px;
+    margin-bottom:25px;
+}
+
+form.frm input[type="text"] {
+
+      width: 100%;
+
+        min-height: 40px;
+
+        padding-left:20px;
+
+        font-size:13px;
+
+        padding-right:20px;
+
+        -webkit-box-sizing: border-box;
+
+        -moz-box-sizing: border-box;
+
+        box-sizing: border-box;
+
+
+
+                               
+}
+
+form.frm input[type="email"] {
+
+      width: 100%;
+
+        min-height: 40px;
+
+        padding-left:20px;
+
+        font-size:13px;
+
+        padding-right:20px;
+
+        -webkit-box-sizing: border-box;
+
+        -moz-box-sizing: border-box;
+
+        box-sizing: border-box;
+
+
+
+                               
+}
+
+
+form.frm input[type="password"] {
+
+    width: 100%;
+
+    min-height: 40px;
+
+    padding-left:20px;
+
+    font-size:13px;
+
+    padding-right:20px;
+
+    -webkit-box-sizing: border-box;
+
+    -moz-box-sizing: border-box;
+
+    box-sizing: border-box;
+
+                               
+}
+
+
+form.frm textarea {
+
+    width: 100%;
+
+    padding-left:20px;
+
+    padding-top:10px;
+
+    font-size:13px;
+
+    padding-right:20px;
+
+    -webkit-box-sizing: border-box;
+
+    -moz-box-sizing: border-box;
+
+    box-sizing: border-box;
+
+
+
+                               
+}
+
+/*
+ * page-section 15-Apr-2020
+ */
+.page-section {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+          
+        
+}
+.page-section .page-content{
+    width: 100%;
+    padding: 85px;
+    min-height: 100vh;
+                                                    transition: all 0.3s;
+}
+
+
+/*
+ * btn
+ */
+.btn-group{
+    margin-top:20px;
+}

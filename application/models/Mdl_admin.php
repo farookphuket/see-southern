@@ -7,31 +7,26 @@ class Mdl_admin extends MY_Model{
         protected $_tb_ar = "tbl_article";
         protected $_tb_cat = "tbl_cat";
         protected $_tb_user = "users";
-        protected $_tb_notic = "tbl_notification";
+
+        protected $_tb_ustd = "tbl_user_status";
+        protected $_tb_blog = "tbl_blog";
+        protected $_tb_comment = "tbl_comment";
+        protected $_tb_tmp = "tbl_template";
+        protected $_tb_visit = "tbl_visiter";
+
+
+
+
 
         public function __construct(){
             
             parent::__construct();
         }
 
-        function getNotice($where=false,$limit=false,$offset=false){
-            $get = 0;
-            if($where):
-                $get = $this->db
-                            ->where($where)
-                            ->order_by("notice_date","desc")
-                            ->limit($limit,$offset)
-                            ->get($this->_tb_notic);
-            else:
-                $get = $this->db 
-                        ->order_by("notice_date","desc")
-                        ->limit($limit,$offset)
-                        ->get($this->_tb_notic);
-            endif;
-            
-            return $get;
-        }
-        //---------------------
         
+
+        
+
+                
 
 }//end of the file 

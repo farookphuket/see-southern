@@ -1,0 +1,354 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Users extends MY_Controller {
+
+    
+    
+
+
+    public $o_put;
+    public $tmp;
+
+    public $sysName = "Users";
+    public $sysVersion = "3.20";
+    public $sysDate = "12-Apr-2020";
+
+  function __construct() {
+    parent::__construct();
+
+    $this->load->library("pagination");
+
+    $this->load->model("Mdl_users");
+    $this->load->model("Mdl_ustd"); 
+    
+        if($this->is_login):
+            if($this->moderate):
+                $this->tmp = "skin/business/about";
+            endif;
+        
+             
+            $this->tmp = "skin/business/products";
+        endif;
+
+    }
+
+    function index(){
+
+        
+        $url = "";
+        if($this->is_login):
+            $url = site_url("users/u/");
+            if($this->is_admin):
+                $url = site_url("admin/u");
+            endif;
+            if($this->moderate):
+              $url = site_url("moderate/u");
+            endif;
+            redirect($url);
+        endif;
+        $this->data["meta_title"] = "{$this->sysName} | index";
+        $this->data["action_id"] = $this->Mdl_users->randomChar(75);
+        $this->data["subview"] = "PUBLIC/login/index";
+        $this->load->view($this->tmp,$this->data);
+
+    }//end of index
+
+    
+    
+
+    //----
+    function u(){
+
+        if(!$this->is_login):
+            redirect(site_url("users/logout"));
+        endif;
+        
+        $this->data["subview"] = "MEMBER/index";
+        $this->data["meta_title"] = "{$this->sysName} | {$this->user_type_text}&nbsp;|&nbsp;welcome {$this->user_name}";
+        $this->load->view($this->tmp,$this->data);
+
+    }
+    //----------
+
+
+
+    //----------uGetUserInfo
+    function uGetUserInfo($id){
+        //---Create Thu 4 Oct 2018
+        $user_email = "";
+        $user_id = "";
+        $user_name = "";
+        $data = "";
+        $get = $this->Mdl_users->getUsers(array("id" => $id))->result();
+        foreach($get as $row):
+            $user_email = $row->email;
+            $user_id = $row->id;
+            $user_name = $row->name;
+        endforeach;
+
+        //---set output ajax
+        
+        $this->o_put["user_info"] = $get;
+        $this->output->set_output(json_encode($this->o_put));
+
+        //----test return data
+        //----Sat 6 Oct 2018
+        $data = array(
+            "user_email" => $user_email,
+            "user_id" => $user_id,
+            "user_name" => $user_name
+        );
+        return $data;
+    }
+    //-----------------------
+   /* User 
+    * member that has login to his landing page
+    *  create Wed 18 Sep 2019 
+    *
+    */
+     
+
+    function userListStatus($page=1){
+      $where = array("{$this->_tb_user}.id" => $this->user_id);
+      $get = $this->Mdl_ustd->userGetStatus($where)->result();
+      $this->o_put["get"] = $get;
+      $this->output->set_output(json_encode($this->o_put));
+    }
+
+    function userStatusSave(){
+      $save = $this->Mdl_ustd->userStatusSave();
+      $user_id = $save["user_id"];
+      $this->o_put["msg"] = "Success  @{$user_id}";
+      $this->output->set_output(json_encode($this->o_put));
+    }
+
+
+
+
+
+
+    /*  End of user section */
+    //no need to edit
+    function logout(){
+
+        $user_data = array("user_name","user_id","is_login","is_admin");
+        $this->session->unset_userdata($user_data);
+        $this->session->sess_destroy();
+        //redirect(site_url());
+        $this->data["subview"] = "PUBLIC/login/logout";
+        $this->data["meta_title"] = "loging out...";
+        $this->tmp = "skin/business/index";
+        $this->load->view($this->tmp,$this->data);
+    }
+////End of mon-12-Sep-2016
+
+
+
+//----------------------------
+//-------adminListUser
+function adminListUser($seg=1){
+
+    $where = array(
+        "user_type !=" => 642,
+        "id !=" => $this->user_id 
+    );
+    $get = $this->Mdl_users->getUsers($where)->result();
+    $num = count($get);
+
+    //----pagination
+    $per_page = 4;
+    $url = "users/adminListUser";
+    $conf = $this->getConfPagin($per_page,$num,$url);
+    $this->pagination->initialize($conf);
+    $page = $seg;
+    $start = ($page-1)*$conf["per_page"];
+    $get_user = $this->Mdl_users->getUsers($where,$conf["per_page"],$start)->result();
+
+    if($num >= $per_page):
+        $this->o_put["pagination"] = $this->pagination->create_links();
+    endif;
+
+    $this->o_put["get_users"] = $get_user;
+    $this->o_put["num_user"] = $num;
+
+    $this->output->set_output(json_encode($this->o_put));
+}
+
+
+  /* Moderate Section create on 15-Sep-2019 */
+  function mod(){
+
+        if(!$this->moderate):
+            //echo"You are not moderator!";
+            redirect(site_url());
+            exit();
+        endif;    
+        $this->data["meta_title"] = "{$this->sysName} version{$this->sysVersion} | {$this->user_name}";
+      $this->data["subview"] = "mod/mod_index";
+      $tmp = "_SEP2019_TMP";
+      $this->load->view($tmp,$this->data);
+
+  }
+
+    function modList($page=1){
+        $where = array(
+            "user_type !=" => 642,
+            "id !=" => $this->user_id
+        );
+        $get = $this->Mdl_users->modList($where)->result();
+        $num = count($get);
+
+        $per_page = 4;
+        $url = "modList";
+        $conf = $this->getConfPagin($per_page,$num,$url);
+        $this->pagination->initialize($conf);
+        $start = ($page-1)*$per_page;
+        $get_u = $this->Mdl_users->ModList($where,$per_page,$start)->result();
+
+        if($num > $per_page):
+            $this->o_put["pagination"] = $this->pagination->create_links();
+        endif;
+        $this->o_put["get"] = $get;
+        $this->o_put["num"] = $num;
+        $this->o_put["get_u"] = $get_u;
+
+        $this->output->set_output(json_encode($this->o_put));
+    }
+
+  /* End of Moderate section */
+//---------------------------------
+//--------modViewUser
+function modViewUser($id){
+    $where = array(
+        "{$this->_tb_user}.id" => $id
+    );
+    $get_user = $this->Mdl_users->getUsers($where)->result();
+    $name = "";
+    foreach($get_user as $row):
+        $name = $row->name;
+        $this->data["name"] = $name;
+        $this->data["u_id"] = $row->id;
+    endforeach;
+    $this->data["meta_title"] = "Show info of {$name}.";
+    $this->data["subview"] = "admin/user/user_detail";
+    $this->load->view("_DETAIL_TMP",$this->data);
+}
+
+
+//---------adminEditUser---------
+function adminEditUser($id){
+    $where = array("id" => $id);
+    $get = $this->Mdl_users->getUsers($where)->result();
+    $this->o_put["get_user"] = $get;
+    $this->output->set_output(json_encode($this->o_put));
+}
+//---------adminEditUser
+function adminSaveUser(){
+    
+    $user_name = $this->input->post("user_name");
+    $user_id = $this->input->post("user_id");
+    $user_email = $this->input->post("user_email");
+    $user_tel = $this->input->post("user_tel");
+    $user_pass = $this->make_hash("1234");
+
+    $user_ban = ($user_ban = $this->input->post("user_ban"))?$user_ban = 2: $user_ban = 0;
+
+    $user_active = ($user_active = $this->input->post("user_active"))?$user_active = 2: $user_active = 0;
+
+    $user_mod = ($user_mod = $this->input->post("user_mod"))?$user_mod = 2: $user_mod = 0;
+
+    $about_user = "
+        <div class='row'>
+            <div class='col-sm-8'>
+                <h2>Warning!</h2>
+                <p>
+                    Your account is create by admin using a simple password 1234 this is insecure.
+                </p>
+                <p>
+                    Please change your password and delete all of this message from the textbox below.
+                </p>
+            </div>
+        </div>
+    ";
+
+    $user_data = array(
+        "name" => $user_name,
+        "passwd" => $user_pass,
+        "email " => $user_email,
+        "tel" => $user_tel,
+        "user_type" => 409,
+        "moderate" => $user_mod,
+        "is_activated" => $user_active,
+        "is_ban" => $user_ban,
+        "date_register" => $this->today,
+        "about_user" => $about_user
+    );
+
+    
+   if(!$user_id):
+        if($this->getExitUserName($user_name)):
+            //---make sure that this user name is not exit then create new user
+            $msg = "Error : This user name {$user_name} is exit! ";
+        else:
+            $save = $this->Mdl_users->saveUser($user_data);
+            $user_id = $save;
+            $msg = "Success : The user name {$user_name } is created!";
+
+        endif;
+        
+    else:
+        //---update this user 
+        unset($user_data["date_register"]);
+        unset($user_data["about_user"]);
+        unset($user_data["passwd"]);
+        $user_id = $user_id;
+        $save = $this->Mdl_users->saveUser($user_data,array("id" => $user_id));
+        $msg = "Success : data of {$user_name} has been updated";
+   endif;
+   
+   
+    $this->o_put["msg"] = $msg;
+    $this->o_put["user_id"] = $user_id;
+    $this->output->set_output(json_encode($this->o_put));
+}
+//---------------
+//-------adminDelUser
+function adminDelUser($id){
+    $where = array("id" => $id);
+    $get = $this->Mdl_users->getUsers($where)->result();
+
+    $name = "";
+    $email = "";
+    $u_id = "";
+    foreach($get as $row):
+        //---for the future improve 
+        $name = $row->name;
+        $email = $row->email;
+        $u_id = $row->id;
+    endforeach;
+    $this->Mdl_users->delUser(array("id" => $u_id));
+    $this->o_put["msg"] = "Success : user name {$name} has been deleted!";
+    $this->o_put["user_id"] = $u_id;
+
+    $this->output->set_output(json_encode($this->o_put));
+}
+
+function getExitUserName($name){
+    $where = array(
+        "name" => $name
+    );
+    $get = $this->Mdl_users->getUsers($where)->result();
+    $num = count($get);
+    $repeat = 0;
+    if($num):
+        $repeat = 1;
+    
+    endif;
+    return $repeat;
+}
+
+//-----------end of admin section
+
+}//end of the class users

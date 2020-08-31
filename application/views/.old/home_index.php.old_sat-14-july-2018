@@ -1,0 +1,105 @@
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>What can I do here?</h1>
+            <div class="page-header">
+            <h2>as 'Anonymous' can do</h2>
+            </div>
+            <ol>
+            <li>: Read the tour program and Booking the tour.</li>
+            <li>
+            : Read the article on the page.
+            </li>
+            <li>
+            : sent the FAQ (Limit 1 time per day).
+            </li>
+            <li>
+            : Login / Register to member area. 
+            </li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+            <h1>ฉันทำอะไรได้บ้างที่นี่</h1>
+            <div class="page-header">
+                <h2>ผู้มาเยือน</h2>
+            </div>
+            <ol>
+            <li>: อ่านทัวร์โปรแกรมและจองทัวร์กับทางเวป.</li>
+            <li>
+            : อ่านบทความ.
+            </li>
+            <li>
+            : ส่งข้อความถึง Admin (จำกัด 1 ครั้ง/วัน).
+            </li>
+            <li>
+            : เข้าใช้งาน / สมัครสมาชิก. 
+            </li>
+            </ol>
+        </div>
+    </div>
+</div>
+    
+
+
+<div class="row">
+  <div class="page-header">
+    <h2>Article</h2>
+  </div>
+  <?php
+    if($num_ar != 0):
+      //--only show if some data
+      foreach($get_ar as $row):
+      ?>
+      <!-- comment out Thu 17 may 2018
+        <div class="col-sm-6">
+        <h3><?php //echo $row->ar_title;?></h3>
+        <p>
+          <?php //echo $row->ar_summary;?>
+        </p>
+        <h4>
+        Read <span class="label label-info">
+        <a href="<?php //echo site_url("article/read/{$row->ar_id}");?>">
+        More?
+        </a>
+        </span>
+        </h4>
+      </div> -->
+        <!--div panel on Thu 17 may 2018-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>
+                   <?php echo $row->ar_title;?>
+                    <a href="<?php echo site_url("article/read/{$row->ar_id}");?>" target="_blank">
+                        <button type="button" class="btn btn-default btn-sm">
+                        
+                            <span class="glyphicon glyphicon-new-window"></span> Read More
+                        
+                        </button>
+                    </a>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="article_box">
+                    <?php echo $row->ar_summary;?>
+                </div>
+                    
+                 
+            </div>
+            <div class="panel-footer">
+                
+            </div>
+        </div>
+        <!--end panel-->
+        
+      <?php
+    endforeach;
+    endif;
+  ?>
+</div>
+
+
+
+
+<?php
+
+        //require("homeJS.php");

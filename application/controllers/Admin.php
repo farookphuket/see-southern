@@ -5,10 +5,12 @@
  * and open the template in the editor.
  */
 class Admin extends MY_Controller{
-    protected $user_id;
-    protected $user_name;
-    protected $is_login;
-    protected $is_admin;
+
+
+    public $user_id;
+    public $user_name;
+    public $is_login;
+    public $is_admin;
 
     public $o_put;
     public $tmp;
@@ -18,28 +20,29 @@ class Admin extends MY_Controller{
 
     function __construct() {
       parent::__construct();
-      $this->is_admin = $this->user_is_admin();
-      $this->is_login = $this->user_is_login();
-      $this->user_id = $this->session->userdata("user_id");
-      //$this->user_is_admin();
-      $this->user_name = $this->session->userdata("user_name");
 
+      
       //Load the library..edit on Mon-31-July-2017
       $this->load->library("pagination");
 
       //Load the models
       $this->load->model("Mdl_users");
-      $this->load->model("Mdl_article");
+      $this->load->model("Mdl_ustd");
+      $this->load->model("Mdl_blog");
       $this->load->model("Mdl_admin");
       $this->load->model("Mdl_cat");
-      $this->load->model("Mdl_booking");
-      $this->load->model("Mdl_faq");
-      $this->load->model("Mdl_notice");
+      $this->load->model("Mdl_comment");
+      $this->load->model("Mdl_visitor");
+      $this->load->model("Mdl_tmp");
+
+
       if(!$this->is_admin):
         //echo"No Admin..";
         redirect(site_url("users/logout"));
       endif;
-      $this->tmp = "_SEP2019_TMP";
+
+
+      $this->tmp = "ADMIN/skin/SEP2019/_SEP2019_TMP";
     }
     
 
@@ -48,126 +51,49 @@ class Admin extends MY_Controller{
             redirect(site_url("admin/u"));
         endif;
         $this->data["meta_title"] = "admin page | {$this->user_name}";
-        $this->data["subview"] = "admin/admin_index";
+
+        $this->data["subview"] = "ADMIN/index";
         $this->load->view($this->tmp,$this->data);
     }
     //---
     
     
-    //---------------adminGetNotice
-   //----Fri 21 sep 2017
-   function adminGetNotice($seg=1){
-        $where = array(
-            "notice_read " => 0
-        );
-        $get = $this->Mdl_notice->getNotice($where)->result();
-        $num_notice = count($get);
-
-        //---pagination
-        $per_page = 10;
-        $url = "admin/adminGetNotice";
-        $conf = $this->getConfPagin($per_page,$num_notice,$url);
-        $this->pagination->initialize($conf);
-        $page = $seg;
-        $start = ($page-1)*$conf["per_page"];
-        $get_all = $this->Mdl_notice->getNotice($where,$conf["per_page"],$start)->result();
-        if($num_notice >= $per_page):
-            $this->o_put["pagination"] = $this->pagination->create_links();
-        endif;
-
-        $this->o_put["num_notice"] = $num_notice;
-        $this->o_put["get_notice"] = $get_all;
-
-        $this->output->set_output(json_encode($this->o_put));
-   }
-
-    //-----------------------------------
-
-    function profile(){
-
-        $command = $this->input->post("command");
-        $admin_id = $this->input->post("admin_id");
-        $name = $this->input->post("name");
-        $email = $this->input->post("email");
-        $tel = $this->input->post("tel");
-        $passwd = $this->make_hash($this->input->post("passwd"));
-
-        $a_data = array(
-            "name" => $name,
-            "email" => $email,
-            "tel" => $tel,
-            "last_update" => time(),
-        );
-
-        $error = 0;
-        $msg = array();
-        switch($command):
-            case"check_admin":
-
-                $where = array("passwd" => $passwd);
-                $get = $this->Mdl_admin->getTB($this->_tb_user,$where);
-                $num = count($get->result());
-
-                if($num == 0):
-                    $error = 1;
-                    $msg["msg"] = "Error : Wrong password!";
-                endif;
-                $msg["error"] = $error;
-                echo json_encode($msg);
-
-            break;
-            case"update":
-                $where = array("id" => $this->user_id);
-                $save = $this->Mdl_admin
-                        ->saveTB($this->_tb_user,$a_data,$where);
-                if(!$save):
-                    echo"Error : code=1";
-                else:
-                    echo"Success : Data has been save!";
-                endif;
-            break;
-            default:
-
-                $where = array("user_type" => 642,"id" => $this->user_id);
-                $get = $this->Mdl_users->getTB($this->_tb_user,$where);
-                foreach($get->result() as $row):
-                    $name = $row->name;
-                    $email = $row->email;
-                    $tel = $row->tel;
-                    $about = $row->about_user;
-                    $u_id = $row->id;
-                endforeach;
-
-                    $this->data["subview"] = "admin/user/admin_profile";
-                    $this->data["meta_title"] = "{$this->user_name}'s profile";
-                    $this->data["admin_id"] = $this->user_id;
-                    $this->data["name"] = $name;
-                    $this->data["email"] = $email;
-                    $this->data["tel"] = $tel;
-                    $this->data["about"] = $about;
-                    $this->load->view("_layout_admin",$this->data);
-
-
-            break;
-        endswitch;
-
-
-    }//end of profile
-
-    //--------------------
     //-------- u
     function u(){
         
         
-        $this->data["subview"] = "admin/admin_index";
-        $this->data["meta_title"] = "{$this->user_type} | welcome {$this->user_name}";
+        $this->data["subview"] = "ADMIN/index";
+        $this->data["meta_title"] = "{$this->user_type_text} | welcome {$this->user_name}";
 
         $this->load->view($this->tmp,$this->data);
     }
 
     
+    function getServiceNumber(){
+        $num_ustd = count($this->Mdl_ustd->ustdCount()->result());
+        $num_blog = count($this->Mdl_blog->blogCount()->result());
+        $num_user = count($this->Mdl_users->usersCount()->result());
+        $num_visit = count($this->Mdl_visitor->visitorCount()->result());
+        $num_cat = count($this->Mdl_cat->all()->result());
+        $num_tmp = count($this->Mdl_tmp->all()->result());
+        $num_comment = count($this->Mdl_comment->all()->result());
+
+
+        $this->o_put["num_ustd"] = $num_ustd;
+        $this->o_put["num_blog"] = $num_blog;
+        $this->o_put["num_user"] = $num_user;
+        $this->o_put["num_visit"] = $num_visit;
+        $this->o_put["num_cat"] = $num_cat;
+        $this->o_put["num_tmp"] = $num_tmp;
+
+        $this->runOutput();
+    }
    
 
+
+    function runOutput(){
+        return $this->output->set_output(json_encode($this->o_put));
+    }
 
 
 }//end of file

@@ -1,0 +1,73 @@
+
+
+<div class="page-header">
+    <h1>Register  | สมัครสมาชิก</h1>
+</div>
+
+
+<div class="row">
+    <div class="col-md-8">
+        <h2>Register Form</h2>
+            <form method="post" action="<?php echo site_url("users/signup");?>" class="form-horizontal" id="signup_frm">
+                <div class="form-group">
+                    <label for="" class="label-control col-sm-4">User Name</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="reg_name" class="form-control reg_name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="label-control col-sm-4">Password</label>
+                    <div class="col-sm-6">
+                        <input type="password" name="reg_pass" class="form-control reg_pass">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="label-control col-sm-4">Email</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="reg_email" class="form-control reg_email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="label-control col-sm-4">&nbsp;</label>
+                    <div class="col-sm-6">
+                        <button type="submit" class="btn btn-primary btnRegis" name="btnReg" value="1" form="signup_frm">
+                            Register
+                        </button>
+                        <input type="hidden" name="reg_ip" class="reg_ip" value="<?php echo $ip;?>">
+                        <div class="modal_status pull-right"></div>
+                    </div>
+                </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <h2>Please Note | โปรดทราบ</h2>
+        <div class="show-list">
+            <ul>
+                <li>
+                    <div class="content-wrap">
+                        <h3>You Name | ชื่อผู้ใช้งาน</h3>
+                        <p>You name is only accept 4 character or more</p>
+                        <p>ชื่อผู้ใช้งาน 4 ตัวอักษรหรือมากกว่า</p>
+                        <br style="clear:both"/>
+                    </div>
+                </li>
+                <li>
+                    <div class="content-wrap">
+                        <h3>You Email | อีเมล</h3>
+                        <p>We will use the email that you have provide to contact you.</p>
+                        <p>เราจะติดต่อท่านผ่านทางอีเมลที่ท่านได้ลงทะเบียนไว้</p>
+                        <br style="clear:both"/>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+</div>
+
+
+
+
+<?php 
+
+    require("registerJS.php");

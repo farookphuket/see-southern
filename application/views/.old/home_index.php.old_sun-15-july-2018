@@ -1,0 +1,77 @@
+<?php 
+    $what_site = "";
+    $far_site = "http://www.farookphuket.com";
+    $see_site = "http://www.see-southern.com";
+    
+    $cur_site = "http://127.0.0.1/".site_url();
+    if($see_site):
+        $what_site = "seesouth_head.php";
+    elseif($far_site):
+            $what_site = "far_head.php";
+    else:
+            $what_site = "dev_head.php";
+    endif;
+    $this->load->view("component/{$what_site}");
+
+?>
+
+<div class="row">
+  <div class="page-header">
+    <h2>Article</h2>
+  </div>
+  <?php
+    if($num_ar != 0):
+      //--only show if some data
+      foreach($get_ar as $row):
+      ?>
+      <!-- comment out Thu 17 may 2018
+        <div class="col-sm-6">
+        <h3><?php //echo $row->ar_title;?></h3>
+        <p>
+          <?php //echo $row->ar_summary;?>
+        </p>
+        <h4>
+        Read <span class="label label-info">
+        <a href="<?php //echo site_url("article/read/{$row->ar_id}");?>">
+        More?
+        </a>
+        </span>
+        </h4>
+      </div> -->
+        <!--div panel on Thu 17 may 2018-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2>
+                   <?php echo $row->ar_title;?>
+                    <a href="<?php echo site_url("article/read/{$row->ar_id}");?>" target="_blank">
+                        <button type="button" class="btn btn-default btn-sm">
+                        
+                            <span class="glyphicon glyphicon-new-window"></span> Read More
+                        
+                        </button>
+                    </a>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <h3>
+                    <?php echo $row->ar_summary;?>
+                 </h3>
+            </div>
+            <div class="panel-footer">
+                
+            </div>
+        </div>
+        <!--end panel-->
+        
+      <?php
+    endforeach;
+    endif;
+  ?>
+</div>
+
+
+
+
+<?php
+
+        //require("homeJS.php");

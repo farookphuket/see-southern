@@ -1,0 +1,47 @@
+<?php  
+
+
+class Mdl_ustd extends MY_Model{
+
+  protected $_tb_ustd = "tbl_user_status";
+  protected $_tb_user = "users";
+  function __construct(){
+    parent::__construct();
+  
+  }
+
+
+  /* ustd create on 18-Oct-2019 START */
+  function ustdGetList($where=false,$limit=false,$offset=false){
+    $get = "";
+    $j1 = "{$this->_tb_user}.id={$this->_tb_ustd}.st_user_id";
+    if($where):
+      $get = $this->db
+                  ->where($where)
+                  ->join($this->_tb_user,$j1)
+                  ->order_by("date_create","DESC")
+                  ->get($this->_tb_ustd,$limit,$offset);
+    else:
+      $get = $this->db
+                  ->join($this->_tb_user,$j1)
+                  ->order_by("date_create","DESC")
+                  ->get($this->_tb_ustd,$limit,$offset);
+      endif;
+    return $get;
+  }
+
+  function ustdGetBy($where){
+    $j1 = "{$this->_tb_user}.id={$this->_tb_ustd}.st_user_id";
+    $get = $this->db
+                ->join($this->_tb_user,$j1)
+                ->where($where)
+                ->get($this->_tb_ustd); 
+    return $get;
+  }
+  
+  /* ustd create on 18-Oct-2019 END */
+
+  
+}
+
+

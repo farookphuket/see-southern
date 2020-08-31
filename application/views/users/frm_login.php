@@ -1,4 +1,7 @@
-	<div id="member" class="row tm-section-mt">
+<div class="container tm-container-2">
+    
+
+     <div id="member" class="row tm-section-mt">
     <div class="col-lg-6">
       <h1>Warning</h1>
       <ol>
@@ -24,16 +27,17 @@
 				</label>
 				<input class="form-control user_pass" type="password" name="user_pass">
 			</div>
-                        <div class="row">
+                        <div style="margin-left:5px;" class="row">
                            <button type="submit" class="btnLogin tm-btn-send btn-sm">Login</button>
-			<button class="tm-btn-send btnForgot btn-sm">Forgot Pass</button>
-			<a href="" class="tm-btn-send btnRegister btn-sm" style="color:white;font-weight:bold">Register</a>
+                           <a href="<?php echo site_url("users/forgotpass"); ?>" style="font-weight:bold;color:white;" class="btn tm-btn-send btnForgot btn-sm">Forgot Pass</a>
+			<a href="<?php echo site_url("register"); ?>" class="tm-btn-send btnRegister btn-sm" style="color:white;font-weight:bold">Register</a>
 
  
                         </div>
 						</form>
 		</div>
 	</div>
+</div>
 <script>
 $(function(){
   var $p = $("#member");

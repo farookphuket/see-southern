@@ -3,179 +3,79 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Home extends MY_Controller {
 
-
- /*
-New edit with the MY_Model class on Thu-25-Aug-2016
-
-*/
-      protected $is_login;
-      protected $is_admin;
-      protected $moderate;
-      
-
-      //--public variable
-      
-      public $ip;
-      public $os;
-      public $browser;
-      public $o_put;
-
-      public $sysName = "";
-      public $sysVersion = "";
-      public $sysDate = "";
-    function __construct() {
-        parent::__construct();
-        $this->is_login = $this->session->userdata("is_login");
-        $this->load->model("Mdl_home");
-        $this->load->model("Mdl_article");
-        $this->load->model("Mdl_tour");
-        $this->load->model("Mdl_tour");
-        $this->load->model("Mdl_ustd");
+  public $o_put;
+  public $sysName = "see-southern";
+  public $sysVersion = "3.2";
+  public $sysDate = "8 Sep 2019";
 
 
-        $this->load->library("pagination");
+  protected $_tb_tmp = "";
+  protected $_tb_ustd = "tbl_user_status";
 
-        //$this->today = date("d-m-Y h:i a",time());
-        //$this->u_data = $this->get_user_info();||comment two line out as no use
-        $this->ip = $this->Mdl_home->getIP();
-        $this->os = $this->Mdl_home->getOS();
-        $this->browser = $this->Mdl_home->getBrowser();
-
-
-
-    }
-public function index()
-{
-
-    $url = site_url();
-    $this->data['subview'] = "home_index";
-    $this->data['meta_title'] = "Welcome  to {$url}";
-    $safari = "Safari";
-    $browser_name = "";
-    $ie = "Internet Explorer";
-    $err = 0;
-
-      if($this->agent->browser() == $ie):
-        $browser_name = $ie;
-        $err = 1;
-       elseif($this->agent->browser() == $safari):
-        $browser_name = $safari;
-        $err = 1;
-        else:
-        $err = 0;
-        $browser_name = $this->agent->browser();
-     endif;
-     $this->data["browser_name"] = $browser_name;
-     $this->data["error"] = $err;
+  function __construct(){
+    parent::__construct();
     
+    $this->load->model("Mdl_home");
+    $this->load->model("Mdl_ustd");
+    $this->load->library("pagination");
 
-    /* check login session 15-Sep-2019 */
-    if($this->is_login):
-      $url = site_url("users/u");
-      if($this->moderate):
-        $url = site_url("users/mod");
+    //--basic info
+    $this->data["sysName"] = $this->sysName;
+    $this->data["sysVersion"] = $this->sysVersion;
+    $this->data["sysDate"] = $this->sysDate;
+
+
+  }
+	public function index()
+	{
+            $this->_seoIndex();
+          
+            $this->data["subview"] = "PUBLIC/home";
+            $tmp = "PUBLIC/skin/business/index";
+            $this->load->view($tmp,$this->data);
+
+	}
+
+
+  function _seoIndex(){
+      $get_last_post = $this->Mdl_ustd->ustdGet(null,1,null)->result();
+      foreach($get_last_post as $row):
+          $this->data["meta_title"] = $row->st_title." - ".$row->article_publisher;
+            $this->data["keyword"] = $row->og_title;
+            $this->data["keydes"] = $row->og_des;
+            $this->data["publisher"] = $row->article_publisher;
+      endforeach;
+  }
+  function ustdGet($page=1){
+      $where = array(
+          "show_public !=" => 0
+      );
+      $get1 = $this->Mdl_ustd->ustdGet($where)->result();
+      $num = count($get1);
+
+      //---pagination
+      $url = "ustdGet";
+      $per_page  = 10;
+      $conf = $this->getConfPagin($per_page,$num,$url);
+      $this->pagination->initialize($conf);
+      $start = ($page-1)*$per_page;
+      $get2 = $this->Mdl_ustd->ustdGet($where,$per_page,$start)->result();
+      if($num > $per_page):
+          $this->o_put["pagination"] = $this->pagination->create_links();
       endif;
-        if($this->is_admin):
-          $url = site_url("admin");
-        endif;
-        redirect($url);
-    endif;
-    /* End of check login  */
-
-    $tmp = "_MAIN_TMP";
-    $this->load->view($tmp,$this->data);
+      $this->o_put["get_all"] = $get1;
+      $this->o_put["get_st"] = $get2;
+      $this->runOutput();
+  }
 
 
 
-}//end of index function
-//----------------------------
+  
 
-/* user status on page 19-Sep-2019 */
-function userStatusList($page=1){
-  $where = array(
-    "show_public !=" => 0,
-    "friend_only !=" => 1,
-    "private_only !=" => 1
-  );
 
-  $get = $this->Mdl_ustd->userGetStatus($where)->result();
-  $num = count($get);
 
-  //--- pagination
-  $per_page = 5;
-  $url = "userStatusList";
-  $conf = $this->getConfPagin($per_page,$num,$url);
-  $this->pagination->initialize($conf);
-  $start = ($page-1)*$per_page;
-  $get_st = $this->Mdl_ustd->userGetStatus($where,$per_page,$start)->result();
+  function runOutput(){
+      return $this->output->set_output(json_encode($this->o_put));
+  }
 
-  if($num >= $per_page):
-    $this->o_put["pagination"] = $this->pagination->create_links();
-  endif;
-  $this->o_put["get_status"] = $get_st;
-  $this->output->set_output(json_encode($this->o_put)); 
 }
-
-
-
-
-/* End of user status */
-//-------get Recent post
-function getRecentPost($page=1){
-    $where = array(
-        "ar_show_public !=" => 0,
-        "ar_show_index !=" => 0,
-        "ar_is_approve !=" => 0
-    );
-    $get = $this->Mdl_article->getArticle($where)->result();
-    $num = count($get);
-
-    //--- pagination 
-    $url = "getRecentPost";
-    $per_page = 8;
-    $conf = $this->getConfPagin($per_page,$num,$url);
-    $this->pagination->initialize($conf);
-    $start = ($page-1)*$per_page;
-    $get_ar = $this->Mdl_article->getArticle($where,$per_page,$start)->result();
-    if($num >= $per_page):
-      $this->o_put["pagination"] = $this->pagination->create_links();
-    endif;
-
-    $this->o_put["num_ar"] = $num;
-    $this->o_put["get_ar"] = $get_ar;
-    $this->output->set_output(json_encode($this->o_put));
-}
-
-
-//----------getTourList
-function getTourList($seg=1){
-    //---Sat 3 Nov 2018
-
-    $where = array(
-        "mark_draft" => 0
-    );
-    $get = $this->Mdl_tour->getTour($where)->result();
-    $num = count($get);
-
-    $per_page = 4;
-    $url = "getTourList";
-    $conf = $this->getConfPagin($per_page,$num,$url);
-    $this->pagination->initialize($conf);
-    $page = $seg;
-    $start = ($page-1)*$conf["per_page"];
-    $get_all = $this->Mdl_tour->getTour($where,$conf["per_page"],$start)->result();
-
-    if($num >= $per_page):
-        $this->o_put["pagination"] = $this->pagination->create_links();
-    endif;
-    $this->o_put["get_tour"] = $get_all;
-    $this->o_put["num_tour"] = $num;
-
-    $this->output->set_output(json_encode($this->o_put));
-}
-
-
-
-
-
-}//end of Home class

@@ -1,21 +1,20 @@
-# see-southern project
-
-> **see-southern** is a back up project file from FAROOK Computer
-> Date Start 10 Sep 2019
-
----
-> **Update 11-Sep-2019**
-
-1.  setup home landing page
-
----
-
-
-> last update 28-sep-2019 @ชลบุรี 7:30 a.m. ตอนจะไปร้อยเอ็ด
+#   see-southern.project year 2020
 
 
 
-1. 7:30 a.m. 28-sep-2019 copy project to laptop
-    1. config see-south as it is ssh
 
 
+## how do it look like 31-Aug-2020 
+
+[see_south]:https://i.ibb.co/DwrHSXW/see-southern.png
+![web site see-southern.com][see_south]
+
+
+
+
+
+#   my report log on this repo
+
+
+-   last update 31-Aug-2020 
+1.  update repo get the current from https://www.see-southern.com

@@ -1,0 +1,62 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Tmp extends MY_Controller {
+
+
+  public $sysName = "Template Generator";
+  public $sysVersion = "1.0";
+  public $sysDate = "25 Sep 2019";
+
+
+  public $o_put;
+  public $temp;
+
+  function __construct(){
+    parent::__construct();
+    $this->load->model("Mdl_tmp");
+    $this->load->model("Mdl_cat");
+    $this->load->model("Mdl_users");
+
+    $this->data["sysName"] = $this->sysName;
+    $this->data["sysVersion"] = $this->sysVersion;
+    $this->data["sysDate"] = $this->sysDate;
+
+    if($this->is_admin):
+        
+        $this->temp = "ADMIN/skin/SEP2019/_SEP2019_TMP";
+    endif;
+  }
+
+    public function index(){
+
+        $url = site_url("users");
+        if($this->is_login):
+            if($this->is_admin):
+                $url = site_url("tmp/admin");
+            endif;
+        endif;
+        redirect($url);
+
+  	
+    }
+
+
+
+
+  /*
+   * admin section
+   *
+   */
+  function admin(){
+    if(!$this->is_admin):
+        redirect(site_url("users/logout"));
+        exit();
+    endif;
+    $this->data["meta_title"] = "{$this->sysName} | {$this->user_type_text}";
+    $this->data["subview"] = "ADMIN/temp/index";    
+    $this->load->view($this->temp,$this->data);
+  }
+
+
+}

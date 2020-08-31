@@ -17,138 +17,105 @@ class Mdl_users extends MY_Model{
    }
 
 
+    function usersCount(){
+        $get = $this->db->get($this->_tb_user);
+        return $get;
+    }
+        
+    //--getUser will return all user 
+   function getUsers($where = false,$limit=false,$offset=false){
 
-    /* moderate section 3 Oct 2019 START */
+       $get = "";
 
-    function modList($where=false,$limit=false,$offset=false){
-
-        $get = "";
         if($where):
             $get = $this->db
-                    ->where($where)
-                    ->order_by("date_register","DESC")
-                    ->get($this->_tb_user,$limit,$offset);
-            else:
-                $get = $this->db
-                    ->order_by("date_register","DESC")
-                    ->get($this->_tb_user,$limit,$offset);
-
-            endif;
-        return $get;
-    }
-
-    /* moderate section 3 Oct 2019 END */
-    
-    //-----------Update <Sun-17-Dec-2017></Sun-17-Dec-2017>
-    //--getUser will return all user if no id 
-   function getUsers($where_u = false,$limit=false,$offset=false){
-
-        
-        
-        $get = "";
-        if($where_u):
-            //return one row
-            $get = $this->getTB($this->_tb_user,$where_u,$limit,$offset);
+                        ->where($where)
+                        ->order_by("date_register","DESC")
+                        ->get($this->_tb_user,$limit,$offset);
         else:
-            //return all rows
-            $get = $this->getTB($this->_tb_user,null,$limit,$offset);
-        endif;
-        return $get;
-   }
+            $get = $this->db
+                        ->order_by("date_register","DESC")
+                        ->get($this->_tb_user,$limit,$offset);
+       endif;
 
-   //------------
-   function saveUser($data,$where=false){
 
-        
-        $id = 0;
-        if($where):
-            //--update data
-            $id = $where["id"];
-            $this->db 
-                    ->where($where)
-                    ->set($data)
-                    ->update($this->_tb_user);
-        else:
-            $this->db 
-                ->set($data)
-                ->insert($this->_tb_user);
-            $id = $this->db->insert_id();
-        endif;
-        return $id;
+      return $get; 
 
    }
 
-   //------delUser Sat 30 Dec 2017
-   function delUser($where){
-       $del = $this->delTB($this->_tb_user,$where);
+   function userData(){
+       $user_name = $this->getEl("user_name");
+       $user_email = $this->getEl("user_email");
+       $user_tel = $this->getEl("user_tel");
+       $about_user = $this->getEl("about_user");
        
+       
+       $user_data = array(
+            "name" => $user_name,
+            "email" => $user_email,
+            "tel" => $user_tel,
+            "about_user" => $about_user
+            
+       );
+
+
+       return $user_data; 
+
    }
 
-   //--------End of Sun 17 Dec 2017
+   function userIsConfirmPassword(){
+       $user_id = $this->getEl("user_id");
+       $user_pass = $this->make_hash($this->getEl("conf_pass"));
+       $get = $this->getUsers(array("id" => $user_id,"passwd" => $user_pass))->result();
 
+       $is_confirm = 0;
+       if(count($get) != 0):
+           $is_confirm = 1;
+       endif;
+       $r_data = array(
+           "is_confirm" => $is_confirm,
+           "user_id" => $this->user_id
+       );
+       return $r_data;
+   }
 
-    //the method to check the login user
-    
-    function get_ban($id){
-        $where = array(
-                    "id" => $id,
-                    "is_ban" => 1
-                    );
-        $get = $this->db
-                    ->where($where)
-                    ->get($this->_tb_user);
-        $num = count($get->result());
-        if($num == 0):
-            return false;
+   function userSaveUserInfo(){
+       $action_id = $this->getEl("action_id");
+       $pass = $this->getEl("new_pass");
+       $nP = $this->make_hash($pass);
+
+       $msg = "";
+       $user_id = "";
+       if($action_id != $this->user_id):
+            $msg = "Sorry! there is no command!";
+            $user_id = 0;
         else:
-            return true;
-        endif;
-        
-    }
-    
-    function get_active($id){
-        
-        $where = array(
-                    "id" => $id,
-                    "is_activated !=" => 0
-                    );
-        $get = $this->db
-                    ->where($where)
-                    ->get($this->_tb_user);
-        $num = count($get->result());
-        if($num == 0):
-            return false;
-        else:
-            return true;
-        endif;
-    }
-    
-    
-    //----------Mon 18 Sep 2017
-    function get_user($cmd=false,$id=false){
-        
-        $data = array();
-        
-        switch($cmd):
-        
-            case"active_user": 
-                $where = array("is_activated" => 1);
-                $get = $this->getTB($this->_tb_user,$where);
-                $num = count($get->result());
-                $data['num_active_user'] = $num;
-                
-            break;
-            default : 
-                $get = $this->db->get($this->_tb_user);
-                $num = count($get->result());
-                $data['num_user'] = $num;
-            break;
-        endswitch;
-        //$data['num_user'] = $num;
-        return $data;
-    }
-    
-    //end of check login user
 
+           $d = $this->userData();
+            if($pass):  
+                $d["passwd"] = $nP;
+            endif; 
+
+           $d["last_update"] = $this->today_andTime;
+           $this->SAVE($d,$this->_tb_user,array("id" => $this->user_id));
+           $msg = "Success : your user account has been updated your pass = {$pass}";
+
+
+        endif;
+
+
+       $r_data = array(
+           "user_id" => $this->user_id,
+           "msg" => $msg
+       );
+       return $r_data;
+           
+   }
+
+
+
+
+
+   
 }//end class
 

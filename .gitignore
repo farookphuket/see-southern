@@ -1,10 +1,9 @@
 
 
-*.old
-*.html
-application/core/MY_Controller.php
 
-application/config/database.php
+/application/config/database.php 
 
+/application/core/MY_Model.php
+/application/core/MY_Controller.php
 
-
+.old/*

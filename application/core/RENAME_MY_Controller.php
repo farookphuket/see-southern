@@ -1,264 +1,219 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 class MY_Controller extends CI_Controller{
     /*
-last change on Sun-23-Oct-2016
+last change on Sun 29-Dec-2019 5:45 a.m. using Laptopn @Phuket
     */
     protected $is_login;
     protected $is_admin;
     protected $moderate;
     protected $user_id;
     protected $user_name;
+    protected $user_type;
     protected $user_email;
-    protected $_tb_seo = "seo";
+    public $user_type_text;
 
 
-    //add this line on Mon-19-Jun-2017
-    public $u_data;
-    public $a_info;
-    public $admin_email = "YOUR-ADMIN-EMAIL";
+    public $admin_email = "info@see-southern.com";
     public $time;
     public $today;
     public $today_andTime;
-    public $user_type;
     public $publisher;
+
+    //--- sysInfo
+    public $sysName = "EverGreen";
+    public $sysVersion = 1.20;
+    public $sysDate = "6-Feb-2020";
+
+    //--- userInfo
+    public $ip;
+    public $browser;
+    public $browser_name;
+    public $browser_version;
+    public $os;
 
 function __construct() {
     parent::__construct();
     $this->output->set_header("Access-Control-Allow-Origin:*");
-    $this->is_login = $this->session->userdata("is_login");
-    $this->is_admin = $this->session->userdata("is_admin");
-    $this->moderate = $this->session->userdata("moderate");
-    $this->user_id =  $this->session->userdata("user_id");
-    $this->user_name =  $this->session->userdata("user_name");
-    $this->user_email =  $this->session->userdata("user_email");
-    $this->user_type = $this->user_type();
+
+    //---from the session
+    $this->is_login = $this->user_is_login();
+    $this->is_admin = $this->user_is_admin();
+    $this->moderate = $this->user_is_mod();
+    $this->user_id =  $this->getUserId();
+    $this->user_name =  $this->getUserName();
+    $this->user_email =  $this->getUserEmail();
+    $this->user_type = $this->getUserType();
+    $this->user_type_text = $this->getUserTypeText();
+
+
+
     //load the agent library
     $this->load->library("user_agent");
 
 
+
     //get the basic information from the user
-    $this->u_data = $this->get_user_info();
-    $this->data["ip"] = $this->u_data["ip"];
-    $this->data["browser"] = $this->u_data["browser"];
-    
-    //---browser_name add on 6-6-19
-    $this->data["browser_name"] = $this->u_data["browser_name"];
-    
-    $this->data["version"] = $this->u_data["version"];
-    $this->data["os"] = $this->u_data["os"];
-    
-    
+    $this->ip = $this->getIP();
+    $this->browser = $this->getBrowser();
+    $this->browser_name = $this->getBrowserName();
+    $this->browser_version = $this->getBrowserVersion();
+    $this->os = $this->getOS();
+    $this->data["ip"] = $this->ip;
+    $this->data["browser"] = $this->browser;
+    $this->data["browser_name"] = $this->browser_name;
+    $this->data["browser_version"] = $this->browser_version;
+    $this->data["os"] = $this->os;
+
+    $this->data["sysName"] = $this->sysName;
+    $this->data["sysDate"] = $this->sysDate;
+    $this->data["sysVersion"] = $this->sysVersion;
+
+    $this->data["user_type"] = $this->user_type;
+    $this->data["user_type_text"] = $this->user_type_text;
+
     $this->data["admin_email"] = $this->admin_email;
-    $this->data["publisher"] = "WHO-AM-I";
-    $this->data["page_description"] = "YOUR-PAGE-DESCRIPTION";
-    $this->data["page_keyword"] = "YOUR-KEYWORD";
+    $this->data["publisher"] = "farook";
+    $this->data["keydes"] = "the big power in the world is the power of sharing so give one to gain more";
+    $this->data["keyword"] = "Mr.F,farook phuket,farookphuket,";
     $this->data["og_url"] = site_url();
     $this->data["og_sitename"] = site_url();
-    
+
     $this->data["user_name"] = "Anonymous";
+    $this->data["is_login"] = false;
     if($this->is_login):
         $this->data["user_name"] = $this->user_name;
         $this->data["user_id"] = $this->user_id;
-    endif;
+        $this->data["is_login"] = true;
+        $this->data["user_email"] = $this->user_email;
+        if($this->is_admin):
+            $this->data["is_admin"] = $this->is_admin;
+        endif;
+    else:
+        $this->user_type_text = "Anonymous";
 
-    $this->a_info = $this->get_app_info();
-    $this->data["a_name"] = $this->a_info["a_name"];
-    $this->data["a_version"] = $this->a_info["a_version"];
-    $this->data["meta_title"] = "Your-TITLE-PAGE-DEFAULT";
-    
+    endif;
+    $this->data["user_id"] = 0;
+
+    $this->data["moderate"] = $this->moderate;
+
+    $this->data["meta_title"] = "Welcome to using {$this->sysName} {$this->sysVersion} | {$this->browser_name}";
+
     $this->today = date("Y-m-d",time());
-    $this->time = date("H:i:s",time());
-    $this->today_andTime = date("Y-m-d H:i:s",time()); 
+    $this->time = date("h:i:s",time());
+    $this->today_andTime = date("Y-m-d H:i:s",time());
 
     $this->data["today"] = $this->today;
     $this->data["time"] = $this->time;
     $this->data["today_andTime"] = $this->today_andTime;
 
-    // $this->data["time"] = $this->today["time"];
-    // $this->data["day"] = $this->today["day"];
-    // $this->data["date_time"] = $this->today["date_time"];
-    // $this->data["today"] = date("Y-m-d h:i:s",time());
-}
-function make_hash($pw){
-  $hash_key = "./!223&&3$#***LVM*&";
-  return hash("sha512",$pw.$hash_key);
-}
+
+  }
+  function make_hash($pw){
+    $hash_key = "./!223&&3$#***LVM*&";
+    return hash("sha512",$pw.$hash_key);
+  }
 
 
-//---------
-//----randomChar
-function randomChar($length=false){
-    if(!$length):
-        $length = 10;
+  //--- basic user machine
+  function getIP(){
+      $this->ip = $this->input->ip_address();
+      return $this->ip;
+  }
+
+  //--getOS
+  function getOS(){
+      $this->os = $this->agent->platform();
+      return $this->os;
+  }
+
+  function getBrowser(){
+    $agent = "Unidentified User Agent";
+    if($this->agent->is_browser()):
+      $agent = $this->agent->browser()." version ".$this->agent->version();
+      elseif($this->agent->is_robot):
+        $agent = $this->agent->robot();
+        elseif($this->agent->is_mobile()):
+          $agent = $this->agent->mobile();
     endif;
-    $permitted_chars = '123456789ABCDEFGHJMNPQRSTUVWXYZ';
-    // Output: 54esmdr0qf
-    $random = substr(str_shuffle($permitted_chars), 0, $length);
-    return $random;
-}
+    return $agent;
+  }
 
-//-------------
-//---send mail 8/4/19
-function sendMailTo($sendFrom=false,$sendTo=false,$title,$message){
-
-    if(!$sendFrom):
-        $sendFrom = $this->admin_email;
+  function getBrowserName(){
+    $b_name = "Unidentified";
+    if($this->agent->is_browser()):
+      $b_name = $this->agent->browser();
     endif;
-    if(!$sendTo):
-        $sendTo = $this->admin_email;
-    endif;
-    $config = Array(
-        'protocol' => 'smtp',
-        'smtp_host' => 'ssl://smtp.gmail.com',
-        'smtp_port' => 465,
-        'smtp_user' => 'YOUR-GMAIL-ACOUNT', // change it to yours
-        'smtp_pass' => 'YOUR-GMAIL-PASSWORD', // change it to yours
-        'mailtype' => 'html',
-        'charset' => 'utf-8',
-        'wordwrap' => TRUE
-    );
+    return $b_name;
+  }
 
-    //$message = 'This is the test from website https://stackoverflow.com/questions/18586801/send-email-by-using-codeigniter-library-via-localhost on 6/4/19<h2>This is the funny </h2><p>Ha ha </p>';
-    $this->load->library('email', $config);
-    $this->email->set_newline("\r\n");
-    $this->email->from($sendFrom); // change it to yours
-    $this->email->to($sendTo);// change it to yours
-    $this->email->subject($title);
-    $this->email->message($message);
-    if($this->email->send())
-    {
-        return true;
+  function getBrowserVersion(){
+    $b_ver = 0;
+    if($this->agent->is_browser()):
+      $b_ver = $this->agent->version();
+    endif;
+    return $b_ver;
+  }
+
+  //---user_type
+  function getUserType(){
+    return $this->session->userdata("user_type");
+  }
+
+  //---user type text
+  function getUserTypeText(){
+      return $this->session->userdata("user_type_text");
+  }
+
+  //---getUserEmail
+  function getUserEmail(){
+    return $this->session->userdata("user_email");
+  }
+
+  //-- getUserId
+  function getUserId(){
+    return $this->session->userdata("user_id");
+  }
+
+    //-- getUserName
+    function getUserName(){
+        return $this->session->userdata("user_name");
     }
-    else
-    {
-        show_error($this->email->print_debugger());
-    }
-
-}
-//show app_name app_version
-function get_app_info(){
-    $a_name = "Ornnicha [อรณิชา]";
-    $a_version = "4.0"; //--We love Thailand 4.0
-    $app_data = array(
-        "a_name" => $a_name." version ".$a_version,
-        "a_version" => $a_version
-    );
-
-    return $app_data;
-}
-
-function is_valid_email($email){
-
-    if(filter_var($email,FILTER_VALIDATE_EMAIL)):
-
-        return true;
-    else:
-        return false;
-    endif;
-}
-
-//Adding on Mon 19 June 2017
-function get_user_info(){
-
-    $u_data = array();
-
-    $ip = $this->input->ip_address();
-    $os = $this->agent->platform();
-    $version = $this->agent->version();
-    $browser = $this->agent->browser();
-
-   $u_data["ip"] = $ip; 
-   $u_data["browser_name"] = $browser;
-   $u_data["browser"] = $browser." browser version ".$version; 
-   $u_data["version"] = $version; 
-   $u_data["os"] = $os; 
 
 
+    function is_valid_email($email){
 
-    return $u_data;
-}
+        if(filter_var($email,FILTER_VALIDATE_EMAIL)):
 
-function get_browser(){
-    $u = array();
-
-    $browser = $this->agent->browser();
-    $version = $this->agent->version();
-    $os = $this->agent->platform();
-    $u["show_full"] = $this->agent->agent_string();
-    $u["browser"] = $browser;
-    $u["version"] = $version;
-    $u["os"] = $os; 
-    return $u;
-}
-
-
-
-    /////this will return the day
-    function get_today(){
-        $day = date("D-M-Y",time());
-        $time = date("h:i a.",time());
-
-        $today = $day;
-        $now = $time;
-
-        $t = array();
-
-        $t["day"] = $today;
-        $t["time"] = $now;
-        $t["date_time"] = "{$today} {$now}";
-
-        return $t;
-    
-    }//end of today
-
-
-
-    function user_is_login(){
-
-        if(!$this->is_login):
+            return true;
+        else:
             return false;
         endif;
-        return true;
     }
+
+
+
+    //---- 29-july-2019
+    function user_is_login(){
+      return $this->session->userdata("is_login");
+    }
+
     function user_is_admin(){
-       if(!$this->is_admin):
-        return false;
-       endif;
-    return true;
+       return $this->session->userdata("is_admin");
     }
 
     //----------Add this on Sat 1 Sep 2018 Start-------
     function user_is_mod(){
-        if(!$this->moderate):
-            return false;
-           endif;
-        return true;
+        return $this->session->userdata("moderate");
     }
     //----------------------------
-    //-------user type
-    function user_type(){
-        $u_type = "Anonymous User";
-        if($this->user_is_login()):
-            
-            if($this->user_is_admin()):
-                $u_type = "Admin";
 
-            elseif($this->moderate):
-                $u_type = "Moderate";
-            else:
-                $u_type = "Member";
-            endif;
-        endif;
-        return $u_type;
-    }
-    //-----------------
-    
+
     //---------------Sat 1 Sep 2018 end-----------
 
     //---getConf for the pagination
@@ -269,7 +224,7 @@ function get_browser(){
         else:
             $url = site_url($url);
         endif;
-        if(!$per_page || $per_page == 0): 
+        if(!$per_page || $per_page == 0):
             $per_page = 10;
         endif;
         $ui_segment = 3;
@@ -305,8 +260,70 @@ function get_browser(){
     }
 
     //-----------------
-    
+    ///
+    //----randomChar 12-july-2019
+    function randomChar($length=false){
+        if(!$length):
+            $length = 10;
+        endif;
+        $permitted_chars = '111122223333444455556666777788889999AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHJJJMMMNNNPPPPQQQQRRRRSSSSTTTTUUUUVVVWWWWXXXXYYYYZZZZ';
+        // Output: 54DBBFGTE7
+        $random = substr(str_shuffle($permitted_chars), 0, $length);
+        return $random;
+    }
+
+
+    function timeisup($time,$time_limit=300){
+        $time_now = strtotime($this->today_andTime);
+        $time_left = ($time-$time_now)/$time_limit;
+        return $time_left;
+
+    }
+
+
+/*
+ * for farookphuket.com
+ * on 18 Dec 2019 has test on the local server and it is work just fine!
+ */
+function sendMailTo($sendFrom=false,$sendTo=false,$title,$message){
+
+    if(!$sendFrom):
+        $sendFrom = $this->admin_email;
+    endif;
+    if(!$sendTo):
+        $sendTo = $this->admin_email;
+    endif;
+    $config = Array(
+        'protocol' => 'smtp',
+        'smtp_host' => 'see-southern.com',
+        'smtp_port' => 25,
+        'smtp_user' => 'info@see-southern.com', // change it to yours
+        'smtp_pass' => '', // change it to yours
+        'mailtype' => 'html',
+        'charset' => 'utf-8',
+        'wordwrap' => TRUE
+    );
+
+    $this->load->library('email', $config);
+    $this->email->set_newline("\r\n");
+    $this->email->from($sendFrom); // change it to yours
+    $this->email->to($sendTo);// change it to yours
+    $this->email->subject($title);
+    $this->email->message($message);
+    if($this->email->send())
+    {
+        return true;
+    }
+    else
+    {
+        show_error($this->email->print_debugger());
+    }
+
+}
+
+/*
+ * End of send mail
+ */
 
 
 }//----end of file
-

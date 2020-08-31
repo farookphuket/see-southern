@@ -1,0 +1,94 @@
+<?php  
+
+
+class Mdl_tmp extends MY_Model{
+
+  protected $_tb_tmp = "tbl_template";
+  function __construct(){
+    parent::__construct();
+  }
+
+
+
+
+  function getList($where=false,$limit=false,$offset=false){
+      $get = 0;
+      if($where):
+        $get = $this->db
+                ->where($where)
+                ->order_by("date_create","DESC")
+                ->get($this->_tb_tmp,$limit,$offset);
+            else:
+             $get = $this->db
+                ->order_by("date_create","DESC")
+                ->get($this->_tb_tmp,$limit,$offset);
+
+          endif;
+      return $get;
+  }
+
+  function tmpEdit($where){
+    $get = $this->getList($where);
+    return $get;
+  }
+
+  function tmpSave(){
+    $save = "";
+
+    
+    $tmp_name = $this->getEl("tmp_name");
+    $tmp_title = $this->getEl("tmpTitle");
+    $tmp_body = $this->getEl("tmpBody");
+    $tmp_id = $this->getEl("tmp_id");
+
+    $tmp_data = array(
+        "tmp_name" => $tmp_name,
+        "section_title" => $tmp_title,
+        "section_body" => $tmp_body,
+        "date_create" => $this->today_andTime,
+        "date_update" => $this->today_andTime
+    );
+
+        $msg = "";
+    if(!$tmp_id):
+        $save = $this->SAVE($tmp_data,$this->_tb_tmp);
+
+    $tmp_id = $save;  
+
+    $msg = "Success : data has been created @{$tmp_id}";
+
+    else:
+        unset($tmp_data["date_create"]);
+        $save = $this->SAVE($tmp_data,$this->_tb_tmp,array("tmp_id" => $tmp_id));
+        $msg = "Success : data has been updated @{$tmp_id}";
+
+    endif;
+
+     $r_data = array(
+         "msg" => $msg,
+         "tmp_id" => $tmp_id
+  );
+  return $r_data;
+
+  }
+
+
+  function tmpDel($id){
+      $this->DEL(array("tmp_id" => $id),$this->_tb_tmp);
+      $get = $this->getList()->result();
+      $num = count($get);
+
+      $msg = "There are {$num} item left since last operation!";
+      $r_data = array(
+          "msg" => $msg
+      );
+      return $r_data;
+  }
+
+  /*
+   * END OF FILE
+   * */
+
+}
+
+

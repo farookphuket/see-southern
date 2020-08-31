@@ -44,6 +44,20 @@ class Mdl_gallery extends MY_Model{
         return $get;
     }
 
+    //--save function 
+    function save($data,$where=false){
+        $save = 0;
+        $g_id = 0;
+        if($where):
+            $save = $this->saveTB($this->_tb_gall,$data,$where);
+            $g_id = $where["pic_id"];
+        else:
+            $save = $this->saveTB($this->_tb_gall,$data);
+            $g_id = $save; 
+        endif;
+        return $g_id;
+    }
+
     function del($where){
         $this->delTB($this->_tb_gall,$where);
         return true;

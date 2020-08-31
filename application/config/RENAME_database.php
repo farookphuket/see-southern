@@ -74,13 +74,19 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 
+//username : farookph
+//password : AJ52ua05ha
+//database : farookph_own
 
+//see-southern
+//seesouth_see-southern
+//m75cMx4Gl6
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'Your-DB-USER-NAME',
-	'password' => 'Your-DB-PASSWORD',
-	'database' => 'Your-DB-NAME', 
+	'username' => 'your-DB-User-name',
+	'password' => 'your-DB-passwordd',
+	'database' => 'your-DB-name', 
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

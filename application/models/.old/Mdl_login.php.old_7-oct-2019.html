@@ -1,0 +1,106 @@
+<?php
+/*
+* class Users last edit on Sat-3-Sep-2016 
+*
+*/
+class Mdl_login extends MY_Model{
+    protected $_tb_user = "users";
+    protected $_order_by;
+
+    //add $_tb_user on Thu 15 June 2017
+
+    public $ip;
+
+    function __construct() {
+        parent::__construct();
+ 
+        $this->ip = $this->getIP();
+   }
+
+
+
+
+    function getUser($where=false){
+        $get = "";
+        if($where):
+            $get = $this->db
+                    ->where($where)
+                    ->get($this->_tb_user);
+        else:
+            $get = $this->db
+                    ->order_by("date_register","DESC")
+                    ->get($this->_tb_user);
+
+        endif;
+        return $get;
+    }
+    function uGet($where){
+        
+        $get = $this->getUser($where)->result();
+        return $get;
+    }
+
+    function uForgot(){
+        $f_email = $this->getEl("fg_email");
+        $msg = "";
+        $u_name = "";
+        $u_email = "";
+        $u_id = 0;
+        $nPass = "";
+
+        $get = $this->db
+                    ->where(array("email" => $f_email))
+                    ->get($this->_tb_user)->result();
+
+        if(count($get) == 0):
+            $msg = "Sorry! but we cannot find your provided email please try the new one or register";
+            else:
+
+                foreach($get as $row):
+                    $u_name = $row->name;
+                    $u_email = $row->email;
+                    $u_id = $row->id;
+                   endforeach; 
+            
+                $nPass = $this->randomChar(6);
+                $passwd = $this->make_hash($nPass);
+                //-- update table 
+                    $u_data = array(
+                        "passwd" => $passwd,
+                        "is_activated" => 0,
+                        "user_ip" => $this->ip,
+                       "last_update" => $this->today 
+                    );
+                $our_web = site_url();
+
+                $ac_url = site_url("login/email_active/{$nPass}");
+                $m_title = "Dear {$u_name} your new password from {$our_web}";
+                $m_body = "<div style='border:2px dashed #ff0000;'>
+        <h1 style='text-align:center;color:green;'>Dear {$u_name} you have request new password</h1>
+<p>
+As you request a new password on {$this->today_andTime} your new password with {$our_web} is '{$nPass}' please click <a style='color:green;font-weight:bold;' href='{$ac_url}'>here</a> to reactivate your account before you try to login.
+</p>                
+<p style='text-align:right;color:blue;font-weight:bold;'>With kind regards</p>
+    </div>";
+
+            $this->sendMailTo(null,$u_email,$m_title,$m_body);
+
+                    $this->SAVE($u_data,$this->_tb_user,array("id" => $u_id));
+
+                $msg = "Success! please check your email @{$f_email} name is {$u_name} your new pass is {$nPass}";
+            
+           endif; 
+
+
+
+       // $msg = "We send the reset link to your e-mail @{$f_email} please check your e-mail";
+        $r_data = array(
+            "msg" => $msg
+        );
+
+        return $r_data;
+    }
+
+
+}//end class
+
