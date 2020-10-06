@@ -137,7 +137,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FALSE;
+$config['composer_autoload'] = FCPATH . '/vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -374,7 +374,7 @@ $config['sess_expiration'] = 7200;
 //$config['sess_save_path'] = "/home/farookph/tmp";
 
 //comment this line on server
-$config['sess_save_path'] = "/srv/http/tmp";
+$config['sess_save_path'] = "/var/www/html/tmp";
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;
